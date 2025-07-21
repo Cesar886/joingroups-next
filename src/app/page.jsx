@@ -33,6 +33,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import slugify from '@/lib/slugify';
 import { useRouter } from 'next/navigation';
+import '@/locales/i18n'; // Importa tus archivos de traducción
 
 
 const countries = [
@@ -143,7 +144,7 @@ const featuredButtons = [
   },
 ];
 
-export default function Home() {
+export default function Page() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const [groups, setGroups] = useState([]);
@@ -156,10 +157,11 @@ export default function Home() {
   const positionRef = useRef('top-left');
 
   useEffect(() => {
-    if (i18n.language !== currentLang) {
-      i18n.changeLanguage(currentLang);
+    const savedLang = sessionStorage.getItem('lang') || 'es';
+    if (i18n.language !== savedLang) {
+      i18n.changeLanguage(savedLang);
     }
-  }, [i18n, currentLang]);
+  }, [i18n]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

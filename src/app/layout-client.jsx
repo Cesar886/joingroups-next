@@ -7,7 +7,6 @@ export default function RootLayoutClient({ children }) {
     <MantineProvider
       withGlobalStyles
       withNormalizeCSS
-      defaultColorScheme="light"
       theme={{
         fontFamily: 'var(--font-geist-sans)',
         headings: { fontFamily: 'var(--font-geist-mono)' },
