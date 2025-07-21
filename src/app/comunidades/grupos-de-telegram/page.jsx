@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
 import {
   IconChevronDown,
   IconChevronUp,
@@ -16,6 +16,7 @@ import {
   ScrollArea,
   Badge,
   Table,
+  Container,
   Text,
   TextInput,
   Button,
@@ -23,11 +24,12 @@ import {
   Title,
 } from '@mantine/core';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
-import styles from './TableSortTelegram.module.css';
+import styles from '@/app/styles/TableSortTelegram.module.css';
 import { Helmet } from 'react-helmet-async';
+import  { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 const getCategoryUrl = (category, currentPath) => {
   // Detectar si estamos en la página de Telegram o WhatsApp
@@ -134,7 +136,7 @@ function sortData(data, { sortBy, reversed, search, collectionFilter }) {
 
 export default function Telegram() {
   const { t, i18n } = useTranslation();
-const router = useRouter();
+  const router = useRouter();
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
@@ -147,8 +149,9 @@ const router = useRouter();
   
   
   // const [collections, setCollections] = useState([]);
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+  
+  const pathname = usePathname();
+  const searchParams = useSearchParams(); 
   const orden = searchParams.get('orden');
   
 
@@ -160,12 +163,11 @@ const router = useRouter();
     }, [data, search, selectedCollections]);
 
     useEffect(() => {
-      const searchParams = new URLSearchParams(location.search);
       // const orden = searchParams.get('orden');
       const cats = searchParams.get('cats')?.split(',') || [];
 
       setSelectedCollections(cats);
-    }, [location.search]);
+    }, [searchParams]);
 
 
     useEffect(() => {
@@ -201,7 +203,7 @@ const router = useRouter();
       };
 
       fetchData();
-    }, [location.search]);
+    }, [searchParams]);
 
     const fetchCollections = async () => {
       const snapshot = await getDocs(collection(db, 'colections'));
@@ -432,265 +434,218 @@ const router = useRouter();
         </script>
       </Helmet>
 
+      <Container size="lg" px="md">
+        <ScrollArea>
 
-      <ScrollArea>
-
-        <TextInput
-          placeholder={t('Buscar por nombre, categoría o contenido...')}
-          mb="md"
-          leftSection={<IconSearch size={16} stroke={1.5} />}
-          value={search}
-          onChange={handleSearchChange}
-        />
-          <>
-          <Group gap='xs' mb="md" justify="center">
-          
+          <TextInput
+            placeholder={t('Buscar por nombre, categoría o contenido...')}
+            mb="md"
+            leftSection={<IconSearch size={16} stroke={1.5} />}
+            value={search}
+            onChange={handleSearchChange}
+          />
+            <>
             <Group gap='xs' mb="md" justify="center">
-              <Button
-                variant="light"
-                size="xs"
-                radius="md"
-                onClick={() => router.push('/comunidades/grupos-de-telegram')}
-                leftSection={
-                  <img
-                    src="/telegramicons.png"
-                    alt="Telegram"
-                    style={{ width: 16, height: 16 }}
-                  />
-                }
-              >
-                {t('Telegram')}
-              </Button>
+            
+              <Group gap='xs' mb="md" justify="center">
+                <Button
+                  variant="light"
+                  size="xs"
+                  radius="md"
+                  onClick={() => router.push('/comunidades/grupos-de-telegram')}
+                  leftSection={
+                    <img
+                      src="/telegramicons.png"
+                      alt="Telegram"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  }
+                >
+                  {t('Telegram')}
+                </Button>
 
-              <Button
-                img src="/wapp.webp"
-                variant="light"
-                size="xs"
-                radius="md"
-                onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
-                leftSection={
-                  <img
-                    src="/wapp.webp"
-                    alt="Whatsapp"
-                    style={{ width: 29, height: 29 }}
-                  />
-                }
-              >
-                {t('Whatsapp')}
-              </Button>
+                <Button
+                  img src="/wapp.webp"
+                  variant="light"
+                  size="xs"
+                  radius="md"
+                  onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
+                  leftSection={
+                    <img
+                      src="/wapp.webp"
+                      alt="Whatsapp"
+                      style={{ width: 29, height: 29 }}
+                    />
+                  }
+                >
+                  {t('Whatsapp')}
+                </Button>
 
-              <Group mt="md" mb="md">
-                <Button onClick={() => router.push('?orden=top')} variant={orden === 'top' ? 'filled' : 'light'}>Top</Button>
-                <Button onClick={() => router.push('?orden=nuevos')} variant={orden === 'nuevos' ? 'filled' : 'light'}>Nuevos</Button>
-                <Button onClick={() => router.push('')} variant={!orden ? 'filled' : 'light'}>Destacados</Button>
+                <Group mt="md" mb="md">
+                  <Button onClick={() => router.push('?orden=top')} variant={orden === 'top' ? 'filled' : 'light'}>Top</Button>
+                  <Button onClick={() => router.push('?orden=nuevos')} variant={orden === 'nuevos' ? 'filled' : 'light'}>Nuevos</Button>
+                  <Button
+                    onClick={() => {
+                      const params = new URLSearchParams(location.search);
+                      params.delete('orden'); // quitar orden para mostrar "destacados"
+                      const search = params.toString();
+                      router.push(`?${search}`);
+                    }}
+                    variant={!orden ? 'filled' : 'light'}
+                  >
+                    Destacados
+                  </Button>                
+                </Group>
               </Group>
+
+
+              <Box
+                style={{
+                  display: 'flex',
+                  overflowX: 'auto',
+                  gap: '10px',
+                  padding: '10px 0',
+                  WebkitOverflowScrolling: 'touch',
+                }}
+              >
+                {collectionsExist &&
+                  collections.map((cat, i) => {
+                    const selected = selectedCollections.includes(cat);
+                    return (
+                      <Badge
+                        key={i}
+                        variant={selected ? 'filled' : 'light'}
+                        color="violet"
+                        size="lg"
+                        radius="xl"
+                        onClick={() => {
+                          // Navegar a la página específica de la categoría
+                          const categoryUrl = getCategoryUrl(cat, location.pathname);
+                          router.push(categoryUrl);
+                        }}
+                        style={{
+                          padding: '10px 16px',
+                          fontSize: '14px',
+                          fontWeight: 600,
+                          backgroundColor: selected ? '#5e2ca5' : '#f3e8ff',
+                          color: selected ? '#ffffff' : '#4a0080',
+                          whiteSpace: 'nowrap',
+                          flexShrink: 0,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease', // Añadir transición suave
+                        }}
+                      >
+                        {cat}
+                      </Badge>
+
+                    );
+                  })}
+              </Box>
             </Group>
 
-
-            <Box
-              style={{
-                display: 'flex',
-                overflowX: 'auto',
-                gap: '10px',
-                padding: '10px 0',
-                WebkitOverflowScrolling: 'touch',
-              }}
-            >
-              {collectionsExist &&
-                collections.map((cat, i) => {
-                  const selected = selectedCollections.includes(cat);
-                  return (
-                    <Badge
-                      key={i}
-                      variant={selected ? 'filled' : 'light'}
-                      color="violet"
-                      size="lg"
-                      radius="xl"
-                      onClick={() => {
-                        // Navegar a la página específica de la categoría
-                        const categoryUrl = getCategoryUrl(cat, location.pathname);
-                        router.push(categoryUrl);
-                      }}
-                      style={{
-                        padding: '10px 16px',
-                        fontSize: '14px',
-                        fontWeight: 600,
-                        backgroundColor: selected ? '#5e2ca5' : '#f3e8ff',
-                        color: selected ? '#ffffff' : '#4a0080',
-                        whiteSpace: 'nowrap',
-                        flexShrink: 0,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease', // Añadir transición suave
-                      }}
-                    >
-                      {cat}
-                    </Badge>
-
-                  );
-                })}
-            </Box>
-          </Group>
-
-            <Paper
-              withBorder
-              radius="md"
-              shadow="xs"
-              mt="xl"
-              p="md"
-              style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
-            >
-            <Title order={2} mb="sm" className={styles.GruposDeTelegram}>
-              Grupos de Telegram con Enlaces Directos (Por Temática y Número de Miembros)
-            </Title>
-
-            <div className={styles.GruposDeTelegram}>
-              <h2>Grupos de Telegram: Conoce Personas y Únete a Comunidades Activas</h2>
-              <p>
-                Un <strong>grupo en Telegram</strong> es una excelente <strong>forma de conocer personas</strong> con intereses similares. Desde tecnología, videojuegos y criptomonedas hasta <strong>amistad</strong> y estudio, existen miles de <strong>grupos y canales</strong> activos esperando nuevos <strong>miembros</strong>. Si estás buscando expandir tu red o simplemente disfrutar contenido entretenido, unirte a <strong>grupos de Telegram</strong> es una excelente opción.
-              </p>
-
-              <h3>Cómo Unirse a Grupos de Telegram en Segundos</h3>
-              <p>
-                <strong>Unirse a un grupo de Telegram</strong> nunca ha sido tan fácil. Con plataformas como JoinGroups <strong>puedes encontrar grupos</strong> organizados por temáticas, idioma, país y cantidad de usuarios. Todo el proceso está optimizado para que accedas rápidamente desde cualquier dispositivo, ya sea <strong>Android</strong> o navegador.
-              </p>
-
-              <h3>Enlaces de Grupos de Telegram Verificados y con Contenido Real</h3>
-              <p>
-                Muchos usuarios se frustran al buscar <strong>grupos en Telegram</strong> por culpa de enlaces rotos. En JoinGroups nos aseguramos de que cada enlace esté activo y el <strong>contenido</strong> sea relevante. Nuestros moderadores revisan manualmente los <strong>canales y grupos</strong> para garantizar una experiencia segura y útil.
-              </p>
-
-              <h3>Buscar Grupos de Telegram por Categoría y Número de Miembros</h3>
-              <p>
-                ¿Te interesa un grupo de anime, música, marketing o desarrollo web? Nuestro sistema de filtros te permite <strong>buscar grupos</strong> según tus intereses y por número de <strong>miembros</strong>. Así, <strong>puedes encontrar</strong> lo que buscas sin perder tiempo.
-              </p>
-
-              <h3>Grupos Públicos de Telegram para Todos los Usuarios</h3>
-              <p>
-                Los <strong>grupos públicos de Telegram</strong> son accesibles para cualquier <strong>usuario</strong>, sin necesidad de invitación. Esto permite <strong>conectar con personas</strong> nuevas, compartir experiencias o simplemente hacer networking en tu área de interés. Desde tu móvil o en <strong>Google</strong>, accede a ellos con un clic.
-              </p>
-
-              <h2>Grupos de Telegram 18+: Comunidades NSFW con Acceso Seguro</h2>
-              <p>
-                Si buscas <strong>grupos de Telegram para adultos</strong>, JoinGroups también ofrece acceso a comunidades NSFW. Todos los enlaces están verificados y acompañados de advertencias claras. Solo para mayores de edad, con acceso directo, sin spam y sin riesgo.
-              </p>
-
-              <h3>Explora los Mejores Grupos de Telegram en 2025</h3>
-              <p>
-                En JoinGroups hemos recopilado los <strong>mejores grupos</strong> del año según actividad, número de <strong>usuarios</strong> y calidad del <strong>contenido</strong>. No pierdas tiempo buscando en foros: accede directamente a los <strong>grupos más populares</strong> y actualizados del momento.
-              </p>
-
-              <p>
-                Ya sea para chatear, aprender, compartir archivos o simplemente pasar un buen rato, en JoinGroups <strong>puedes encontrar el grupo ideal</strong>. Crea conexiones reales, intercambia ideas y únete a comunidades activas.
-              </p>
-
-              <h2>¿Cómo Hacer Crecer tu Grupo de Telegram en 2025?</h2>
-              <p>
-                ¿Te preguntas <strong>cómo hacer crecer tu grupo de Telegram</strong>? Te ayudamos a <strong>crear y gestionar</strong> una comunidad sólida. Desde estrategias de contenido hasta consejos para aumentar la participación, aquí tienes lo que necesitas para triunfar como admin.
-              </p>
-
-              <h3>Promocionar tu Grupo en Canales Relevantes</h3>
-              <p>
-                Una buena estrategia para <strong>hacer crecer tu grupo</strong> es promocionarlo en <strong>canales y grupos relacionados</strong>. Conecta con otros administradores, intercambia menciones o usa plataformas como JoinGroups para llegar a más personas interesadas.
-              </p>
-
-              <h3>¿Cómo Encontrar los Mejores Grupos de Telegram?</h3>
-              <p>
-                La forma más efectiva de <strong>encontrar grupos</strong> es usar sitios que verifiquen sus enlaces, como JoinGroups. Filtra por temática, idioma, número de <strong>miembros</strong> o nivel de actividad y olvídate de enlaces rotos o comunidades vacías.
-              </p>
-            </div>
-
-            {isMobile ? (
-              <>
-                <Title order={4} mb="xs">
-                  {t('Mejores Grupos de Telegram')}
-                </Title>
-                <Text size="sm" color="dimmed" mb="xs">
-                  {t('¿Tienes un grupo de Telegram?')} <strong>{t('Publícalo gratis en JoinGroups')}</strong> {t('y consigue nuevos miembros fácilmente. Descubre cómo crecer con comunidades activas y visibles en toda la web.')}
-                </Text>
-              </>
-            ) : (
-              <>
-                <Title order={3} mb="xs">
-                  {t('Promociona tu Grupo de Telegram en JoinGroups')}
-                </Title>
-                <Text size="sm" color="dimmed" mb="xs">
-                  {t('¿Tienes un grupo o canal en Telegram y quieres hacerlo crecer?')} <strong>{t('En JoinGroups puedes publicarlo gratis')}</strong> {t('y empezar a recibir nuevos miembros interesados.')}{' '}
-                  {t('Explora los mejores grupos de Telegram organizados por temática, intereses y comunidad.')}{' '}
-                  {t('Utiliza nuestro buscador y encuentra canales, consejos y recursos para hacer destacar tu grupo en el mundo Telegram.')}
-                </Text>
-              </>
-            )}
-
-            </Paper>
-
-            {rows}
-
-            <Group mt="xl" justify="center" gap="xs">
-              <Button
-                variant="light"
-                size="xs"
+              <Paper
+                withBorder
                 radius="md"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
+                shadow="xs"
+                mt="xl"
+                p="md"
+                style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
               >
-                {t('Inicio (paginación)')}
-              </Button>
-              <Button
-                variant="subtle"
-                size="xs"
+
+              {isMobile ? (
+                <>
+                  <Title order={4} mb="xs">
+                    {t('Mejores Grupos de Telegram')}
+                  </Title>
+                  <Text size="sm" color="dimmed" mb="xs">
+                    {t('¿Tienes un grupo de Telegram?')} <strong>{t('Publícalo gratis en JoinGroups')}</strong> {t('y consigue nuevos miembros fácilmente. Descubre cómo crecer con comunidades activas y visibles en toda la web.')}
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Title order={3} mb="xs">
+                    {t('Promociona tu Grupo de Telegram en JoinGroups')}
+                  </Title>
+                  <Text size="sm" color="dimmed" mb="xs">
+                    {t('¿Tienes un grupo o canal en Telegram y quieres hacerlo crecer?')} <strong>{t('En JoinGroups puedes publicarlo gratis')}</strong> {t('y empezar a recibir nuevos miembros interesados.')}{' '}
+                    {t('Explora los mejores grupos de Telegram organizados por temática, intereses y comunidad.')}{' '}
+                    {t('Utiliza nuestro buscador y encuentra canales, consejos y recursos para hacer destacar tu grupo en el mundo Telegram.')}
+                  </Text>
+                </>
+              )}
+
+              </Paper>
+
+              {rows}
+
+              <Group mt="xl" justify="center" gap="xs">
+                <Button
+                  variant="light"
+                  size="xs"
+                  radius="md"
+                  onClick={() => setCurrentPage(1)}
+                  disabled={currentPage === 1}
+                >
+                  {t('Inicio (paginación)')}
+                </Button>
+                <Button
+                  variant="subtle"
+                  size="xs"
+                  radius="md"
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  ← {t('Anterior')}
+                </Button>
+                <Text size="sm" fw={500} mt={4}>
+                  {t('Página')} <strong>{currentPage}</strong>
+                </Text>
+                <Button
+                  variant="subtle"
+                  size="xs"
+                  radius="md"
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      indexOfLastGroup < sortedData.length ? prev + 1 : prev
+                    )
+                  }
+                  disabled={indexOfLastGroup >= sortedData.length}
+                >
+                  {t('Siguiente')} →
+                </Button>
+              </Group>
+
+              <Paper
+                withBorder
                 radius="md"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
+                shadow="xs"
+                mt="xl"
+                p="md"
+                style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
               >
-                ← {t('Anterior')}
-              </Button>
-              <Text size="sm" fw={500} mt={4}>
-                {t('Página')} <strong>{currentPage}</strong>
+              <Text size="md" fw={600} mb="sm">
+                {t('¿Quieres que tu grupo de Telegram crezca y llegue a más personas?')}
               </Text>
-              <Button
-                variant="subtle"
-                size="xs"
-                radius="md"
-                onClick={() =>
-                  setCurrentPage((prev) =>
-                    indexOfLastGroup < sortedData.length ? prev + 1 : prev
-                  )
-                }
-                disabled={indexOfLastGroup >= sortedData.length}
-              >
-                {t('Siguiente')} →
-              </Button>
-            </Group>
 
-            <Paper
-              withBorder
-              radius="md"
-              shadow="xs"
-              mt="xl"
-              p="md"
-              style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
-            >
-            <Text size="md" fw={600} mb="sm">
-              {t('¿Quieres que tu grupo de Telegram crezca y llegue a más personas?')}
-            </Text>
+              <Text size="sm" color="dimmed" mb="xs">
+                {t('Publica tu grupo gratuitamente en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses.')}
+                {t('Si aún no sabes cómo crear un grupo, puedes aprender fácilmente')} {' '}
+                <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>
+                  {t('aquí cómo crear tu grupo de Telegram')}
+                </Link>.
+              </Text>
 
-            <Text size="sm" color="dimmed" mb="xs">
-              {t('Publica tu grupo gratuitamente en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses.')}
-              {t('Si aún no sabes cómo crear un grupo, puedes aprender fácilmente')} {' '}
-              <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>
-                {t('aquí cómo crear tu grupo de Telegram')}
-              </Link>.
+              <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
+                {t('Únete a miles de usuarios que ya están haciendo crecer sus comunidades en Telegram.')}
+              </Text>
+              </Paper>
+            </>
+            <Text ta="center" fw={500} c="dimmed" mt="xl">
+              {t('No se encontraron resultados.')}
             </Text>
+        </ScrollArea>
+      </Container>
 
-            <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
-              {t('Únete a miles de usuarios que ya están haciendo crecer sus comunidades en Telegram.')}
-            </Text>
-            </Paper>
-          </>
-          <Text ta="center" fw={500} c="dimmed" mt="xl">
-            {t('No se encontraron resultados.')}
-          </Text>
-      </ScrollArea>
     </>
   );
 }

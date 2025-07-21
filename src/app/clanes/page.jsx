@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, useRef} from 'react';
 import Link from 'next/link';
 import {
@@ -11,6 +13,7 @@ import {
   Box,
   Center,
   Group,
+  Container,
   Paper,
   ScrollArea,
   Badge,
@@ -22,13 +25,12 @@ import {
   Title,
 } from '@mantine/core';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
-// import { useLocation } from 'react-router-dom';
-import styles from './TableSortClanes.module.css';
+import styles from '@/app/styles/TableSortClanes.module.css';
 import { Helmet } from 'react-helmet-async';
-
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 
 import { useTranslation } from 'react-i18next';
@@ -80,7 +82,8 @@ function sortData(data, { sortBy, reversed, search, collectionFilter }) {
 
 export default function Clanes() {
   const { t, i18n } = useTranslation();
-const router = useRouter();
+  const router = useRouter();
+  const pathname = usePathname();
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
@@ -356,271 +359,175 @@ const router = useRouter();
         </script>
       </Helmet>
 
+      <Container size="lg" px="md">        
+        <ScrollArea>
+          <TextInput
+            placeholder={t('Buscar por nombre, categoría o contenido...')}
+            mb="md"
+            leftSection={<IconSearch size={16} stroke={1.5} />}
+            value={search}
+            onChange={handleSearchChange}
+            />
 
-        {selectedCollection && (
-          <Button
-            variant="outline"
-            color="gray"
-            mb="xs"
-            onClick={() => handleCollectionFilter(selectedCollection)}
-          >
-            {t('Quitar filtro')}: {selectedCollection}
-          </Button>
-        )}
-
-        <TextInput
-          placeholder={t('Buscar por nombre, categoría o contenido...')}
-          mb="md"
-          leftSection={<IconSearch size={16} stroke={1.5} />}
-          value={search}
-          onChange={handleSearchChange}
-        />
-
-        {collections.length > 0 && (
-          <Group mb="md" spacing="xs" wrap="wrap">
-            <Badge
-              key="todos"
-              variant={selectedCollection === null ? 'filled' : 'light'}
-              color={selectedCollection === null ? 'blue' : 'gray'}
-              size="md"
-              onClick={() => handleCollectionFilter(null)}
-              style={{ cursor: 'pointer' }}
-            >
-              {t('Todos')}
-            </Badge>
-
-            {collections.map((col) => (
-              <Badge
-                key={col}
-                variant={selectedCollection === col ? 'filled' : 'light'}
-                color={selectedCollection === col ? 'blue' : 'gray'}
-                size="md"
-                onClick={() => handleCollectionFilter(col)}
-                style={{ cursor: 'pointer' }}
-              >
-                {col}
-              </Badge>
-            ))}
-          </Group>
-        )}
-      <ScrollArea>
-
-        {rows.length > 0 ? (
-          <>
-            <Group gap='xs' mb="md" justify="center">
-              <Button
-                height={140}
-                variant="light"
-                size="xs"
-                radius="md"
-                onClick={() => router.push('/clanes/clanes-de-clash-royale')}
-                leftSection={
-                  <img
-                    src="/clashRoyaleFondo1.png"
-                    alt="Clash Royale"
-                    style={{ width: 32, height: 32 }}
-                  />
-                }
-              >
-                {t('Clash Royale')}
-              </Button>
-
-              <Button
-                variant="light"
-                size="xs"
-                radius="md"
-                onClick={() => router.push('/clanes/clanes-de-clash-of-clans')}
-                leftSection={
-                  <img
-                    src="/clashOfClansFondo.png"
-                    alt="Clash of Clans"
-                    style={{ width: 34, height: 34 }}
-                  />
-                }
-              >
-                {t('Clash of Clans')}
-              </Button>
-            </Group>
-
-            <Paper
-              withBorder
-              radius="md"
-              shadow="xs"
-              mt="xl"
-              p="md"
-              style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
-            >
-              <Title order={2} mb="sm" className={styles.GruposDeTelegram}>
-                Grupos de Juegos en Telegram y WhatsApp ⟶ Únete Directamente (Por Categoría)
-              </Title>
-
-              <div className={styles.GruposDeTelegram}>
-                <h2>Grupos de Juegos: Encuentra Comunidades Activas para Jugar y Conocer Nuevos Miembros</h2>
-                <p>
-                  Los <strong>grupos de juegos en Telegram y WhatsApp</strong> son ideales para <strong>conocer personas</strong> con tus mismos intereses, compartir estrategias, organizar partidas o simplemente charlar sobre tu juego favorito. Desde títulos móviles hasta consolas y PC, existen miles de <strong>canales y grupos activos</strong> esperando nuevos <strong>usuarios</strong>.
-                </p>
-
-                <h3>Únete a Grupos de Juegos en Telegram, WhatsApp y Discord</h3>
-                <p>
-                  En <strong>JoinGroups</strong> puedes <strong>unirte a grupos</strong> rápidamente gracias a nuestros <strong>enlaces verificados</strong>. Accede a comunidades clasificadas por juego, plataforma, país o idioma. Ya sea que juegues Free Fire, Clash Royale, Among Us, Roblox o Call of Duty Mobile, aquí encontrarás el grupo ideal.
-                </p>
-
-                <h3>Grupos de Juegos con Enlaces Activos y Moderación Real</h3>
-                <p>
-                  Sabemos que es frustrante hacer clic en enlaces rotos o <strong>grupos abandonados</strong>. Por eso en JoinGroups solo mostramos <strong>grupos activos</strong>, revisados manualmente y organizados para que <strong>puedas encontrar contenido</strong> real y actualizado.
-                </p>
-
-                <h3>Buscar Grupos Gamer por Plataforma, Juego o Comunidad</h3>
-                <p>
-                  Usa nuestro sistema de búsqueda para filtrar <strong>grupos de juegos</strong> por plataforma: Android, iOS, PC, consolas, y también por temáticas como PvP, clanes, torneos, eSports o solo charlas. Todo está organizado para ayudarte a <strong>encontrar grupos</strong> fácilmente, sin complicaciones.
-                </p>
-
-                <h3>Grupos Públicos de Juegos para Todos los Jugadores</h3>
-                <p>
-                  Nuestra plataforma te da acceso a <strong>grupos públicos de Telegram y WhatsApp</strong> donde puedes unirte sin invitaciones. Es la <strong>forma más fácil</strong> de expandir tu red de amigos gamers, conocer nuevas personas o simplemente pasar un buen rato con jugadores reales.
-                </p>
-
-                <h2>Grupos de Juegos para Adultos: Comunidades 18+ en Telegram</h2>
-                <p>
-                  También existen <strong>grupos NSFW de juegos</strong> o comunidades para adultos que combinan el mundo gamer con conversaciones privadas. En JoinGroups puedes encontrar este tipo de grupos con etiquetas claras y advertencias apropiadas, garantizando privacidad y contenido verificado.
-                </p>
-
-                <h3>Top Grupos de Juegos en Telegram: ¡No te Pierdas los Más Populares!</h3>
-                <p>
-                  Consulta nuestra selección de los <strong>mejores grupos de juegos</strong>, actualizados por número de <strong>miembros</strong>, participación y calidad del contenido. Desde clanes competitivos hasta comunidades relajadas, te mostramos lo más destacado del momento.
-                </p>
-
-                <p>
-                  JoinGroups es la herramienta ideal para <strong>crear, encontrar y compartir</strong> comunidades gamer. Aquí puedes descubrir nuevos <strong>canales</strong>, unirte a grupos organizados y estar siempre al tanto de lo mejor del mundo de los juegos.
-                </p>
-
-                <h2>Cómo Hacer Crecer tu Grupo de Juegos en Telegram</h2>
-                <p>
-                  Si eres administrador, te mostramos <strong>cómo hacer crecer tu grupo de juegos</strong> en Telegram o WhatsApp. Aprende a mejorar tu contenido, atraer nuevos <strong>usuarios</strong>, y mantener una comunidad activa e interesante para todos los miembros.
-                </p>
-
-                <h3>Promociona tu Grupo de Juegos en Comunidades Relacionadas</h3>
-                <p>
-                  Una forma efectiva de ganar <strong>miembros</strong> es promocionarlo en otros <strong>grupos y canales</strong> similares. Usa nuestra plataforma para que otros jugadores descubran tu grupo fácilmente y se unan directamente desde sus dispositivos, incluso si vienen desde <strong>Google</strong>.
-                </p>
-
-                <h3>¿Cómo encontrar los mejores grupos de juegos?</h3>
-                <p>
-                  Usa herramientas como JoinGroups para acceder a <strong>grupos verificados</strong>, organizados por categorías y sin spam. Encuentra comunidades reales, con contenido útil, y empieza a jugar con otros desde hoy.
-                </p>
-              </div>
-
-
-            {isMobile ? (
+            {rows.length > 0 ? (
               <>
-                <Title order={4} mb="xs">
-                  📣 {t('¡Promociona tu Clan de VideoJuego en JoinGroups!')}
-                </Title>
-                <Text size="sm" color="dimmed" mb="xs">
-                  📱 {t('¿Tienes un clan de videojuego?')} <strong>{t('Publícalo gratis')}</strong> {t('y consigue miembros al instante.')}
+                <Group gap='xs' mb="md" justify="center">
+                  <Button
+                    height={140}
+                    variant="light"
+                    size="xs"
+                    radius="md"
+                    onClick={() => router.push('/clanes/clanes-de-clash-royale')}
+                    leftSection={
+                      <img
+                        src="/clashRoyaleFondo1.png"
+                        alt="Clash Royale"
+                        style={{ width: 32, height: 32 }}
+                      />
+                    }
+                  >
+                    {t('Clash Royale')}
+                  </Button>
+
+                  <Button
+                    variant="light"
+                    size="xs"
+                    radius="md"
+                    onClick={() => router.push('/clanes/clanes-de-clash-of-clans')}
+                    leftSection={
+                      <img
+                        src="/clashOfClansFondo.png"
+                        alt="Clash of Clans"
+                        style={{ width: 34, height: 34 }}
+                      />
+                    }
+                  >
+                    {t('Clash of Clans')}
+                  </Button>
+                </Group>
+
+                <Paper
+                  withBorder
+                  radius="md"
+                  shadow="xs"
+                  mt="xl"
+                  p="md"
+                  style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
+                >
+
+
+                {isMobile ? (
+                  <>
+                    <Title order={4} mb="xs">
+                      📣 {t('¡Promociona tu Clan de VideoJuego en JoinGroups!')}
+                    </Title>
+                    <Text size="sm" color="dimmed" mb="xs">
+                      📱 {t('¿Tienes un clan de videojuego?')} <strong>{t('Publícalo gratis')}</strong> {t('y consigue miembros al instante.')}
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Title order={3} mb="xs">
+                      📣 {t('¡Promociona tu Clan de VideoJuego en JoinGroups!')}
+                    </Title>
+                    <Text size="sm" color="dimmed" mb="xs">
+                      📱 {t('¿Tienes un clan de videojuego y quieres hacerlo crecer?')} <strong>{t('En JoinGroups puedes publicar tu clan gratis')}</strong> {t('y empezar a recibir nuevos miembros interesados.')}<br />
+                      🔍 {t('Explora una lista actualizada de')} <strong>{t('clanes de videojuegos')}</strong> {t('organizados por categoría e intereses.')}{' '}
+                      🤝 {t('Únete a comunidades activas, comparte tu clan y conéctate con personas afines usando JoinGroups.')}
+                    </Text>
+                  </>
+                )}
+
+
+                </Paper>
+
+                {rows}
+
+                <Group mt="xl" justify="center" gap="xs">
+                  <Button
+                    variant="light"
+                    size="xs"
+                    radius="md"
+                    onClick={() => setCurrentPage(1)}
+                    disabled={currentPage === 1}
+                  >
+                    {t('Inicio (paginación)')}
+                  </Button>
+                  <Button
+                    variant="subtle"
+                    size="xs"
+                    radius="md"
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                  >
+                    ← {t('Anterior')}
+                  </Button>
+                  <Text size="sm" fw={500} mt={4}>
+                    {t('Página')} <strong>{currentPage}</strong>
+                  </Text>
+                  <Button
+                    variant="subtle"
+                    size="xs"
+                    radius="md"
+                    onClick={() =>
+                      setCurrentPage((prev) =>
+                        indexOfLastGroup < sortedData.length ? prev + 1 : prev
+                      )
+                    }
+                    disabled={indexOfLastGroup >= sortedData.length}
+                  >
+                    {t('Siguiente')} →
+                  </Button>
+                </Group>
+
+                <Paper
+                  withBorder
+                  radius="md"
+                  shadow="xs"
+                  mt="xl"
+                  p="md"
+                  style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
+                >
+                <Text size="md" fw={600} mb="sm">
+                  {t('¿Quieres que tu Clan de videojuego crezca y llegue a más personas?')}
                 </Text>
+
+                <Text size="sm" color="dimmed" mb="xs">
+                  {t('Publica tu Clan gratuitamente en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses. ')}
+                  {t('Si aún no sabes cómo crear un clan, puedes aprender fácilmente')} {' '}
+                  <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>
+                    {t('aquí cómo crear tu clan de Telegram')}
+                  </Link>.
+                </Text>
+
+                <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
+                  {t('Únete a miles de usuarios que ya están haciendo crecer sus clanes en JoinGroups.')}
+                </Text>
+                </Paper>
               </>
             ) : (
-              <>
-                <Title order={3} mb="xs">
-                  📣 {t('¡Promociona tu Clan de VideoJuego en JoinGroups!')}
-                </Title>
-                <Text size="sm" color="dimmed" mb="xs">
-                  📱 {t('¿Tienes un clan de videojuego y quieres hacerlo crecer?')} <strong>{t('En JoinGroups puedes publicar tu clan gratis')}</strong> {t('y empezar a recibir nuevos miembros interesados.')}<br />
-                  🔍 {t('Explora una lista actualizada de')} <strong>{t('clanes de videojuegos')}</strong> {t('organizados por categoría e intereses.')}{' '}
-                  🤝 {t('Únete a comunidades activas, comparte tu clan y conéctate con personas afines usando JoinGroups.')}
-                </Text>
-              </>
-            )}
-
-
-            </Paper>
-
-            {rows}
-
-            <Group mt="xl" justify="center" gap="xs">
-              <Button
-                variant="light"
-                size="xs"
-                radius="md"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
-              >
-                {t('Inicio (paginación)')}
-              </Button>
-              <Button
-                variant="subtle"
-                size="xs"
-                radius="md"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                ← {t('Anterior')}
-              </Button>
-              <Text size="sm" fw={500} mt={4}>
-                {t('Página')} <strong>{currentPage}</strong>
+              <Text ta="center" fw={500} c="dimmed" mt="xl">
+                {t('No se encontraron resultados.')}
               </Text>
-              <Button
-                variant="subtle"
-                size="xs"
-                radius="md"
-                onClick={() =>
-                  setCurrentPage((prev) =>
-                    indexOfLastGroup < sortedData.length ? prev + 1 : prev
-                  )
-                }
-                disabled={indexOfLastGroup >= sortedData.length}
-              >
-                {t('Siguiente')} →
-              </Button>
-            </Group>
+            )}
+          {/* Botón flotante con cambio de posición */}
+          <Button
+            component={Link}
+            href="/clanes/form"
+            color="red"
+            size="sm"
+            variant='filled'
+            radius="xl"
+            className={styles['floating-publish-button']}
+            style={{
+              ...floatingStyle(buttonPosition),
+            }}
+          >
+            Publica tu clan AHORA !!
+          </Button>
+        </ScrollArea>
+      </Container>
 
-            <Paper
-              withBorder
-              radius="md"
-              shadow="xs"
-              mt="xl"
-              p="md"
-              style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
-            >
-            <Text size="md" fw={600} mb="sm">
-              {t('¿Quieres que tu Clan de videojuego crezca y llegue a más personas?')}
-            </Text>
-
-            <Text size="sm" color="dimmed" mb="xs">
-              {t('Publica tu Clan gratuitamente en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses. ')}
-              {t('Si aún no sabes cómo crear un clan, puedes aprender fácilmente')} {' '}
-              <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>
-                {t('aquí cómo crear tu clan de Telegram')}
-              </Link>.
-            </Text>
-
-            <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
-              {t('Únete a miles de usuarios que ya están haciendo crecer sus clanes en JoinGroups.')}
-            </Text>
-            </Paper>
-          </>
-        ) : (
-          <Text ta="center" fw={500} c="dimmed" mt="xl">
-            {t('No se encontraron resultados.')}
-          </Text>
-        )}
-        {/* Botón flotante con cambio de posición */}
-        <Button
-          component={Link}
-          href="/clanes/form"
-          color="red"
-          size="sm"
-          variant='filled'
-          radius="xl"
-          className={styles['floating-publish-button']}
-          style={{
-            ...floatingStyle(buttonPosition),
-          }}
-        >
-          Publica tu clan AHORA !!
-        </Button>
-      </ScrollArea>
     </>
   );
 }

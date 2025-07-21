@@ -85,7 +85,7 @@ export default function Header() {
   const links = [
     { link: '/', label: t('Inicio') },
     {
-      link: isClanesSection ? '/clanes/form' : '/comunidades/form',
+      link: isClanesSection ? '/clanes/publicar-clan' : '/comunidades/subir-grupo',
       label: isClanesSection ? t('Publica tu clan') : t('Publica Tu Grupo'),
       highlight: true,
     },

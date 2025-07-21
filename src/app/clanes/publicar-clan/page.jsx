@@ -1,3 +1,5 @@
+'use client';
+
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import {
   TextInput,
@@ -5,6 +7,7 @@ import {
   Select,
   Checkbox,
   Button,
+  Container,
   Text,
   Title,
   Stack,
@@ -19,18 +22,20 @@ import {
   getDocs,
   updateDoc,
 } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@/firebase/firebase';
 import { useRef, useState } from 'react';
 import slugify from '@/lib/slugify';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { IconBrandWhatsapp } from '@tabler/icons-react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+
 
 export default function ClanesGroupForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { t, i18n } = useTranslation();
-const router = useRouter();
+  const router = useRouter();
   const baseLang = i18n.language.split('-')[0]; // "en-US" → "en"
   const [game, setGame] = useState('Clash Royale');
 
@@ -275,212 +280,213 @@ const router = useRouter();
         />
       </Helmet>
 
-      <Stack spacing="sm" mb="md">
-        <Title order={2}>
-          {t('Publica tu Clan')}
-        </Title>
+      <Container size="lg" px="md">      
+        <Stack spacing="sm" mb="md">
+          <Title order={2}>
+            {t('Publica tu Clan')}
+          </Title>
 
-        <Button
-          leftIcon={<IconBrandWhatsapp size={18} />}
-          variant="outline"
-          color="blue"
-          component="a"
-          href="https://wa.me/5212284935831?text=Hola%2C%20me%20gustaría%20sugerir%20un%20nuevo%20juego%20para%20los%20clanes%20en%20JoinGroups"
-          target="_blank"
-          rel="noopener noreferrer"
-          fullWidth
-        >
-          {t('¿Quieres que agreguemos otro juego? Comunícate con nosotros')}
-        </Button>
-      </Stack>
-
-
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!form.validate().hasErrors) setModalOpen(true);
-        }}
-      >
-        <Stack>
-          {/* Juego */}
-          <Select
-            label="Juego"
-            placeholder="Selecciona un juego"
-            data={['Clash Royale', 'Clash of Clans']}
-            value={game}
-            onChange={setGame}
-            allowDeselect={false}
-          />
-
-          {/* Nombre */}
-          <TextInput
-            label={t('Nombre del Clan')}
-            required
-            {...form.getInputProps('name')}
-          />
-
-          {/* Link */}
-          <TextInput
-            label={t('Enlace de invitación')}
-            placeholder={
-              game === 'Clash Royale'
-                ? 'https://link.clashroyale.com/invite/clan/...'
-                : 'https://link.clashofclans.com/en?...tag=YOURTAG'
-            }
-            required
-            {...form.getInputProps('link')}
-          />
-
-          {/* Feedback visual del link */}
-          {form.values.link && (
-            <Text
-              size="xs"
-              c={
-                (game === 'Clash Royale' &&
-                  clashRoyaleClanRegex.test(
-                    form.values.link.trim()
-                  )) ||
-                (game === 'Clash of Clans' &&
-                  clashOfClansClanRegex.test(
-                    form.values.link.trim()
-                  ))
-                  ? 'green'
-                  : 'red'
-              }
-            >
-              {game === 'Clash Royale' &&
-                clashRoyaleClanRegex.test(
-                  form.values.link.trim()
-                ) &&
-                t('Enlace válido de clan (Clash Royale)')}
-              {game === 'Clash of Clans' &&
-                clashOfClansClanRegex.test(
-                  form.values.link.trim()
-                ) &&
-                t('Enlace válido de clan (Clash of Clans)')}
-              {!(
-                (game === 'Clash Royale' &&
-                  clashRoyaleClanRegex.test(
-                    form.values.link.trim()
-                  )) ||
-                (game === 'Clash of Clans' &&
-                  clashOfClansClanRegex.test(
-                    form.values.link.trim()
-                  ))
-              ) && t('Enlace no válido de clan')}
-            </Text>
-          )}
-
-          {/* Email */}
-          <TextInput
-            label={t('Tu e‑mail')}
-            placeholder="email@email.com"
-            required
-            {...form.getInputProps('email')}
-          />
-          <TextInput
-            label={t('Repite tu e‑mail')}
-            required
-            {...form.getInputProps('emailRepeat')}
-          />
-
-          {/* Descripción ES / EN */}
-          <Textarea
-            label="Descripción (Español)"
-            placeholder="⌨ Máximo 320 caracteres"
-            required={baseLang === 'es'}
-            autosize
-            minRows={3}
-            style={{
-              display: baseLang === 'es' ? 'block' : 'none',
-            }}
-            value={form.values.descriptionEs}
-            onChange={(e) => {
-              form.setFieldValue(
-                'descriptionEs',
-                e.currentTarget.value
-              );
-              debouncedTranslate();
-            }}
-            error={form.errors.descriptionEs}
-          />
-
-          <Textarea
-            label="Description (English)"
-            placeholder="⌨ Maximum 320 characters"
-            required={baseLang === 'en'}
-            autosize
-            minRows={3}
-            style={{
-              display: baseLang === 'en' ? 'block' : 'none',
-            }}
-            value={form.values.descriptionEn}
-            onChange={(e) => {
-              form.setFieldValue(
-                'descriptionEn',
-                e.currentTarget.value
-              );
-              debouncedTranslate();
-            }}
-            error={form.errors.descriptionEn}
-          />
-
-          {/* Ciudad (opcional) */}
-          <TextInput
-            label={t('Tu ciudad (opcional)')}
-            {...form.getInputProps('city')}
-          />
-
-          {/* Categorías */}
-          <Select
-            label={t('Categorías')}
-            placeholder={t('Selecciona una categoría')}
-            {...form.getInputProps('categories')}
-            data={[
-              'Competitivo',
-              'Casual',
-              'Guerras de clanes',
-              'Farming',
-              'Esports',
-            ]}
-          />
-
-          {/* Términos */}
-          <Checkbox
-            label={t(
-              'He leído y acepto las condiciones de uso y la privacidad'
-            )}
-            required
-            {...form.getInputProps('acceptTerms', {
-              type: 'checkbox',
-            })}
-          />
-
-          {/* Botón */}
           <Button
-            type="submit"
-            mt="md"
-            loading={isLoading}
-            loaderProps={{ type: 'dots' }}
+            leftIcon={<IconBrandWhatsapp size={18} />}
+            variant="outline"
+            color="blue"
+            component="a"
+            href="https://wa.me/5212284935831?text=Hola%2C%20me%20gustaría%20sugerir%20un%20nuevo%20juego%20para%20los%20clanes%20en%20JoinGroups"
+            target="_blank"
+            rel="noopener noreferrer"
+            fullWidth
           >
-            {t('Publicar')}
+            {t('¿Quieres que agreguemos otro juego? Comunícate con nosotros')}
           </Button>
         </Stack>
-      </form>
 
-      {/* Modal captcha */}
-      <Modal
-        opened={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title={t('Verifica que no eres un bot')}
-        centered
-      >
-        <HCaptcha
-          sitekey="71f4e852-9d22-4418-aef6-7c1c0a7c5b54"
-          onVerify={handleVerify}
-          ref={captchaRef}
-        />
-      </Modal>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!form.validate().hasErrors) setModalOpen(true);
+          }}
+        >
+          <Stack>
+            {/* Juego */}
+            <Select
+              label="Juego"
+              placeholder="Selecciona un juego"
+              data={['Clash Royale', 'Clash of Clans']}
+              value={game}
+              onChange={setGame}
+              allowDeselect={false}
+            />
+
+            {/* Nombre */}
+            <TextInput
+              label={t('Nombre del Clan')}
+              required
+              {...form.getInputProps('name')}
+            />
+
+            {/* Link */}
+            <TextInput
+              label={t('Enlace de invitación')}
+              placeholder={
+                game === 'Clash Royale'
+                  ? 'https://link.clashroyale.com/invite/clan/...'
+                  : 'https://link.clashofclans.com/en?...tag=YOURTAG'
+              }
+              required
+              {...form.getInputProps('link')}
+            />
+
+            {/* Feedback visual del link */}
+            {form.values.link && (
+              <Text
+                size="xs"
+                c={
+                  (game === 'Clash Royale' &&
+                    clashRoyaleClanRegex.test(
+                      form.values.link.trim()
+                    )) ||
+                  (game === 'Clash of Clans' &&
+                    clashOfClansClanRegex.test(
+                      form.values.link.trim()
+                    ))
+                    ? 'green'
+                    : 'red'
+                }
+              >
+                {game === 'Clash Royale' &&
+                  clashRoyaleClanRegex.test(
+                    form.values.link.trim()
+                  ) &&
+                  t('Enlace válido de clan (Clash Royale)')}
+                {game === 'Clash of Clans' &&
+                  clashOfClansClanRegex.test(
+                    form.values.link.trim()
+                  ) &&
+                  t('Enlace válido de clan (Clash of Clans)')}
+                {!(
+                  (game === 'Clash Royale' &&
+                    clashRoyaleClanRegex.test(
+                      form.values.link.trim()
+                    )) ||
+                  (game === 'Clash of Clans' &&
+                    clashOfClansClanRegex.test(
+                      form.values.link.trim()
+                    ))
+                ) && t('Enlace no válido de clan')}
+              </Text>
+            )}
+
+            {/* Email */}
+            <TextInput
+              label={t('Tu e‑mail')}
+              placeholder="email@email.com"
+              required
+              {...form.getInputProps('email')}
+            />
+            <TextInput
+              label={t('Repite tu e‑mail')}
+              required
+              {...form.getInputProps('emailRepeat')}
+            />
+
+            {/* Descripción ES / EN */}
+            <Textarea
+              label="Descripción (Español)"
+              placeholder="⌨ Máximo 320 caracteres"
+              required={baseLang === 'es'}
+              autosize
+              minRows={3}
+              style={{
+                display: baseLang === 'es' ? 'block' : 'none',
+              }}
+              value={form.values.descriptionEs}
+              onChange={(e) => {
+                form.setFieldValue(
+                  'descriptionEs',
+                  e.currentTarget.value
+                );
+                debouncedTranslate();
+              }}
+              error={form.errors.descriptionEs}
+            />
+
+            <Textarea
+              label="Description (English)"
+              placeholder="⌨ Maximum 320 characters"
+              required={baseLang === 'en'}
+              autosize
+              minRows={3}
+              style={{
+                display: baseLang === 'en' ? 'block' : 'none',
+              }}
+              value={form.values.descriptionEn}
+              onChange={(e) => {
+                form.setFieldValue(
+                  'descriptionEn',
+                  e.currentTarget.value
+                );
+                debouncedTranslate();
+              }}
+              error={form.errors.descriptionEn}
+            />
+
+            {/* Ciudad (opcional) */}
+            <TextInput
+              label={t('Tu ciudad (opcional)')}
+              {...form.getInputProps('city')}
+            />
+
+            {/* Categorías */}
+            <Select
+              label={t('Categorías')}
+              placeholder={t('Selecciona una categoría')}
+              {...form.getInputProps('categories')}
+              data={[
+                'Competitivo',
+                'Casual',
+                'Guerras de clanes',
+                'Farming',
+                'Esports',
+              ]}
+            />
+
+            {/* Términos */}
+            <Checkbox
+              label={t(
+                'He leído y acepto las condiciones de uso y la privacidad'
+              )}
+              required
+              {...form.getInputProps('acceptTerms', {
+                type: 'checkbox',
+              })}
+            />
+
+            {/* Botón */}
+            <Button
+              type="submit"
+              mt="md"
+              loading={isLoading}
+              loaderProps={{ type: 'dots' }}
+            >
+              {t('Publicar')}
+            </Button>
+          </Stack>
+        </form>
+
+        <Modal
+          opened={modalOpen}
+          onClose={() => setModalOpen(false)}
+          title={t('Verifica que no eres un bot')}
+          centered
+        >
+          <HCaptcha
+            sitekey="71f4e852-9d22-4418-aef6-7c1c0a7c5b54"
+            onVerify={handleVerify}
+            ref={captchaRef}
+          />
+        </Modal>
+      </Container>
+
     </>
   );
 }

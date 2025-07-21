@@ -11,6 +11,7 @@ import {
 import {
   Box,
   Center,
+  Container,
   Group,
   Paper,
   ScrollArea,
@@ -23,11 +24,12 @@ import {
   Title,
 } from '@mantine/core';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
-import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import  { useRouter, usePathname, useSearchParams } from 'next/navigation';
+
 
 const getCategoryUrl = (category, currentPath) => {
   // Detectar si estamos en la página de Telegram o WhatsApp
@@ -134,7 +136,7 @@ function sortData(data, { sortBy, reversed, search, collectionFilter }) {
 
 export default function Whatsapp() {
   const { t, i18n } = useTranslation();
-const router = useRouter();
+  const router = useRouter();
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
@@ -145,8 +147,9 @@ const router = useRouter();
   const [collections, setCollections] = useState([]);  
   const [currentPage, setCurrentPage] = useState(1);
   // const [collections, setCollections] = useState([]);
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+  
+  const pathname = usePathname();
+  const searchParams = useSearchParams(); 
   const orden = searchParams.get('orden');
 
   useEffect(() => {
@@ -157,12 +160,11 @@ const router = useRouter();
   }, [data, search, selectedCollections]);
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
     // const orden = searchParams.get('orden');
     const cats = searchParams.get('cats')?.split(',') || [];
 
     setSelectedCollections(cats);
-  }, [location.search]);
+  }, [searchParams]);
 
 
   useEffect(() => {
@@ -201,7 +203,7 @@ const router = useRouter();
     };
 
     fetchData();
-  }, [location.search]);
+  }, [searchParams]);
 
   const fetchCollections = async () => {
     const snapshot = await getDocs(collection(db, 'colections'));
@@ -393,208 +395,211 @@ const router = useRouter();
         </script>
       </Helmet>
 
-      <ScrollArea>
+      <Container size="lg" px="md">
+        <ScrollArea>
 
-        <TextInput
-          placeholder={t('Buscar por nombre, categoría o contenido...')}
-          mb="md"
-          leftSection={<IconSearch size={16} stroke={1.5} />}
-          value={search}
-          onChange={handleSearchChange}
-        />
-          <>
-          <Group gap='xs' mb="md" justify="center">
-          
+          <TextInput
+            placeholder={t('Buscar por nombre, categoría o contenido...')}
+            mb="md"
+            leftSection={<IconSearch size={16} stroke={1.5} />}
+            value={search}
+            onChange={handleSearchChange}
+          />
+            <>
             <Group gap='xs' mb="md" justify="center">
-              <Button
-                variant="light"
-                size="xs"
-                radius="md"
-                onClick={() => router.push('/comunidades/grupos-de-telegram')}
-                leftSection={
-                  <img
-                    src="/telegramicons.png"
-                    alt="Telegram"
-                    style={{ width: 16, height: 16 }}
-                  />
-                }
-              >
-                {t('Telegram')}
-              </Button>
+            
+              <Group gap='xs' mb="md" justify="center">
+                <Button
+                  variant="light"
+                  size="xs"
+                  radius="md"
+                  onClick={() => router.push('/comunidades/grupos-de-telegram')}
+                  leftSection={
+                    <img
+                      src="/telegramicons.png"
+                      alt="Telegram"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  }
+                >
+                  {t('Telegram')}
+                </Button>
 
-              <Button
-                img src="/wapp.webp"
-                variant="light"
-                size="xs"
-                radius="md"
-                onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
-                leftSection={
-                  <img
-                    src="/wapp.webp"
-                    alt="Whatsapp"
-                    style={{ width: 29, height: 29 }}
-                  />
-                }
-              >
-                {t('Whatsapp')}
-              </Button>
+                <Button
+                  img src="/wapp.webp"
+                  variant="light"
+                  size="xs"
+                  radius="md"
+                  onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
+                  leftSection={
+                    <img
+                      src="/wapp.webp"
+                      alt="Whatsapp"
+                      style={{ width: 29, height: 29 }}
+                    />
+                  }
+                >
+                  {t('Whatsapp')}
+                </Button>
 
-              <Group mt="md" mb="md">
-                <Button onClick={() => router.push('?orden=top')} variant={orden === 'top' ? 'filled' : 'light'}>Top</Button>
-                <Button onClick={() => router.push('?orden=nuevos')} variant={orden === 'nuevos' ? 'filled' : 'light'}>Nuevos</Button>
-                <Button onClick={() => router.push('')} variant={!orden ? 'filled' : 'light'}>Destacados</Button>
+                <Group mt="md" mb="md">
+                  <Button onClick={() => router.push('?orden=top')} variant={orden === 'top' ? 'filled' : 'light'}>Top</Button>
+                  <Button onClick={() => router.push('?orden=nuevos')} variant={orden === 'nuevos' ? 'filled' : 'light'}>Nuevos</Button>
+                  <Button onClick={() => router.push('')} variant={!orden ? 'filled' : 'light'}>Destacados</Button>
+                </Group>
               </Group>
+
+
+              <Box
+                style={{
+                  display: 'flex',
+                  overflowX: 'auto',
+                  gap: '10px',
+                  padding: '10px 0',
+                  WebkitOverflowScrolling: 'touch',
+                }}
+              >
+                {collectionsExist &&
+                  collections.map((cat, i) => {
+                    const selected = selectedCollections.includes(cat);
+                    return (
+                      <Badge
+                        key={i}
+                        variant={selected ? 'filled' : 'light'}
+                        color="violet"
+                        size="lg"
+                        radius="xl"
+                        onClick={() => {
+                          // Navegar a la página específica de la categoría
+                          const categoryUrl = getCategoryUrl(cat, location.pathname);
+                          router.push(categoryUrl);
+                        }}
+                        style={{
+                          padding: '10px 16px',
+                          fontSize: '14px',
+                          fontWeight: 600,
+                          backgroundColor: selected ? '#5e2ca5' : '#f3e8ff',
+                          color: selected ? '#ffffff' : '#4a0080',
+                          whiteSpace: 'nowrap',
+                          flexShrink: 0,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease', // Añadir transición suave
+                        }}
+                      >
+                        {cat}
+                      </Badge>
+
+                    );
+                  })}
+              </Box>
             </Group>
-
-
-            <Box
-              style={{
-                display: 'flex',
-                overflowX: 'auto',
-                gap: '10px',
-                padding: '10px 0',
-                WebkitOverflowScrolling: 'touch',
-              }}
-            >
-              {collectionsExist &&
-                collections.map((cat, i) => {
-                  const selected = selectedCollections.includes(cat);
-                  return (
-                    <Badge
-                      key={i}
-                      variant={selected ? 'filled' : 'light'}
-                      color="violet"
-                      size="lg"
-                      radius="xl"
-                      onClick={() => {
-                        // Navegar a la página específica de la categoría
-                        const categoryUrl = getCategoryUrl(cat, location.pathname);
-                        router.push(categoryUrl);
-                      }}
-                      style={{
-                        padding: '10px 16px',
-                        fontSize: '14px',
-                        fontWeight: 600,
-                        backgroundColor: selected ? '#5e2ca5' : '#f3e8ff',
-                        color: selected ? '#ffffff' : '#4a0080',
-                        whiteSpace: 'nowrap',
-                        flexShrink: 0,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease', // Añadir transición suave
-                      }}
-                    >
-                      {cat}
-                    </Badge>
-
-                  );
-                })}
-            </Box>
-          </Group>
-          
-            <Paper
-              withBorder
-              radius="md"
-              shadow="xs"
-              mt="xl"
-              p="md"
-              style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
-            >
-
-
-            {isMobile ? (
-              <>
-                <Title order={4} mb="xs">
-                  {t('¡Grupos de Whatsapp!')}
-                </Title>
-                <Text size="sm" color="dimmed" mb="xs">
-                  {t('¿Tienes un grupo de WhatsApp?')} <strong>{t('Publícalo gratis')}</strong> {t('y consigue miembros al instante.')}
-                </Text>
-              </>
-            ) : (
-              <>
-                <Title order={3} mb="xs">
-                  📣 {t('¡Promociona tu Grupo de WhatsApp en JoinGroups!')}
-                </Title>
-                <Text size="sm" color="dimmed" mb="xs">
-                  📱 {t('¿Tienes un grupo de WhatsApp y quieres hacerlo crecer?')} <strong>{t('En JoinGroups puedes publicar tu grupo gratis')}</strong> {t('y empezar a recibir nuevos miembros interesados.')}<br />
-                  🔍 {t('Explora una lista actualizada de')} <strong>{t('grupos de WhatsApp')}</strong> {t('organizados por categoría e intereses.')}{' '}
-                  🤝 {t('Únete a comunidades activas, comparte tu grupo y conéctate con personas afines usando JoinGroups.')}
-                </Text>
-              </>
-            )}
-
-
-
-            </Paper>
-
-            {rows}
-
-            <Group mt="xl" justify="center" gap="xs">
-              <Button
-                variant="light"
-                size="xs"
+            
+              <Paper
+                withBorder
                 radius="md"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
+                shadow="xs"
+                mt="xl"
+                p="md"
+                style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
               >
-                {t('Inicio (paginación)')}
-              </Button>
-              <Button
-                variant="subtle"
-                size="xs"
+
+
+              {isMobile ? (
+                <>
+                  <Title order={4} mb="xs">
+                    {t('¡Grupos de Whatsapp!')}
+                  </Title>
+                  <Text size="sm" color="dimmed" mb="xs">
+                    {t('¿Tienes un grupo de WhatsApp?')} <strong>{t('Publícalo gratis')}</strong> {t('y consigue miembros al instante.')}
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Title order={3} mb="xs">
+                    📣 {t('¡Promociona tu Grupo de WhatsApp en JoinGroups!')}
+                  </Title>
+                  <Text size="sm" color="dimmed" mb="xs">
+                    📱 {t('¿Tienes un grupo de WhatsApp y quieres hacerlo crecer?')} <strong>{t('En JoinGroups puedes publicar tu grupo gratis')}</strong> {t('y empezar a recibir nuevos miembros interesados.')}<br />
+                    🔍 {t('Explora una lista actualizada de')} <strong>{t('grupos de WhatsApp')}</strong> {t('organizados por categoría e intereses.')}{' '}
+                    🤝 {t('Únete a comunidades activas, comparte tu grupo y conéctate con personas afines usando JoinGroups.')}
+                  </Text>
+                </>
+              )}
+
+
+
+              </Paper>
+
+              {rows}
+
+              <Group mt="xl" justify="center" gap="xs">
+                <Button
+                  variant="light"
+                  size="xs"
+                  radius="md"
+                  onClick={() => setCurrentPage(1)}
+                  disabled={currentPage === 1}
+                >
+                  {t('Inicio (paginación)')}
+                </Button>
+                <Button
+                  variant="subtle"
+                  size="xs"
+                  radius="md"
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  ← {t('Anterior')}
+                </Button>
+                <Text size="sm" fw={500} mt={4}>
+                  {t('Página')} <strong>{currentPage}</strong>
+                </Text>
+                <Button
+                  variant="subtle"
+                  size="xs"
+                  radius="md"
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      indexOfLastGroup < sortedData.length ? prev + 1 : prev
+                    )
+                  }
+                  disabled={indexOfLastGroup >= sortedData.length}
+                >
+                  {t('Siguiente')} →
+                </Button>
+              </Group>
+
+              <Paper
+                withBorder
                 radius="md"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
+                shadow="xs"
+                mt="xl"
+                p="md"
+                style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
               >
-                ← {t('Anterior')}
-              </Button>
-              <Text size="sm" fw={500} mt={4}>
-                {t('Página')} <strong>{currentPage}</strong>
+              <Text size="md" fw={600} mb="sm">
+                {t('¿Quieres que tu grupo de Whatsapp crezca y llegue a más personas?')}
               </Text>
-              <Button
-                variant="subtle"
-                size="xs"
-                radius="md"
-                onClick={() =>
-                  setCurrentPage((prev) =>
-                    indexOfLastGroup < sortedData.length ? prev + 1 : prev
-                  )
-                }
-                disabled={indexOfLastGroup >= sortedData.length}
-              >
-                {t('Siguiente')} →
-              </Button>
-            </Group>
 
-            <Paper
-              withBorder
-              radius="md"
-              shadow="xs"
-              mt="xl"
-              p="md"
-              style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
-            >
-            <Text size="md" fw={600} mb="sm">
-              {t('¿Quieres que tu grupo de Whatsapp crezca y llegue a más personas?')}
-            </Text>
+              <Text size="sm" color="dimmed" mb="xs">
+                {t('Publica tu grupo gratuitamente en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses.')}
+                {t('Si aún no sabes cómo crear un grupo, puedes aprender fácilmente')} {' '}
+                <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>
+                  {t('aquí cómo crear tu grupo de Telegram')}
+                </Link>.
+              </Text>
 
-            <Text size="sm" color="dimmed" mb="xs">
-              {t('Publica tu grupo gratuitamente en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses.')}
-              {t('Si aún no sabes cómo crear un grupo, puedes aprender fácilmente')} {' '}
-              <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>
-                {t('aquí cómo crear tu grupo de Telegram')}
-              </Link>.
+              <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
+                {t('Únete a miles de usuarios que ya están haciendo crecer sus comunidades en Telegram.')}
+              </Text>
+              </Paper>
+            </>
+            <Text ta="center" fw={500} c="dimmed" mt="xl">
+              {t('No se encontraron resultados.')}
             </Text>
+        </ScrollArea>
+      </Container>
 
-            <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
-              {t('Únete a miles de usuarios que ya están haciendo crecer sus comunidades en Telegram.')}
-            </Text>
-            </Paper>
-          </>
-          <Text ta="center" fw={500} c="dimmed" mt="xl">
-            {t('No se encontraron resultados.')}
-          </Text>
-      </ScrollArea>
     </>
   );
 }

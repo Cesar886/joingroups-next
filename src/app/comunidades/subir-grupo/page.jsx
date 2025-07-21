@@ -10,17 +10,18 @@ import {
   Text,
   Title,
   MultiSelect,
+  Container,
   Stack,
   Modal,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { collection, addDoc, query, where, getDocs, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@/firebase/firebase';
 import { useRef, useState } from 'react';
 import slugify from '@/lib/slugify'
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { IconBrandWhatsapp } from '@tabler/icons-react';
 
 
@@ -208,7 +209,8 @@ export default function Form() {
 
       form.reset();
       const subdomain = form.values.city || 'www';
-      window.location.href = `https://${subdomain}.joingroups.pro/comunidades/grupos-de-${redSocial.toLowerCase()}/${slug}`;
+      const categoriaSlug = slugify(form.values.categories[0] || 'general');
+      window.location.href = `https://${subdomain}.joingroups.pro/comunidades/grupos-de-${redSocial.toLowerCase()}/${categoriaSlug}/${slug}`;
 
 
       // 👇 Traducción automática post-envío
@@ -382,218 +384,220 @@ export default function Form() {
         </script>
       </Helmet>
 
-      <Stack spacing="sm" mb="md">
-        <Title order={2}>
-          {t('Publica tu Grupo')}
-        </Title>
+      <Container size="lg" px="md">
+        <Stack spacing="sm" mb="md">
+          <Title order={2}>
+            {t('Publica tu Grupo')}
+          </Title>
 
-        <Button
-          leftSection={<IconBrandWhatsapp size={18} />}
-          variant="outline"
-          color="blue"
-          component="a"
-          href="https://wa.me/5212284935831?text=Hola,%20tengo%20un%20problema%20para%20publicar%20mi%20grupo%20en%20JoinGroups"
-          target="_blank"
-          rel="noopener noreferrer"
-          fullWidth
-        >
-          {t('¿Tienes problemas? Escríbenos por WhatsApp')}
-        </Button>
-      </Stack>
+          <Button
+            leftSection={<IconBrandWhatsapp size={18} />}
+            variant="outline"
+            color="blue"
+            component="a"
+            href="https://wa.me/5212284935831?text=Hola,%20tengo%20un%20problema%20para%20publicar%20mi%20grupo%20en%20JoinGroups"
+            target="_blank"
+            rel="noopener noreferrer"
+            fullWidth
+          >
+            {t('¿Tienes problemas? Escríbenos por WhatsApp')}
+          </Button>
+        </Stack>
 
-      <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const validation = form.validate();
-            if (!validation.hasErrors) {
-              setModalOpen(true); // Abre el modal con el captcha real
-            }
-          }}
-        >
-         <Stack>
-          <TextInput
-            label={t(`Nombre del Grupo de ${redSocial}`)}
-            required
-            {...form.getInputProps('name')}
-          />
+        <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const validation = form.validate();
+              if (!validation.hasErrors) {
+                setModalOpen(true); // Abre el modal con el captcha real
+              }
+            }}
+          >
+          <Stack>
+            <TextInput
+              label={t(`Nombre del Grupo de ${redSocial}`)}
+              required
+              {...form.getInputProps('name')}
+            />
 
-          <TextInput
-            label={t("Enlace de invitación")}
-            placeholder={redSocial === 'Telegram' ? 'https://t.me/' : ''}
-            required
-            value={form.values.link}
-            onChange={(event) => {
-              const input = event.currentTarget.value;
+            <TextInput
+              label={t("Enlace de invitación")}
+              placeholder={redSocial === 'Telegram' ? 'https://t.me/' : ''}
+              required
+              value={form.values.link}
+              onChange={(event) => {
+                const input = event.currentTarget.value;
 
-              if (redSocial === 'Telegram') {
-                const typedPrefix = input.slice(0, prefix.length);
-                const rest = input.slice(prefix.length);
-                if (
-                  typedPrefix.toLowerCase() !== prefix.toLowerCase() &&
-                  prefix.toLowerCase().startsWith(typedPrefix.toLowerCase())
-                ) {
-                  form.setFieldValue('link', prefix + rest);
+                if (redSocial === 'Telegram') {
+                  const typedPrefix = input.slice(0, prefix.length);
+                  const rest = input.slice(prefix.length);
+                  if (
+                    typedPrefix.toLowerCase() !== prefix.toLowerCase() &&
+                    prefix.toLowerCase().startsWith(typedPrefix.toLowerCase())
+                  ) {
+                    form.setFieldValue('link', prefix + rest);
+                  } else {
+                    form.setFieldValue('link', input);
+                  }
                 } else {
                   form.setFieldValue('link', input);
                 }
-              } else {
-                form.setFieldValue('link', input);
-              }
-            }}
-            {...form.getInputProps('link')}
-          />
+              }}
+              {...form.getInputProps('link')}
+            />
 
-          {/* ✅ Mueve este bloque JSX AQUÍ */}
-          {redSocial === 'Whatsapp' && form.values.link && (
-            <Text size="xs" c={
-              whatsappGroupRegex.test(form.values.link.trim()) || whatsappChannelRegex.test(form.values.link.trim())
-                ? 'green'
-                : 'red'
-            }>
-              {
-                whatsappGroupRegex.test(form.values.link.trim())
-                  ? t('Detectado: grupo de WhatsApp')
-                  : whatsappChannelRegex.test(form.values.link.trim())
-                  ? t('Detectado: canal de WhatsApp')
-                  : t('Enlace no válido de grupo o canal')
-              }
-            </Text>
-          )}
+            {/* ✅ Mueve este bloque JSX AQUÍ */}
+            {redSocial === 'Whatsapp' && form.values.link && (
+              <Text size="xs" c={
+                whatsappGroupRegex.test(form.values.link.trim()) || whatsappChannelRegex.test(form.values.link.trim())
+                  ? 'green'
+                  : 'red'
+              }>
+                {
+                  whatsappGroupRegex.test(form.values.link.trim())
+                    ? t('Detectado: grupo de WhatsApp')
+                    : whatsappChannelRegex.test(form.values.link.trim())
+                    ? t('Detectado: canal de WhatsApp')
+                    : t('Enlace no válido de grupo o canal')
+                }
+              </Text>
+            )}
 
-          <Select
-            label="Red social"
-            placeholder="Selecciona una red"
-            data={['Telegram', 'Whatsapp']}
-            value={redSocial}
-            onChange={setRedSocial}
-            allowDeselect={false}
-          />
+            <Select
+              label="Red social"
+              placeholder="Selecciona una red"
+              data={['Telegram', 'Whatsapp']}
+              value={redSocial}
+              onChange={setRedSocial}
+              allowDeselect={false}
+            />
 
 
-          <Select
-            label={t("¿ACEPTAS CONTENIDO SEXUAL o PARA ADULTOS?")}
-            data={[t('Sí'), t('No')]}
-            required
-            {...form.getInputProps('content18')}
-          />
+            <Select
+              label={t("¿ACEPTAS CONTENIDO SEXUAL o PARA ADULTOS?")}
+              data={[t('Sí'), t('No')]}
+              required
+              {...form.getInputProps('content18')}
+            />
 
-          <TextInput
-            label={t("Tu e-mail")}
-            placeholder="email@email.com"
-            required
-            {...form.getInputProps('email')}
-          />
+            <TextInput
+              label={t("Tu e-mail")}
+              placeholder="email@email.com"
+              required
+              {...form.getInputProps('email')}
+            />
 
-          <TextInput
-            label={t("Repite tu e-mail")}
-            required
-            {...form.getInputProps('emailRepeat')}
-          />
+            <TextInput
+              label={t("Repite tu e-mail")}
+              required
+              {...form.getInputProps('emailRepeat')}
+            />
 
-          <Textarea
-              label="Descripción (Español)"
-              placeholder="⌨ Máximo 320 caracteres"
-              required={baseLang === 'es'}
+            <Textarea
+                label="Descripción (Español)"
+                placeholder="⌨ Máximo 320 caracteres"
+                required={baseLang === 'es'}
+                autosize
+                minRows={3}
+                style={{ display: baseLang === 'es' ? 'block' : 'none' }}
+                value={form.values.descriptionEs}
+                onChange={(e) => {
+                  form.setFieldValue('descriptionEs', e.currentTarget.value);
+                  debouncedTranslate();
+                }}
+                error={form.errors.descriptionEs}
+            />
+
+            {/* Inglés siempre presente, pero oculto si no es el idioma activo */}
+            <Textarea
+              label="Description (English)"
+              placeholder="⌨ Maximum 320 characters"
+              required={baseLang === 'en'}
               autosize
               minRows={3}
-              style={{ display: baseLang === 'es' ? 'block' : 'none' }}
-              value={form.values.descriptionEs}
+              style={{ display: baseLang === 'en' ? 'block' : 'none' }}
+              value={form.values.descriptionEn}
               onChange={(e) => {
-                form.setFieldValue('descriptionEs', e.currentTarget.value);
+                form.setFieldValue('descriptionEn', e.currentTarget.value);
                 debouncedTranslate();
               }}
-              error={form.errors.descriptionEs}
+              error={form.errors.descriptionEn}
+            />
+            
+            <Select
+              label={t("Ciudad")}
+              placeholder={t("Selecciona una ciudad")}
+              data={cities}
+              searchable
+              required
+              {...form.getInputProps('city')}
+            />    
+
+            <MultiSelect
+              label={t("Categorías")}
+              placeholder={t("Selecciona una o varias categorías, Max 3")}
+              required
+              data={[
+                'Hot',
+                t('NSFW'),
+                'Anime y Manga',
+                t('Películas y Series'),
+                t('Porno'),
+                t('Criptomonedas'),
+                'Xxx',
+                'Hacking',
+                t('Memes y Humor'),
+                '18+',
+                t('Fútbol'),
+                t('Tecnología'),
+                t('Programación'),
+                'Gaming',
+                t('Cursos y Tutoriales'),
+                t('Música y Podcasts'),
+                t('Arte y Diseño'),
+                t('Ciencia y Educación'),
+                t('Negocios y Finanzas'),
+                'Packs',
+                'Trading',
+                t('Ofertas y Descuentos'),
+                t('Emprendimiento'),
+                t('Relaciones y Citas'),
+                'Telegram Bots',
+                t('Stickers'),
+              ]}
+              searchable
+              clearable
+              multiple
+              {...form.getInputProps('categories')}
+            />
+
+
+            <Checkbox
+              label={t("He leído y acepto las condiciones de uso y la privacidad")}
+              required
+              {...form.getInputProps('acceptTerms', { type: 'checkbox' })}
+            />
+
+            <Button type="submit" mt="md" loading={isLoading} loaderProps={{ type: 'dots' }}>
+              {t('Publicar')}
+            </Button>
+          </Stack>
+        </form>
+
+        <Modal
+          opened={modalOpen}
+          onClose={() => setModalOpen(false)}
+          title="Verifica que no eres un bot"
+          centered
+        >
+          <HCaptcha
+            sitekey="71f4e852-9d22-4418-aef6-7c1c0a7c5b54"
+            onVerify={handleVerify}
+            ref={captchaRef}
           />
+        </Modal>
+      </Container>
 
-          {/* Inglés siempre presente, pero oculto si no es el idioma activo */}
-          <Textarea
-            label="Description (English)"
-            placeholder="⌨ Maximum 320 characters"
-            required={baseLang === 'en'}
-            autosize
-            minRows={3}
-            style={{ display: baseLang === 'en' ? 'block' : 'none' }}
-            value={form.values.descriptionEn}
-            onChange={(e) => {
-              form.setFieldValue('descriptionEn', e.currentTarget.value);
-              debouncedTranslate();
-            }}
-            error={form.errors.descriptionEn}
-          />
-          
-          <Select
-            label={t("Ciudad")}
-            placeholder={t("Selecciona una ciudad")}
-            data={cities} // asegúrate de haberlo definido
-            searchable
-            required
-            nothingFound={t('Ninguna ciudad coincide')}
-            {...form.getInputProps('city')}
-          />    
-
-          <MultiSelect
-            label={t("Categorías")}
-            placeholder={t("Selecciona una o varias categorías, Max 3")}
-            required
-            data={[
-              'Hot',
-              t('NSFW'),
-              'Anime y Manga',
-              t('Películas y Series'),
-              t('Porno'),
-              t('Criptomonedas'),
-              'Xxx',
-              'Hacking',
-              t('Memes y Humor'),
-              '18+',
-              t('Fútbol'),
-              t('Tecnología'),
-              t('Programación'),
-              'Gaming',
-              t('Cursos y Tutoriales'),
-              t('Música y Podcasts'),
-              t('Arte y Diseño'),
-              t('Ciencia y Educación'),
-              t('Negocios y Finanzas'),
-              'Packs',
-              'Trading',
-              t('Ofertas y Descuentos'),
-              t('Emprendimiento'),
-              t('Relaciones y Citas'),
-              'Telegram Bots',
-              t('Stickers'),
-            ]}
-            searchable
-            clearable
-            multiple
-            {...form.getInputProps('categories')}
-          />
-
-
-          <Checkbox
-            label={t("He leído y acepto las condiciones de uso y la privacidad")}
-            required
-            {...form.getInputProps('acceptTerms', { type: 'checkbox' })}
-          />
-
-          <Button type="submit" mt="md" loading={isLoading} loaderProps={{ type: 'dots' }}>
-            {t('Publicar')}
-          </Button>
-        </Stack>
-      </form>
-
-      <Modal
-        opened={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title="Verifica que no eres un bot"
-        centered
-      >
-        <HCaptcha
-          sitekey="71f4e852-9d22-4418-aef6-7c1c0a7c5b54"
-          onVerify={handleVerify}
-          ref={captchaRef}
-        />
-      </Modal>
     </>
   );
 }
