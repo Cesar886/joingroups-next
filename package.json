@@ -33,6 +33,7 @@
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "firebase": "^12.0.0",
+    "framer-motion": "^12.23.6",
     "i18next": "^25.3.2",
     "next": "15.4.2",
     "react": "19.1.0",

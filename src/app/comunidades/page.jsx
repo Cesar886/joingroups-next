@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import {
@@ -23,19 +22,17 @@ import {
   UnstyledButton,
   Menu,
   Title,
-  MultiSelect,
+  Container,
   rem,
 } from '@mantine/core';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
-import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
 import styles from '@/app/styles/TableSort.module.css';
-import { usePathname } from 'next/navigation';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 
 
@@ -136,6 +133,8 @@ function Th({ children, reversed, sorted, onSort }) {
 export default function TableSort() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams(); 
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
@@ -143,8 +142,6 @@ export default function TableSort() {
   // const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [currentPage, setCurrentPage] = useState(1);
-  const pathname = usePathname();
-  const searchParams = useSearchParams(); 
   const [collections, setCollections] = useState([]);
   const [selectedCollections, setSelectedCollections] = useState([]);  // ✅ único estado
   const orden = searchParams.get('orden');
@@ -179,8 +176,7 @@ export default function TableSort() {
     } else {
       params.delete('cats');
     }
-    router.push({ search: params.toString() }, { replace: true });
-    // eslint‑disable‑next‑line react‑hooks/exhaustive‑deps
+     // eslint‑disable‑next‑line react‑hooks/exhaustive‑deps
   }, [selectedCollections]);   // ✅ sin ‘location’ y sin duplicar el hook
 
 
@@ -221,7 +217,7 @@ export default function TableSort() {
       setData(groups);
     };
     fetchData();
-  }, [location.search]);
+  }, [searchParams]);
 
   const fetchCollections = async () => {
     const snapshot = await getDocs(collection(db, 'colections'));
@@ -234,15 +230,13 @@ export default function TableSort() {
 
 
   useEffect(() => {
-    const searchParams = useSearchParams();
     // const orden = searchParams.get('orden');
     const cats = searchParams.get('cats')?.split(',') || [];
 
     setSelectedCollections(cats);
-  }, [location.search]);
+  }, [searchParams]);
 
   useEffect(() => {
-    const searchParams = useSearchParams();
     const orden = searchParams.get('orden');
 
     let ordenados = [...data];
@@ -263,7 +257,7 @@ export default function TableSort() {
     });
 
     setSortedData(final);
-  }, [data, search, selectedCollections, location.search]);
+  }, [data, search, selectedCollections, searchParams]);
 
 
 
@@ -427,338 +421,344 @@ export default function TableSort() {
         <meta name="description" content="Explora y únete a grupos de Telegram y WhatsApp clasificados por categorías. Actualizado para 2025." />
       </Helmet>
 
-      <ScrollArea>
-        <TextInput
-          placeholder={t('Buscar por nombre, categoría o contenido...')}
-          mb="md"
-          leftSection={<IconSearch size={16} stroke={1.5} />}
-          value={search}
-          onChange={handleSearchChange}
-        />
+      <Container size="lg" px="md">
+        <ScrollArea>
+          <TextInput
+            placeholder={t('Buscar por nombre, categoría o contenido...')}
+            mb="md"
+            leftSection={<IconSearch size={16} stroke={1.5} />}
+            value={search}
+            onChange={handleSearchChange}
+            />
 
-          <>
-            <Group gap='xs' mb="md" justify="center">
-              <Button
-                variant="light"
-                size="xs"
-                radius="md"
-                onClick={() => router.push('/comunidades/grupos-de-telegram')}
-                leftSection={
-                  <img
-                    src="/telegramicons.png"
-                    alt="Telegram"
-                    style={{ width: 16, height: 16 }}
-                  />
-                }
-              >
-                {t('Telegram')}
-              </Button>
-
-              <Button
-                variant="light"
-                size="xs"
-                radius="md"
-                onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
-                leftSection={
-                  <img
-                    src="/wapp.webp"
-                    alt="Whatsapp"
-                    style={{ width: 29, height: 29 }}
-                  />
-                }
-              >
-                {t('Whatsapp')}
-              </Button>
-              <Group mt="md" mb="md">
+            <>
+              <Group gap='xs' mb="md" justify="center">
                 <Button
-                  onClick={() => {
-                    const params = new URLSearchParams(location.search);
-                    const currentOrden = params.get('orden');
-                    if (currentOrden === 'top') {
-                      params.delete('orden'); // quitar si ya estaba activo
-                    } else {
-                      params.set('orden', 'top');
-                    }
-                    router.push({ search: params.toString() }, { replace: false });
-                  }}
-                  variant={orden === 'top' ? 'filled' : 'light'}
+                  variant="light"
+                  size="xs"
+                  radius="md"
+                  onClick={() => router.push('/comunidades/grupos-de-telegram')}
+                  leftSection={
+                    <img
+                      src="/telegramicons.png"
+                      alt="Telegram"
+                      style={{ width: 16, height: 16 }}
+                    />
+                  }
                 >
-                  Top
+                  {t('Telegram')}
                 </Button>
 
                 <Button
-                  onClick={() => {
-                    const params = new URLSearchParams(location.search);
-                    const currentOrden = params.get('orden');
-                    if (currentOrden === 'nuevos') {
-                      params.delete('orden');
-                    } else {
-                      params.set('orden', 'nuevos');
+                  variant="light"
+                  size="xs"
+                  radius="md"
+                  onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
+                  leftSection={
+                    <img
+                      src="/wapp.webp"
+                      alt="Whatsapp"
+                      style={{ width: 29, height: 29 }}
+                      />
                     }
-                    router.push({ search: params.toString() }, { replace: false });
-                  }}
-                  variant={orden === 'nuevos' ? 'filled' : 'light'}
                 >
-                  Nuevos
+                  {t('Whatsapp')}
                 </Button>
+                <Group mt="md" mb="md">
+                  <Button
+                    onClick={() => {
+                      const params = new URLSearchParams(location.search);
+                      const currentOrden = params.get('orden');
+                      if (currentOrden === 'top') {
+                        params.delete('orden'); // quitar si ya estaba activo
+                      } else {
+                        params.set('orden', 'top');
+                      }
+                      const search = params.toString();
+                      router.push(`?${search}`);
+                    }}
+                    variant={orden === 'top' ? 'filled' : 'light'}
+                  >
+                    Top
+                  </Button>
 
-                <Button
-                  onClick={() => {
-                    const params = new URLSearchParams(location.search);
-                    params.delete('orden'); // quitar orden para mostrar "destacados"
-                    router.push({ search: params.toString() }, { replace: false });
+                  <Button
+                    onClick={() => {
+                      const params = new URLSearchParams(location.search);
+                      const currentOrden = params.get('orden');
+                      if (currentOrden === 'nuevos') {
+                        params.delete('orden');
+                      } else {
+                        params.set('orden', 'nuevos');
+                      }
+                      const search = params.toString();
+                      router.push(`?${search}`);                  
+                    }}
+                    variant={orden === 'nuevos' ? 'filled' : 'light'}
+                  >
+                    Nuevos
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      const params = new URLSearchParams(location.search);
+                      params.delete('orden'); // quitar orden para mostrar "destacados"
+                      const search = params.toString();
+                      router.push(`?${search}`);
+                    }}
+                    variant={!orden ? 'filled' : 'light'}
+                  >
+                    Destacados
+                  </Button>
+                </Group>
+
+
+                <Box
+                  style={{
+                    display: 'flex',
+                    overflowX: 'auto',
+                    gap: '10px',
+                    padding: '10px 0',
+                    WebkitOverflowScrolling: 'touch',
                   }}
-                  variant={!orden ? 'filled' : 'light'}
                 >
-                  Destacados
+                  {collectionsExist &&
+                    collections.map((cat, i) => {
+                      const selected = selectedCollections.includes(cat);
+                      return (
+                        <Badge
+                          key={i}
+                          variant={selected ? 'filled' : 'light'}
+                          color="violet"
+                          size="lg"
+                          radius="xl"
+                          onClick={() => toggleCollection(cat)}
+                          style={{
+                            padding: '10px 16px',
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            backgroundColor: selected ? '#5e2ca5' : '#f3e8ff',
+                            color: selected ? '#ffffff' : '#4a0080',
+                            whiteSpace: 'nowrap',
+                            flexShrink: 0,
+                            cursor: 'pointer',
+                          }}
+                        >
+                          {cat}
+                        </Badge>
+                      );
+                    })}
+                </Box>
+              </Group>
+
+              <Paper
+                withBorder
+                radius="md"
+                shadow="xs"
+                mt="xl"
+                p="md"
+                style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
+              >
+              {isMobile ? (
+                <>
+                <Title order={4} mb="xs">
+                  {t('Grupos de Telegram Activos 2025')}
+                </Title>
+                <Text size="sm" color="dimmed" mb="xs">
+                  {t('Únete a los')} <strong>{t('mejores grupos de Telegram')}</strong> {t('o publica el tuyo gratis y consigue nuevos miembros al instante.')}
+                </Text>
+                </>
+              ) : (
+                <>
+                  <Title order={3} mb="sm">
+                    {t('Grupos de Telegram Activos 2025')}
+                  </Title>
+
+                  <Text size="sm" color="dimmed" mb="xs">
+                    {t('¿Tienes un grupo o canal de Telegram o WhatsApp y no sabes cómo conseguir más miembros?')} <strong>{t('En JoinGroups puedes publicar tu grupo gratis')}</strong>, {t('la mejor web para encontrar comunidades activas.')}{' '}
+                    {t('Explora nuestro buscador y descubre los ')}<strong>{t('Mejores Grupos de Telegram ')}</strong>{t('WhatsApp organizados por temática, intereses y nombre.')}{' '}
+                    {t('Aqui encontraras las mejores ')}<strong>{t('Comunidades de Telegram ')}</strong>{t('recibe consejos útiles para aumentar tu comunidad y aprende cómo hacer crecer tu grupo con nuestras guías.')}{' '}
+                    <strong>{t('JoinGroups encuentras Grpos de Telegram Activos.')}</strong>
+                  </Text>
+                </>
+              )}
+
+              </Paper>
+
+              {rows}
+
+              <Group mt="xl" justify="center" gap="xs">
+                <Button
+                  variant="light"
+                  size="xs"
+                  radius="md"
+                  onClick={() => setCurrentPage(1)}
+                  disabled={currentPage === 1}
+                >
+                  {t('Inicio (paginación)')}
+                </Button>
+                <Button
+                  variant="subtle"
+                  size="xs"
+                  radius="md"
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  ← {t('Anterior')}
+                </Button>
+                <Text size="sm" fw={500} mt={4}>
+                  {t('Página')} <strong>{currentPage}</strong>
+                </Text>
+                <Button
+                  variant="subtle"
+                  size="xs"
+                  radius="md"
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      indexOfLastGroup < sortedData.length ? prev + 1 : prev
+                    )
+                  }
+                  disabled={indexOfLastGroup >= sortedData.length}
+                >
+                  {t('Siguiente')} →
                 </Button>
               </Group>
 
-
               <Box
-                style={{
-                  display: 'flex',
-                  overflowX: 'auto',
-                  gap: '10px',
-                  padding: '10px 0',
-                  WebkitOverflowScrolling: 'touch',
-                }}
+                onPointerDownCapture={(e) => e.stopPropagation()}
+                onWheel={(e) => e.stopPropagation()}
               >
-                {collectionsExist &&
-                  collections.map((cat, i) => {
-                    const selected = selectedCollections.includes(cat);
-                    return (
-                      <Badge
-                        key={i}
-                        variant={selected ? 'filled' : 'light'}
-                        color="violet"
-                        size="lg"
-                        radius="xl"
-                        onClick={() => toggleCollection(cat)}
-                        style={{
-                          padding: '10px 16px',
-                          fontSize: '14px',
-                          fontWeight: 600,
-                          backgroundColor: selected ? '#5e2ca5' : '#f3e8ff',
-                          color: selected ? '#ffffff' : '#4a0080',
-                          whiteSpace: 'nowrap',
-                          flexShrink: 0,
-                          cursor: 'pointer',
-                        }}
-                      >
-                        {cat}
-                      </Badge>
-                    );
-                  })}
-              </Box>
-            </Group>
-
-            <Paper
-              withBorder
-              radius="md"
-              shadow="xs"
-              mt="xl"
-              p="md"
-              style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
-            >
-            {isMobile ? (
-              <>
-              <Title order={4} mb="xs">
-                {t('Grupos de Telegram Activos 2025')}
-              </Title>
-              <Text size="sm" color="dimmed" mb="xs">
-                {t('Únete a los')} <strong>{t('mejores grupos de Telegram')}</strong> {t('o publica el tuyo gratis y consigue nuevos miembros al instante.')}
-              </Text>
-              </>
-            ) : (
-              <>
-                <Title order={3} mb="sm">
-                  {t('Grupos de Telegram Activos 2025')}
-                </Title>
-
-                <Text size="sm" color="dimmed" mb="xs">
-                  {t('¿Tienes un grupo o canal de Telegram o WhatsApp y no sabes cómo conseguir más miembros?')} <strong>{t('En JoinGroups puedes publicar tu grupo gratis')}</strong>, {t('la mejor web para encontrar comunidades activas.')}{' '}
-                  {t('Explora nuestro buscador y descubre los ')}<strong>{t('Mejores Grupos de Telegram ')}</strong>{t('WhatsApp organizados por temática, intereses y nombre.')}{' '}
-                  {t('Aqui encontraras las mejores ')}<strong>{t('Comunidades de Telegram ')}</strong>{t('recibe consejos útiles para aumentar tu comunidad y aprende cómo hacer crecer tu grupo con nuestras guías.')}{' '}
-                  <strong>{t('JoinGroups encuentras Grpos de Telegram Activos.')}</strong>
-                </Text>
-              </>
-            )}
-
-            </Paper>
-
-            {rows}
-
-            <Group mt="xl" justify="center" gap="xs">
-              <Button
-                variant="light"
-                size="xs"
-                radius="md"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
-              >
-                {t('Inicio (paginación)')}
-              </Button>
-              <Button
-                variant="subtle"
-                size="xs"
-                radius="md"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                ← {t('Anterior')}
-              </Button>
-              <Text size="sm" fw={500} mt={4}>
-                {t('Página')} <strong>{currentPage}</strong>
-              </Text>
-              <Button
-                variant="subtle"
-                size="xs"
-                radius="md"
-                onClick={() =>
-                  setCurrentPage((prev) =>
-                    indexOfLastGroup < sortedData.length ? prev + 1 : prev
-                  )
-                }
-                disabled={indexOfLastGroup >= sortedData.length}
-              >
-                {t('Siguiente')} →
-              </Button>
-            </Group>
-
-            <Box
-              onPointerDownCapture={(e) => e.stopPropagation()}
-              onWheel={(e) => e.stopPropagation()}
-            >
-              <Menu shadow="md" width={200} withinPortal position="bottom-end">
-                <Menu.Target>
-                  <ActionIcon
-                    size="lg"
-                    radius="xl"
-                    variant="subtle"
-                    style={{
-                      fontSize: rem(24),
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}
-                  >
-                    <span style={{
-                      fontSize: '16px',
-                      display: 'inline-block',
-                      lineHeight: '1',
-                      borderRadius: '2px',
-                      overflow: 'hidden',
-                      width: '20px',
-                      height: '14px',
-                    }}>
-                      {countries.find((c) => c.value === subdomain)?.emoji ?? '🇲🇽'}
-                    </span>
-                    <span style={{ fontSize: '0.75rem', transform: 'translateY(1px)' }}>▼</span>
-                  </ActionIcon>
-      
-                </Menu.Target>
-      
-                <Menu.Dropdown
-                  style={{
-                    maxHeight: rem(300),
-                    overflowY: 'auto',
-                  }}
-                  onWheel={(e) => e.stopPropagation()}
-                >
-                  {countries.map((country) => (
-                    <Menu.Item
-                      key={country.value}
-                      leftSection={
-                        <span style={{
-                          fontSize: '16px',
-                          display: 'inline-block',
-                          lineHeight: '1',
-                          borderRadius: '2px',
-                          overflow: 'hidden',
-                          width: '20px',
-                          height: '14px',
-                        }}>
-                          {country.emoji}
-                        </span>
-                      }
-                      onClick={() => {
-                        const currentPath = window.location.pathname + window.location.search;
-                        i18n.changeLanguage(country.lang);
-                        window.location.href = `https://${country.value}.joingroups.pro${currentPath}`;
+                <Menu shadow="md" width={200} withinPortal position="bottom-end">
+                  <Menu.Target>
+                    <ActionIcon
+                      size="lg"
+                      radius="xl"
+                      variant="subtle"
+                      style={{
+                        fontSize: rem(24),
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
                       }}
                     >
-                      {country.label}
-                    </Menu.Item>
-                  ))}
-                </Menu.Dropdown>
-      
-              </Menu>
-            </Box>
-
-            {rows.length === 0 && (
-              <Box ta="center" mt="xl">
-                <Text fw={500} c="dimmed" mb="sm">
-                  {t('No se encontraron resultados para esta categoría.')}
-                </Text>
-                <img
-                  src="https://joingroups.pro/meme-Pica.png"
-                  alt="Nada, No hay, No existe"
-                  style={{ width: '160px', opacity: 0.5 }}
-                />
+                      <span style={{
+                        fontSize: '16px',
+                        display: 'inline-block',
+                        lineHeight: '1',
+                        borderRadius: '2px',
+                        overflow: 'hidden',
+                        width: '20px',
+                        height: '14px',
+                      }}>
+                        {countries.find((c) => c.value === subdomain)?.emoji ?? '🇲🇽'}
+                      </span>
+                      <span style={{ fontSize: '0.75rem', transform: 'translateY(1px)' }}>▼</span>
+                    </ActionIcon>
+        
+                  </Menu.Target>
+        
+                  <Menu.Dropdown
+                    style={{
+                      maxHeight: rem(300),
+                      overflowY: 'auto',
+                    }}
+                    onWheel={(e) => e.stopPropagation()}
+                  >
+                    {countries.map((country) => (
+                      <Menu.Item
+                        key={country.value}
+                        leftSection={
+                          <span style={{
+                            fontSize: '16px',
+                            display: 'inline-block',
+                            lineHeight: '1',
+                            borderRadius: '2px',
+                            overflow: 'hidden',
+                            width: '20px',
+                            height: '14px',
+                          }}>
+                            {country.emoji}
+                          </span>
+                        }
+                        onClick={() => {
+                          const currentPath = window.location.pathname + window.location.search;
+                          i18n.changeLanguage(country.lang);
+                          window.location.href = `https://${country.value}.joingroups.pro${currentPath}`;
+                        }}
+                      >
+                        {country.label}
+                      </Menu.Item>
+                    ))}
+                  </Menu.Dropdown>
+        
+                </Menu>
               </Box>
-            )}
-            
-            <Paper
-              withBorder
-              radius="md"
-              shadow="xs"
-              mt="xl"
-              p="md"
-              style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
-            >
-            <Text size="md" fw={600} mb="sm">
-              {t('Como Hacer Crecer tu Grupo de Telegram, Guia definitiva')}
-            </Text>
 
-            <Text size="sm" color="dimmed" mb="xs">
-              {t('Publica tu Grupo o Canal de Telegram gratis en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>, {t('la mejor web para conectar con comunidades activas y encontrar nuevos miembros.')}{' '}
-              {t('Explora los mejores grupos por nombre, temática o red social como Facebook o YouTube, y descubre consejos útiles para crecer.')}{' '}
-              {t('¿Aún no sabes cómo crear un grupo? Aprende paso a paso desde nuestro buscador de comunidades.')}{' '}
-              {typeof i18n.language !== 'undefined' && (
+              {rows.length === 0 && (
+                <Box ta="center" mt="xl">
+                  <Text fw={500} c="dimmed" mb="sm">
+                    {t('No se encontraron resultados para esta categoría.')}
+                  </Text>
+                  <img
+                    src="https://joingroups.pro/meme-Pica.png"
+                    alt="Nada, No hay, No existe"
+                    style={{ width: '160px', opacity: 0.5 }}
+                    />
+                </Box>
+              )}
+              
+              <Paper
+                withBorder
+                radius="md"
+                shadow="xs"
+                mt="xl"
+                p="md"
+                style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
+                >
+              <Text size="md" fw={600} mb="sm">
+                {t('Como Hacer Crecer tu Grupo de Telegram, Guia definitiva')}
+              </Text>
+
+              <Text size="sm" color="dimmed" mb="xs">
+                {t('Publica tu Grupo o Canal de Telegram gratis en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>, {t('la mejor web para conectar con comunidades activas y encontrar nuevos miembros.')}{' '}
+                {t('Explora los mejores grupos por nombre, temática o red social como Facebook o YouTube, y descubre consejos útiles para crecer.')}{' '}
+                {t('¿Aún no sabes cómo crear un grupo? Aprende paso a paso desde nuestro buscador de comunidades.')}{' '}
+                {typeof i18n.language !== 'undefined' && (
                 <Link
-                  to={i18n.language === 'es' ? '/comunidades/como-crear-grupo-telegram' : '/comunidades/how-to-create-telegram-group'}
+                  href={i18n.language === 'es' ? '/comunidades/como-crear-grupo-telegram' : '/comunidades/how-to-create-telegram-group'}
                   style={{ color: '#228be6', textDecoration: 'underline' }}
                 >
                   {t('Haz clic aquí y aprende cómo crear tu grupo de Telegram')}
                 </Link>
-              )}
 
-            </Text>
+                )}
+
+              </Text>
 
 
 
-            <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
-              {t('Grupos de Telegram Activos 2025, Grupos de Telegram, Grupos de WhatsApp, Comunidades de Telegram, Publicar Grupo Telegram, Unirse a Grupos Telegram, Buscar Miembros Telegram, Conocer Personas Telegram')}
-            </Text>
-            </Paper>
-          </>
-        {/* Botón flotante con cambio de posición */}
-        <Button
-          component={Link}
-          href="/comunidades/form"
-          color="red"
-          size="sm"
-          variant='filled'
-          radius="xl"
-          className={styles['floating-publish-button']}
-          style={{
-            ...floatingStyle(buttonPosition),
-          }}
-        >
-          Publica tu grupo AHORA !!
-        </Button>
-      </ScrollArea>
+              <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
+                {t('Grupos de Telegram Activos 2025, Grupos de Telegram, Grupos de WhatsApp, Comunidades de Telegram, Publicar Grupo Telegram, Unirse a Grupos Telegram, Buscar Miembros Telegram, Conocer Personas Telegram')}
+              </Text>
+              </Paper>
+            </>
+          {/* Botón flotante con cambio de posición */}
+          <Button
+            component={Link}
+            href="/comunidades/subir-grupo"
+            color="red"
+            size="sm"
+            variant='filled'
+            radius="xl"
+            className={styles['floating-publish-button']}
+            style={{
+              ...floatingStyle(buttonPosition),
+            }}
+          >
+            Publica tu grupo AHORA !!
+          </Button>
+        </ScrollArea>
+      </Container>
     </>
 
   );

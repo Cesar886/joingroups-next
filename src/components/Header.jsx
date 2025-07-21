@@ -1,4 +1,5 @@
-import { NavLink, useLocation } from 'react-router-dom';
+"use client";
+
 import {
   ActionIcon,
   Center,
@@ -9,10 +10,15 @@ import {
   rem,
   Box,
 } from '@mantine/core';
-import classes from './Header.module.css';
+import classes from '@/app/styles/Header.module.css';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import i18n from '@/locales/i18n.jsx';
+
+
 
 const countries = [
   { value: 'mx', label: 'México', emoji: '🇲🇽', lang: 'es' },
@@ -52,11 +58,18 @@ const countries = [
 ];
 
 
-export function Header() {
+export default function Header() {
   const { t, i18n } = useTranslation();
+  const [subdomain, setSubdomain] = useState('mx');
+  const pathname = usePathname(); // ← usa esto directamente
 
   // Detectar subdominio desde la URL
-  const subdomain = window.location.hostname.includes('.') ? window.location.hostname.split('.')[0] : 'mx';
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    if (hostname.includes('.')) {
+      setSubdomain(hostname.split('.')[0]);
+    }
+  }, []);
   const currentLang = subdomain === 'us' ? 'en' : 'es';
 
   // Forzar idioma desde subdominio
@@ -66,10 +79,9 @@ export function Header() {
     }
   }, [i18n, currentLang]);
 
-  const location = useLocation();
-
-  const isClanesSection = location.pathname.startsWith('/clanes');
-
+  const isClanesSection = pathname.startsWith('/clanes');
+  
+  
   const links = [
     { link: '/', label: t('Inicio') },
     {
@@ -78,18 +90,18 @@ export function Header() {
       highlight: true,
     },
   ];
-
+  
   const items = links.map((link) => {
+    const isActive = pathname.startsWith(link.link);
     const navLink = (
-      <NavLink
+      <Link
         key={link.link}
-        to={link.link}
-        className={({ isActive }) =>
-          isActive ? `${classes.link} ${classes.active}` : classes.link
-        }
+        href={link.link}
+        className={isActive ? 'active' : ''}
       >
         {link.label}
-      </NavLink>
+      </Link>
+
     );
 
     return link.highlight ? (
@@ -110,7 +122,7 @@ export function Header() {
     <header className={classes.header}>
       <Container size="md">
         <div className={classes.inner}>
-          <NavLink href="/" className={classes.logoLink}>
+          <Link href="/" className={classes.logoLink}>
             <Group align="center" gap="xs" wrap="nowrap">
               <img
                 src="/JoinGroups.png"
@@ -121,7 +133,7 @@ export function Header() {
               />
               <span className={classes.logoText}>JoinGroup</span>
             </Group>
-          </NavLink>
+          </Link>
 
           <Group
             gap={6}

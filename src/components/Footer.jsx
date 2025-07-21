@@ -1,7 +1,7 @@
+"use client";
+
 import {
   IconBrandInstagram,
-  IconBrandTwitter,
-  IconBrandYoutube,
 } from '@tabler/icons-react';
 import {
   ActionIcon,
@@ -12,7 +12,7 @@ import {
   Flex,
   Image,
 } from '@mantine/core';
-import classes from './Footer.module.css';
+import classes from '@/app/styles/Footer.module.css';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
@@ -51,7 +51,7 @@ export default function Footer() {
             <Image src="/JoinGroups.png" alt="Logo de JoinGroup" className={classes.logo}/>
             <Text size="sm" c="dimmed" className={classes.description} ta={{ base: 'center', sm: 'left' }}>
             <Link
-              to={i18n.language === 'es' ? 'https://joingroups.pro' : 'https://joingroups.pro'}
+              href={i18n.language === 'es' ? 'https://joingroups.pro' : 'https://joingroups.pro'}
               style={{ color: 'inherit', textDecoration: 'none', fontWeight: 400 }}
             >
               JoinGroups
@@ -83,7 +83,7 @@ export default function Footer() {
                         key={link.label}
                         className={classes.link}
                         component={Link}
-                        to={link.link}
+                        href={link.link}
                       >
                         {link.label}
                       </Text>
