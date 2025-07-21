@@ -1,4 +1,4 @@
-// Home.jsx
+"use client";
 import {
   ActionIcon,
   Title,
@@ -16,7 +16,7 @@ import {
   rem,
   Table,
 } from '@mantine/core';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
 import {
   IconFlame,
   IconTrendingUp,
@@ -26,12 +26,14 @@ import {
   IconBolt,
 } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
-import styles from './Home.module.css';
+import styles from '@/app/styles/Page.module.css';
 import { useEffect, useState, useRef } from 'react';
-import { db } from '../firebase';
+import { db } from '@/firebase/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
-import slugify from '../assets/slugify';
+import slugify from '@/lib/slugify';
+import { useRouter } from 'next/navigation';
+
 
 const countries = [
   { value: 'mx', label: 'México', emoji: '🇲🇽', lang: 'es' },
@@ -143,13 +145,15 @@ const featuredButtons = [
 
 export default function Home() {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [groups, setGroups] = useState([]);
   const [clanes, setClanes] = useState([]);
+  const [subdomain, setSubdomain] = useState('mx'); // valor por defecto
   const baseLang = typeof i18n.language === 'string' ? i18n.language.split('-')[0] : 'es';
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const subdomain = window.location.hostname.includes('.') ? window.location.hostname.split('.')[0] : 'mx';
   const currentLang = subdomain === 'us' ? 'en' : 'es';
+  const [buttonPosition, setButtonPosition] = useState('top-left');
+  const positionRef = useRef('top-left');
 
   useEffect(() => {
     if (i18n.language !== currentLang) {
@@ -157,8 +161,14 @@ export default function Home() {
     }
   }, [i18n, currentLang]);
 
-  const [buttonPosition, setButtonPosition] = useState('top-left');
-  const positionRef = useRef('top-left');
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const host = window.location.hostname;
+      const sd = host.includes('.') ? host.split('.')[0] : 'mx';
+      setSubdomain(sd);
+    }
+  }, []);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -228,7 +238,7 @@ export default function Home() {
           const basePath = isGroup
             ? `/comunidades/grupos-de-${row.tipo}/${slugify(categoria)}`
             : `/clanes/clanes-de-${row.tipo}`;
-          navigate(`${basePath}/${slug}`);
+          router.push(`${basePath}/${slug}`);
         }}
         style={{ cursor: 'pointer' }}
       >
@@ -326,7 +336,7 @@ export default function Home() {
         component={Link}
         variant="light"
         radius="lg"
-        to="/comunidades"
+        href="/comunidades"
         style={{ fontWeight: 600 }}
       >
         Explorar Grupos Populares
@@ -340,7 +350,7 @@ export default function Home() {
           <Button
             key={i}
             component={Link}
-            to={b.to}
+            href={b.to}
             leftSection={b.icon}
             variant="light"
             radius="xl"
@@ -364,7 +374,7 @@ export default function Home() {
           {groups.map((group, i) => renderCard(group, i, true))}
         </Stack>
         <Center mt="md">
-          <Button variant="light" component={Link} radius="md" to="/comunidades">
+          <Button variant="light" component={Link} radius="md" href="/comunidades">
             Ver todos los grupos
           </Button>
         </Center>
@@ -376,14 +386,14 @@ export default function Home() {
           {clanes.map((clan, i) => renderCard(clan, i, false))}
         </Stack>
         <Center mt="md">
-          <Button variant="light" component={Link} radius="md" to="/clanes" color='violet'>
+          <Button variant="light" component={Link} radius="md" href="/clanes" color='violet'>
             Ver todos los clanes
           </Button>
         </Center>
       </Paper>
 
       <Center mt="xl">
-        <Button component={Link} to="/clanes/form" variant='light' color="violet" size="lg" radius='lg'>
+        <Button component={Link} href="/clanes/form" variant='light' color="violet" size="lg" radius='lg'>
           Publica tu CLAN ahora
         </Button>
       </Center>
@@ -493,7 +503,7 @@ export default function Home() {
       {/* Botón flotante con cambio de posición */}
       <Button
         component={Link}
-        to="/comunidades/form"
+        href="/comunidades/form"
         color="rgba(255, 0, 0, 1)"
         size="sm"
         variant='filled'

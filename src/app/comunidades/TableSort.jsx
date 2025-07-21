@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import Link from 'next/link';
 import {
   IconChevronDown,
   IconChevronUp,
@@ -27,7 +27,7 @@ import {
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useMediaQuery } from '@mantine/hooks';
-import slugify from '../assets/slugify';
+import slugify from '@/lib/slugify';
 import styles from './TableSort.module.css';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -129,7 +129,7 @@ function Th({ children, reversed, sorted, onSort }) {
 
 export default function TableSort() {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+const router = useRouter();
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
@@ -170,7 +170,7 @@ export default function TableSort() {
     } else {
       params.delete('cats');
     }
-    navigate({ search: params.toString() }, { replace: true });
+    router.push({ search: params.toString() }, { replace: true });
     // eslint‑disable‑next‑line react‑hooks/exhaustive‑deps
   }, [selectedCollections]);   // ✅ sin ‘location’ y sin duplicar el hook
 
@@ -336,7 +336,7 @@ export default function TableSort() {
         key={`${row.id}-${slug}-${idx}`}
         onClick={() => {
           const categoria = row.categories?.[0] || 'otros';
-          navigate(`/comunidades/grupos-de-${row.tipo}/${slugify(categoria)}/${slug}`);
+          router.push(`/comunidades/grupos-de-${row.tipo}/${slugify(categoria)}/${slug}`);
         }}
       >
         <Table horizontalSpacing="md" withRowBorders={false}>
@@ -548,7 +548,7 @@ export default function TableSort() {
                 variant="light"
                 size="xs"
                 radius="md"
-                onClick={() => navigate('/comunidades/grupos-de-telegram')}
+                onClick={() => router.push('/comunidades/grupos-de-telegram')}
                 leftSection={
                   <img
                     src="/telegramicons.png"
@@ -564,7 +564,7 @@ export default function TableSort() {
                 variant="light"
                 size="xs"
                 radius="md"
-                onClick={() => navigate('/comunidades/grupos-de-whatsapp')}
+                onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
                 leftSection={
                   <img
                     src="/wapp.webp"
@@ -585,7 +585,7 @@ export default function TableSort() {
                     } else {
                       params.set('orden', 'top');
                     }
-                    navigate({ search: params.toString() }, { replace: false });
+                    router.push({ search: params.toString() }, { replace: false });
                   }}
                   variant={orden === 'top' ? 'filled' : 'light'}
                 >
@@ -601,7 +601,7 @@ export default function TableSort() {
                     } else {
                       params.set('orden', 'nuevos');
                     }
-                    navigate({ search: params.toString() }, { replace: false });
+                    router.push({ search: params.toString() }, { replace: false });
                   }}
                   variant={orden === 'nuevos' ? 'filled' : 'light'}
                 >
@@ -612,7 +612,7 @@ export default function TableSort() {
                   onClick={() => {
                     const params = new URLSearchParams(location.search);
                     params.delete('orden'); // quitar orden para mostrar "destacados"
-                    navigate({ search: params.toString() }, { replace: false });
+                    router.push({ search: params.toString() }, { replace: false });
                   }}
                   variant={!orden ? 'filled' : 'light'}
                 >
@@ -828,7 +828,7 @@ export default function TableSort() {
             </Text>
 
             <Text size="sm" color="dimmed" mb="xs">
-              {t('Publica tu Grupo o Canal de Telegram gratis en')} <Link to="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>, {t('la mejor web para conectar con comunidades activas y encontrar nuevos miembros.')}{' '}
+              {t('Publica tu Grupo o Canal de Telegram gratis en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>, {t('la mejor web para conectar con comunidades activas y encontrar nuevos miembros.')}{' '}
               {t('Explora los mejores grupos por nombre, temática o red social como Facebook o YouTube, y descubre consejos útiles para crecer.')}{' '}
               {t('¿Aún no sabes cómo crear un grupo? Aprende paso a paso desde nuestro buscador de comunidades.')}{' '}
               <Link to={i18n.language === 'es' ? '/comunidades/como-crear-grupo-telegram' : '/comunidades/how-to-create-telegram-group'}
@@ -847,7 +847,7 @@ export default function TableSort() {
         {/* Botón flotante con cambio de posición */}
         <Button
           component={Link}
-          to="/comunidades/form"
+          href="/comunidades/form"
           color="red"
           size="sm"
           variant='filled'

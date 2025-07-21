@@ -13,7 +13,7 @@ import {
   Image,
 } from '@mantine/core';
 import classes from './Footer.module.css';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 

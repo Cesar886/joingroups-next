@@ -1,5 +1,4 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { useNavigate } from 'react-router-dom';
 import {
   TextInput,
   Textarea,
@@ -22,7 +21,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useRef, useState } from 'react';
-import slugify from '../assets/slugify';
+import slugify from '@/lib/slugify';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
 import { Helmet } from 'react-helmet';
@@ -31,7 +30,7 @@ import { IconBrandWhatsapp } from '@tabler/icons-react';
 export default function ClanesGroupForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+const router = useRouter();
   const baseLang = i18n.language.split('-')[0]; // "en-US" → "en"
   const [game, setGame] = useState('Clash Royale');
 
@@ -248,7 +247,7 @@ export default function ClanesGroupForm() {
 
       /* 6. Reset + navegación */
       form.reset();
-      navigate(`/clanes/clanes-de-${game.toLowerCase().replace(/\s+/g, '-')}/${slug}`);
+      router.push(`/clanes/clanes-de-${game.toLowerCase().replace(/\s+/g, '-')}/${slug}`);
     } catch (error) {
       console.error(error);
       showNotification({

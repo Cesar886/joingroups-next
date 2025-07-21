@@ -1,9 +1,8 @@
 import { Button, Container, Image, SimpleGrid, Text, Title } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
 import classes from './404.module.css';
 
 export default function NotFoundImage() {
-  const navigate = useNavigate();
+const router = useRouter();
 
   return (
     <Container className={classes.root}>
@@ -29,7 +28,7 @@ export default function NotFoundImage() {
             size="md"
             mt="xl"
             className={classes.control}
-            onClick={() => navigate('/')}
+            onClick={() => router.push('/')}
           >
             Volver al inicio
           </Button>

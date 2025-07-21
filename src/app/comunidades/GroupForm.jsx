@@ -15,7 +15,7 @@ import { showNotification } from '@mantine/notifications';
 import { collection, addDoc, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useRef, useState } from 'react';
-import slugify from '../assets/slugify'
+import slugify from '@/lib/slugify'
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
 import { Helmet } from 'react-helmet';

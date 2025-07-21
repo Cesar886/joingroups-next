@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import Link from 'next/link';
 import {
   IconChevronDown,
   IconChevronUp,
@@ -24,7 +24,7 @@ import {
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useMediaQuery } from '@mantine/hooks';
-import slugify from '../assets/slugify';
+import slugify from '@/lib/slugify';
 import { Helmet } from 'react-helmet-async';
 import styles from './ClanClashRoyale.module.css';
 
@@ -78,7 +78,7 @@ function sortData(data, { sortBy, reversed, search, collectionFilter }) {
 
 export default function ClashOfClans() {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+const router = useRouter();
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
@@ -163,7 +163,7 @@ export default function ClashOfClans() {
         shadow="xs"
         mb="sm"
         key={`${row.id}-${slug}-${idx}`}
-        onClick={() => navigate(`/clanes/clanes-de-clash-of-clans/${slug}`)}
+        onClick={() => router.push(`/clanes/clanes-de-clash-of-clans/${slug}`)}
       >
         <Table horizontalSpacing="md" withRowBorders={false}>
           <Table.Tbody>
@@ -362,7 +362,7 @@ export default function ClashOfClans() {
                 variant="light"
                 size="xs"
                 radius="md"
-                onClick={() => navigate('/clanes')}
+                onClick={() => router.push('/clanes')}
                 leftSection={
                   <img
                     src="/telegramicons.png"
@@ -378,7 +378,7 @@ export default function ClashOfClans() {
                 variant="light"
                 size="xs"
                 radius="md"
-                onClick={() => navigate('/clanes/clanes-de-clash-royale')}
+                onClick={() => router.push('/clanes/clanes-de-clash-royale')}
                 leftSection={
                   <img
                     src="/clashRoyaleFondo1.png"
@@ -394,7 +394,7 @@ export default function ClashOfClans() {
                 variant="light"
                 size="xs"
                 radius="md"
-                onClick={() => navigate('/clanes/clanes-de-clash-of-clans')}
+                onClick={() => router.push('/clanes/clanes-de-clash-of-clans')}
                 leftSection={
                   <img
                     src="/clashOfClansFondo.png"
@@ -498,7 +498,7 @@ export default function ClashOfClans() {
                 variant="outline"
                 size="xs"
                 radius="md"
-                onClick={() => navigate('/clanes/form')}
+                onClick={() => router.push('/clanes/form')}
                 leftSection={
                   <img
                   src="/telegramicons.png"
@@ -563,9 +563,9 @@ export default function ClashOfClans() {
             </Text>
 
             <Text size="sm" color="dimmed" mb="xs">
-              {t('Publica tu CLAN gratuitamente en')} <Link to="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses.')}
+              {t('Publica tu CLAN gratuitamente en')} <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses.')}
               {t('Si aún no sabes cómo crear un clan, puedes aprender fácilmente')} {' '}
-              <Link to="/instrucciones-crear-clan" style={{ color: '#228be6', textDecoration: 'underline' }}>
+              <Link href="/instrucciones-crear-clan" style={{ color: '#228be6', textDecoration: 'underline' }}>
                 {t('aquí cómo crear tu clan de Clash of Clans')}
               </Link>.
             </Text>

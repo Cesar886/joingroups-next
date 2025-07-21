@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import Link from 'next/link';
 import {
   IconChevronDown,
   IconChevronUp,
@@ -23,7 +23,7 @@ import {
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useMediaQuery } from '@mantine/hooks';
-import slugify from '../assets/slugify';
+import slugify from '@/lib/slugify';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
@@ -132,7 +132,7 @@ function sortData(data, { sortBy, reversed, search, collectionFilter }) {
 
 export default function Whatsapp() {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+const router = useRouter();
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
@@ -256,7 +256,7 @@ export default function Whatsapp() {
         onClick={() => {
           const mainCategory = row.categories?.[0] || 'otros';
           const categoryUrl = getCategoryUrl(mainCategory, location.pathname);
-          navigate(`${categoryUrl}/${slug}`);
+          router.push(`${categoryUrl}/${slug}`);
         }}
         >
         <Table horizontalSpacing="md" withRowBorders={false}>
@@ -408,7 +408,7 @@ export default function Whatsapp() {
                 variant="light"
                 size="xs"
                 radius="md"
-                onClick={() => navigate('/comunidades/grupos-de-telegram')}
+                onClick={() => router.push('/comunidades/grupos-de-telegram')}
                 leftSection={
                   <img
                     src="/telegramicons.png"
@@ -425,7 +425,7 @@ export default function Whatsapp() {
                 variant="light"
                 size="xs"
                 radius="md"
-                onClick={() => navigate('/comunidades/grupos-de-whatsapp')}
+                onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
                 leftSection={
                   <img
                     src="/wapp.webp"
@@ -438,9 +438,9 @@ export default function Whatsapp() {
               </Button>
 
               <Group mt="md" mb="md">
-                <Button onClick={() => navigate('?orden=top')} variant={orden === 'top' ? 'filled' : 'light'}>Top</Button>
-                <Button onClick={() => navigate('?orden=nuevos')} variant={orden === 'nuevos' ? 'filled' : 'light'}>Nuevos</Button>
-                <Button onClick={() => navigate('')} variant={!orden ? 'filled' : 'light'}>Destacados</Button>
+                <Button onClick={() => router.push('?orden=top')} variant={orden === 'top' ? 'filled' : 'light'}>Top</Button>
+                <Button onClick={() => router.push('?orden=nuevos')} variant={orden === 'nuevos' ? 'filled' : 'light'}>Nuevos</Button>
+                <Button onClick={() => router.push('')} variant={!orden ? 'filled' : 'light'}>Destacados</Button>
               </Group>
             </Group>
 
@@ -467,7 +467,7 @@ export default function Whatsapp() {
                       onClick={() => {
                         // Navegar a la página específica de la categoría
                         const categoryUrl = getCategoryUrl(cat, location.pathname);
-                        navigate(categoryUrl);
+                        router.push(categoryUrl);
                       }}
                       style={{
                         padding: '10px 16px',
@@ -577,9 +577,9 @@ export default function Whatsapp() {
             </Text>
 
             <Text size="sm" color="dimmed" mb="xs">
-              {t('Publica tu grupo gratuitamente en')} <Link to="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses.')}
+              {t('Publica tu grupo gratuitamente en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses.')}
               {t('Si aún no sabes cómo crear un grupo, puedes aprender fácilmente')} {' '}
-              <Link to="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>
+              <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>
                 {t('aquí cómo crear tu grupo de Telegram')}
               </Link>.
             </Text>

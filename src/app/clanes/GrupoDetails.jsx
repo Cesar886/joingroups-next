@@ -10,7 +10,7 @@ import {
   Group, Paper, Stack, Text, Title,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import slugify from '../assets/slugify';     // ⬅️ el mismo helper que usas en TableSort
+import slugify from '@/lib/slugify';     // ⬅️ el mismo helper que usas en TableSort
 import { useTranslation } from 'react-i18next';
 
 

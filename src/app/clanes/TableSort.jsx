@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef} from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import Link from 'next/link';
 import {
   IconChevronDown,
   IconChevronUp,
@@ -24,7 +24,7 @@ import {
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useMediaQuery } from '@mantine/hooks';
-import slugify from '../assets/slugify';
+import slugify from '@/lib/slugify';
 // import { useLocation } from 'react-router-dom';
 import styles from './TableSortClanes.module.css';
 import { Helmet } from 'react-helmet-async';
@@ -80,7 +80,7 @@ function sortData(data, { sortBy, reversed, search, collectionFilter }) {
 
 export default function Clanes() {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+const router = useRouter();
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
@@ -220,7 +220,7 @@ export default function Clanes() {
         shadow="xs"
         mb="sm"
         key={`${row.id}-${slug}-${idx}`}
-        onClick={() => navigate(`/clanes/clanes-de-${row.tipo}/${slug}`)}
+        onClick={() => router.push(`/clanes/clanes-de-${row.tipo}/${slug}`)}
       >
         <Table horizontalSpacing="md" withRowBorders={false}>
           <Table.Tbody>
@@ -413,7 +413,7 @@ export default function Clanes() {
                 variant="light"
                 size="xs"
                 radius="md"
-                onClick={() => navigate('/clanes/clanes-de-clash-royale')}
+                onClick={() => router.push('/clanes/clanes-de-clash-royale')}
                 leftSection={
                   <img
                     src="/clashRoyaleFondo1.png"
@@ -429,7 +429,7 @@ export default function Clanes() {
                 variant="light"
                 size="xs"
                 radius="md"
-                onClick={() => navigate('/clanes/clanes-de-clash-of-clans')}
+                onClick={() => router.push('/clanes/clanes-de-clash-of-clans')}
                 leftSection={
                   <img
                     src="/clashOfClansFondo.png"
@@ -588,9 +588,9 @@ export default function Clanes() {
             </Text>
 
             <Text size="sm" color="dimmed" mb="xs">
-              {t('Publica tu Clan gratuitamente en')} <Link to="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses. ')}
+              {t('Publica tu Clan gratuitamente en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses. ')}
               {t('Si aún no sabes cómo crear un clan, puedes aprender fácilmente')} {' '}
-              <Link to="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>
+              <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>
                 {t('aquí cómo crear tu clan de Telegram')}
               </Link>.
             </Text>
@@ -608,7 +608,7 @@ export default function Clanes() {
         {/* Botón flotante con cambio de posición */}
         <Button
           component={Link}
-          to="/clanes/form"
+          href="/clanes/form"
           color="red"
           size="sm"
           variant='filled'

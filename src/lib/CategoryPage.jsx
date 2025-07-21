@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import {
   IconSearch,
 } from '@tabler/icons-react';
@@ -18,7 +18,7 @@ import {
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useMediaQuery } from '@mantine/hooks';
-import slugify from '../assets/slugify'; // Asegúrate de que esta ruta sea correcta
+import slugify from '@/lib/slugify'; // Asegúrate de que esta ruta sea correcta
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 
@@ -242,7 +242,7 @@ function sortData(data, { search, category, orden }) {
 
 export default function CategoryPage() {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+const router = useRouter();
   const location = useLocation();
   const { category } = useParams(); // Obtiene la categoría de la URL (ej. 'anime')
   const [data, setData] = useState([]);
@@ -328,7 +328,7 @@ export default function CategoryPage() {
         shadow="xs"
         mb="sm"
         key={`${row.id}-${slug}-${idx}`}
-        onClick={() => navigate(`/comunidades/grupos-de-${platform}/${slug}`)} // Navega al detalle del grupo
+        onClick={() => router.push(`/comunidades/grupos-de-${platform}/${slug}`)} // Navega al detalle del grupo
         style={{ cursor: 'pointer' }} // Indica que es clickeable
       >
         <Table horizontalSpacing="md" withRowBorders={false}>
@@ -515,7 +515,7 @@ export default function CategoryPage() {
             variant="light"
             size="xs"
             radius="md"
-            onClick={() => navigate('/comunidades/grupos-de-telegram')}
+            onClick={() => router.push('/comunidades/grupos-de-telegram')}
             leftSection={
               <img
                 src="/telegramicons.png"
@@ -531,7 +531,7 @@ export default function CategoryPage() {
             variant="light"
             size="xs"
             radius="md"
-            onClick={() => navigate('/comunidades/grupos-de-whatsapp')}
+            onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
             leftSection={
               <img
                 src="/wapp.webp"
@@ -554,7 +554,7 @@ export default function CategoryPage() {
                 } else {
                   params.set('orden', 'top');
                 }
-                navigate({ search: params.toString() }, { replace: false });
+                router.push({ search: params.toString() }, { replace: false });
               }}
               variant={orden === 'top' ? 'filled' : 'light'}
             >
@@ -570,7 +570,7 @@ export default function CategoryPage() {
                 } else {
                   params.set('orden', 'nuevos');
                 }
-                navigate({ search: params.toString() }, { replace: false });
+                router.push({ search: params.toString() }, { replace: false });
               }}
               variant={orden === 'nuevos' ? 'filled' : 'light'}
             >
@@ -581,7 +581,7 @@ export default function CategoryPage() {
               onClick={() => {
                 const params = new URLSearchParams(location.search);
                 params.delete('orden');
-                navigate({ search: params.toString() }, { replace: false });
+                router.push({ search: params.toString() }, { replace: false });
               }}
               variant={!orden ? 'filled' : 'light'}
             >
@@ -609,7 +609,7 @@ export default function CategoryPage() {
                     color="violet"
                     size="lg"
                     radius="xl"
-                    onClick={() => navigate(`/comunidades/grupos-de-${platform}/${slugify(cat)}`)}
+                    onClick={() => router.push(`/comunidades/grupos-de-${platform}/${slugify(cat)}`)}
                     style={{
                       padding: '10px 16px',
                       fontSize: '14px',
@@ -768,7 +768,7 @@ export default function CategoryPage() {
             </Text>
             <Button
               component={Link}
-              to="/comunidades/form"
+              href="/comunidades/form"
               variant="filled"
               color="violet"
             >
@@ -797,7 +797,7 @@ export default function CategoryPage() {
 
           <Text size="sm" color="dimmed" mb="md">
             ¿Tienes un grupo de {category} y quieres hacerlo crecer? {' '}
-            <Link to="/comunidades/form" style={{ color: '#228be6', textDecoration: 'underline' }}>
+            <Link href="/comunidades/form" style={{ color: '#228be6', textDecoration: 'underline' }}>
               Publícalo gratis en JoinGroups
             </Link> y llega a miles de usuarios interesados en {category}.
           </Text>

@@ -110,7 +110,7 @@ export function Header() {
     <header className={classes.header}>
       <Container size="md">
         <div className={classes.inner}>
-          <NavLink to="/" className={classes.logoLink}>
+          <NavLink href="/" className={classes.logoLink}>
             <Group align="center" gap="xs" wrap="nowrap">
               <img
                 src="/JoinGroups.png"
