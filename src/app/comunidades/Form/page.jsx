@@ -1,3 +1,5 @@
+'use client';
+
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import {
   TextInput,
@@ -23,7 +25,7 @@ import { IconBrandWhatsapp } from '@tabler/icons-react';
 
 
 
-export default function Page() {
+export default function Form() {
   const [isLoading, setIsLoading] = useState(false);
   const { t, i18n } = useTranslation();
   const baseLang = i18n.language.split('-')[0]; // "en-US" → "en"

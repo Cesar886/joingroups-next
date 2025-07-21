@@ -1,6 +1,5 @@
 import '@mantine/core/styles.css';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { ColorSchemeScript } from '@mantine/core';
 import '@/app/styles/globals.css';
 import RootLayoutClient from './layout-client';
 

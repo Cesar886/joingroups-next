@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+'use client';
+
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import {
   IconChevronDown,
@@ -25,13 +27,17 @@ import {
   rem,
 } from '@mantine/core';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@/firebase/firebase';
+import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
-import styles from './TableSort.module.css';
-import { useLocation } from 'react-router-dom';
+import styles from '@/app/styles/TableSort.module.css';
+import { usePathname } from 'next/navigation';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'next/navigation';
+
+
 
 
 const countryMap = {
@@ -127,9 +133,9 @@ function Th({ children, reversed, sorted, onSort }) {
 }
 
 
-export default function Page() {
+export default function TableSort() {
   const { t, i18n } = useTranslation();
-const router = useRouter();
+  const router = useRouter();
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
@@ -137,12 +143,15 @@ const router = useRouter();
   // const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [currentPage, setCurrentPage] = useState(1);
+  const pathname = usePathname();
+  const searchParams = useSearchParams(); 
   const [collections, setCollections] = useState([]);
   const [selectedCollections, setSelectedCollections] = useState([]);  // ✅ único estado
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
   const orden = searchParams.get('orden');
-  const subdomain = window.location.hostname.includes('.') ? window.location.hostname.split('.')[0] : 'mx';
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
+  const subdomain = hostname.includes('.') && hostname.split('.')[0] !== 'www'
+    ? hostname.split('.')[0]
+    : 'mx';
 
   
   const [buttonPosition, setButtonPosition] = useState('top-left');
@@ -225,7 +234,7 @@ const router = useRouter();
 
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
+    const searchParams = useSearchParams();
     // const orden = searchParams.get('orden');
     const cats = searchParams.get('cats')?.split(',') || [];
 
@@ -233,7 +242,7 @@ const router = useRouter();
   }, [location.search]);
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
+    const searchParams = useSearchParams();
     const orden = searchParams.get('orden');
 
     let ordenados = [...data];
@@ -307,7 +316,7 @@ const router = useRouter();
   const currentGroups = sortedData.slice(indexOfFirstGroup, indexOfLastGroup);
 
   // 1️⃣  Calcula el idioma base una sola vez:
-  const baseLang = i18n.language.split('-')[0]; // "en-US" → "en"
+  const baseLang = i18n.language?.split('-')[0] || 'es';
   
 
   // …
@@ -414,123 +423,8 @@ const router = useRouter();
   return (
     <>
       <Helmet>
-        {/*
-          --- TÍTULO (Title) ---
-          Optimización:
-          - Más orientado a la acción ("Encuentra y Únete").
-          - Incluye "WhatsApp" para ampliar el alcance, ya que esta página es un agregador.
-          - Mantiene el año para relevancia y el branding "JoinGroups".
-        */}
-        <title>Encuentra y Únete a Grupos de Telegram y WhatsApp | Comunidades 2025</title>
-
-        {/*
-          --- DESCRIPCIÓN (Description) ---
-          Optimización:
-          - Comienza con un llamado a la acción claro.
-          - Menciona explícitamente ambas plataformas (Telegram y WhatsApp).
-          - Usa un lenguaje más natural y atractivo para el usuario.
-        */}
-        <meta
-          name="description"
-          content="Descubre el directorio más completo de comunidades online. Encuentra enlaces de invitación para grupos de Telegram y WhatsApp por categorías: amistad, gaming, anime, +18 y más."
-        />
-
-        {/*
-          --- KEYWORDS ---
-          Eliminada. Esta etiqueta es obsoleta y no tiene valor para el SEO moderno.
-          Las palabras clave importantes ya están integradas en el título y la descripción.
-        */}
-
-        {/* ——— CANONICAL ——— (Sin cambios, es correcta) */}
-        <link rel="canonical" href="https://joingroups.pro/comunidades" />
-
-        {/*
-          --- OPEN GRAPH (para redes sociales como Facebook, WhatsApp ) ---
-          Optimización:
-          - Título y descripción alineados con las metaetiquetas principales para consistencia.
-          - Se enfoca en el beneficio directo para el usuario ("El directorio #1...").
-        */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://joingroups.pro/comunidades" />
-        <meta property="og:title" content="El Directorio #1 de Grupos de Telegram y WhatsApp" />
-        <meta property="og:description" content="¿Buscas una comunidad? Explora cientos de grupos activos por categorías y únete con un solo clic. ¡Encuentra tu lugar ideal!" />
-        <meta property="og:image" content="https://joingroups.pro/images/og-comunidades-joingroups.jpg" />
-        <meta property="og:site_name" content="JoinGroups" />
-
-        {/*
-          --- TWITTER CARDS (para Twitter/X ) ---
-          Optimización:
-          - Mensajes adaptados para ser concisos y directos, como es común en Twitter.
-        */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://joingroups.pro/comunidades" />
-        <meta name="twitter:title" content="Tu Puerta de Entrada a Miles de Comunidades Online" />
-        <meta name="twitter:description" content="Encuentra enlaces directos a grupos de Telegram y WhatsApp. Explora, filtra por categoría y únete a la conversación." />
-        <meta name="twitter:image" content="https://joingroups.pro/images/twitter-comunidades-joingroups.jpg" />
-
-        {/*
-          --- SCHEMA.ORG (JSON-LD para datos estructurados ) ---
-          Optimización:
-          - Se mantiene `CollectionPage` pero se añade un `BreadcrumbList` (migas de pan).
-            Esto le indica a Google la jerarquía del sitio (Inicio > Comunidades), lo cual es excelente para el SEO.
-          - El `mainEntity` ahora usa `SiteNavigationElement`, que es más específico y semánticamente correcto
-            para una lista de enlaces a otras páginas de categorías.
-        */}
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "CollectionPage",
-              "name": "Directorio de Comunidades de Telegram y WhatsApp",
-              "description": "Navega por nuestro directorio de comunidades online. Filtra por plataforma y categoría para encontrar grupos de tu interés.",
-              "url": "https://joingroups.pro/comunidades",
-              "mainEntity": {
-                "@type": "ItemList",
-                "name": "Plataformas Principales",
-                "itemListElement": [
-                  {
-                    "@type": "SiteNavigationElement",
-                    "position": 1,
-                    "name": "Grupos de Telegram",
-                    "description": "Explora todas las comunidades disponibles en Telegram.",
-                    "url": "https://joingroups.pro/comunidades/grupos-de-telegram"
-                  },
-                  {
-                    "@type": "SiteNavigationElement",
-                    "position": 2,
-                    "name": "Grupos de WhatsApp",
-                    "description": "Encuentra grupos de WhatsApp por temas de interés.",
-                    "url": "https://joingroups.pro/comunidades/grupos-de-whatsapp"
-                  },
-                  {
-                    "@type": "SiteNavigationElement",
-                    "position": 3,
-                    "name": "Clanes de Videojuegos",
-                    "description": "Descubre clanes para juegos como Clash Royale y Clash of Clans.",
-                    "url": "https://joingroups.pro/clanes"
-                  }
-                ]
-              },
-              "breadcrumb": {
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                  {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Inicio",
-                    "item": "https://joingroups.pro/"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "Comunidades",
-                    "item": "https://joingroups.pro/comunidades"
-                  }
-                ]
-              }
-            }
-          `}
-        </script>
+        <title>Comunidades - JoinGroups.pro</title>
+        <meta name="description" content="Explora y únete a grupos de Telegram y WhatsApp clasificados por categorías. Actualizado para 2025." />
       </Helmet>
 
       <ScrollArea>
@@ -831,10 +725,15 @@ const router = useRouter();
               {t('Publica tu Grupo o Canal de Telegram gratis en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>, {t('la mejor web para conectar con comunidades activas y encontrar nuevos miembros.')}{' '}
               {t('Explora los mejores grupos por nombre, temática o red social como Facebook o YouTube, y descubre consejos útiles para crecer.')}{' '}
               {t('¿Aún no sabes cómo crear un grupo? Aprende paso a paso desde nuestro buscador de comunidades.')}{' '}
-              <Link to={i18n.language === 'es' ? '/comunidades/como-crear-grupo-telegram' : '/comunidades/how-to-create-telegram-group'}
-                style={{ color: '#228be6', textDecoration: 'underline' }}>
-                {t('Haz clic aquí y aprende cómo crear tu grupo de Telegram')}
-              </Link>.
+              {typeof i18n.language !== 'undefined' && (
+                <Link
+                  to={i18n.language === 'es' ? '/comunidades/como-crear-grupo-telegram' : '/comunidades/how-to-create-telegram-group'}
+                  style={{ color: '#228be6', textDecoration: 'underline' }}
+                >
+                  {t('Haz clic aquí y aprende cómo crear tu grupo de Telegram')}
+                </Link>
+              )}
+
             </Text>
 
 
