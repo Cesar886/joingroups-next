@@ -152,16 +152,8 @@ export default function Page() {
   const [subdomain, setSubdomain] = useState('mx'); // valor por defecto
   const baseLang = typeof i18n.language === 'string' ? i18n.language.split('-')[0] : 'es';
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const currentLang = subdomain === 'us' ? 'en' : 'es';
   const [buttonPosition, setButtonPosition] = useState('top-left');
   const positionRef = useRef('top-left');
-
-  useEffect(() => {
-    const savedLang = sessionStorage.getItem('lang') || 'es';
-    if (i18n.language !== savedLang) {
-      i18n.changeLanguage(savedLang);
-    }
-  }, [i18n]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Link, useLocation } from 'react-router-dom';
 import {
   IconChevronDown,
   IconChevronUp,
@@ -24,7 +24,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
-import { useLocation } from 'react-router-dom';
+import styles from './TableSortTelegram.module.css';
 import { Helmet } from 'react-helmet-async';
 
 const getCategoryUrl = (category, currentPath) => {
@@ -130,7 +130,7 @@ function sortData(data, { sortBy, reversed, search, collectionFilter }) {
 );
 }
 
-export default function Whatsapp() {
+export default function Page() {
   const { t, i18n } = useTranslation();
 const router = useRouter();
   const [data, setData] = useState([]);
@@ -139,76 +139,78 @@ const router = useRouter();
   // const [sortBy, setSortBy] = useState(null);
   // const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const [selectedCollections, setSelectedCollections] = useState([]);  // ✅ único estado
-  const [collections, setCollections] = useState([]);  
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCollections, setSelectedCollections] = useState([]);  // ✅ único estado
+  const [collections, setCollections] = useState([]);
+  
+  
   // const [collections, setCollections] = useState([]);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const orden = searchParams.get('orden');
+  
 
-  useEffect(() => {
-    setSortedData(
-      sortData(data, { search, collectionFilter: selectedCollections })
-    );
-    setCurrentPage(1);               // regresa a página 1 si cambian filtros
-  }, [data, search, selectedCollections]);
+    useEffect(() => {
+      setSortedData(
+        sortData(data, { search, collectionFilter: selectedCollections })
+      );
+      setCurrentPage(1);               // regresa a página 1 si cambian filtros
+    }, [data, search, selectedCollections]);
 
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    // const orden = searchParams.get('orden');
-    const cats = searchParams.get('cats')?.split(',') || [];
+    useEffect(() => {
+      const searchParams = new URLSearchParams(location.search);
+      // const orden = searchParams.get('orden');
+      const cats = searchParams.get('cats')?.split(',') || [];
 
-    setSelectedCollections(cats);
-  }, [location.search]);
+      setSelectedCollections(cats);
+    }, [location.search]);
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const snapshot = await getDocs(collection(db, 'groups'));
-      const groups = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    useEffect(() => {
+      const fetchData = async () => {
+        const snapshot = await getDocs(collection(db, 'groups'));
+        const groups = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-      // Filtrar solo grupos de tipo "telegram"
-      const telegramGroups = groups.filter(g => g.tipo === 'whatsapp');
+        const telegramGroups = groups.filter(g => g.tipo === 'telegram');
 
-      const fetchCollections = async () => {
-        // const snapshot = await getDocs(collection(db, 'colections'));
-        // const docs = snapshot.docs.map(doc => doc.data());
-        // const allCollections = docs.flatMap(doc => Array.isArray(doc.colections) ? doc.colections : []);
-        // setCollections([...new Set(allCollections)]);
+        const fetchCollections = async () => {
+          // const snapshot = await getDocs(collection(db, 'colections'));
+          // const docs = snapshot.docs.map(doc => doc.data());
+          // const allCollections = docs.flatMap(doc => Array.isArray(doc.colections) ? doc.colections : []);
+          // setCollections([...new Set(allCollections)]);
+        };
+        fetchCollections();
+
+        let ordenados = [...telegramGroups];
+
+        if (orden === 'top' || orden === 'vistos') {
+          ordenados.sort((a, b) => b.visitas - a.visitas);
+        } else if (orden === 'nuevos') {
+          ordenados.sort((a, b) => {
+            const dateA = a.createdAt?.toDate?.() ?? new Date(0);
+            const dateB = b.createdAt?.toDate?.() ?? new Date(0);
+            return dateB - dateA;
+          });
+        }
+
+
+        setData(ordenados);
+        setSortedData(ordenados);
       };
 
-      fetchCollections();
+      fetchData();
+    }, [location.search]);
 
-      // const destacados = telegramGroups.filter(g => g.destacado);
-      // const normales = telegramGroups.filter(g => !g.destacado);
-      let ordenados = [...telegramGroups];
-
-      if (orden === 'top' || orden === 'vistos') {
-        ordenados.sort((a, b) => b.visitas - a.visitas);
-      } else if (orden === 'nuevos') {
-        ordenados.sort((a, b) => {
-          const dateA = a.createdAt?.toDate?.() ?? new Date(0);
-          const dateB = b.createdAt?.toDate?.() ?? new Date(0);
-          return dateB - dateA;
-        });
-      }
-
-      setData(ordenados);
-      setSortedData(ordenados);
+    const fetchCollections = async () => {
+      const snapshot = await getDocs(collection(db, 'colections'));
+      const docs = snapshot.docs.map(doc => doc.data());
+      const allCollections = docs.flatMap(doc => Array.isArray(doc.colections) ? doc.colections : []);
+      setCollections([...new Set(allCollections)]);
+      // setCollections({ collections: [...new Set(allCollections)] });
     };
+    fetchCollections();
 
-    fetchData();
-  }, [location.search]);
 
-  const fetchCollections = async () => {
-    const snapshot = await getDocs(collection(db, 'colections'));
-    const docs = snapshot.docs.map(doc => doc.data());
-    const allCollections = docs.flatMap(doc => Array.isArray(doc.colections) ? doc.colections : []);
-    setCollections([...new Set(allCollections)]);
-    // setCollections({ collections: [...new Set(allCollections)] });
-  };
-  fetchCollections();
 
   // const setSorting = (field) => {
   //   const reversed = field === sortBy ? !reverseSortDirection : false;
@@ -243,22 +245,22 @@ const router = useRouter();
           || row.description['es']            // intento 3: español por defecto
         : row.description;
         
-    const isTelegram = location.pathname === '/telegram';
-    const iconSrc = isTelegram ? '/telegramicons.png' : '/wapp.webp';
+    const iconSrc = '/telegramicons.png'
 
     return (
-      <Paper
-        withBorder
-        radius="md"
-        shadow="xs"
-        mb="sm"
-        key={`${row.id}-${slug}-${idx}`}
-        onClick={() => {
-          const mainCategory = row.categories?.[0] || 'otros';
-          const categoryUrl = getCategoryUrl(mainCategory, location.pathname);
-          router.push(`${categoryUrl}/${slug}`);
-        }}
+        <Paper
+          withBorder
+          radius="md"
+          shadow="xs"
+          mb="sm"
+          key={`${row.id}-${slug}-${idx}`}
+          onClick={() => {
+            const mainCategory = row.categories?.[0] || 'otros';
+            const categoryUrl = getCategoryUrl(mainCategory, location.pathname);
+            router.push(`${categoryUrl}/${slug}`);
+          }}
         >
+
         <Table horizontalSpacing="md" withRowBorders={false}>
           <Table.Tbody>
             <Table.Tr>
@@ -274,17 +276,16 @@ const router = useRouter();
             style={{
               marginLeft: '8px',
             }}
-          >{row.name}</Text>          <img
+          >{row.name}</Text>         
+           <img
             src={iconSrc}
             alt={row.name}
             style={{
-              width: isTelegram ? '24px' : '39px',
-              height: isTelegram ? '24px' : '39px',
+              width: '24px',
+              height: '24px',
               borderRadius: '4px',
               objectFit: 'cover',
               marginLeft: 'auto',
-              marginRight: isTelegram ? '9px' : '0px',
-              marginTop: isTelegram ? '5px' : '0px',
             }}
           />
         </div>
@@ -334,62 +335,101 @@ const router = useRouter();
   return (
     <>
       <Helmet>
-        {/* ——— TITLE (≤60 car.) ——— */}
-        <title>Grupos de WhatsApp ACTIVOS 2025 | Publica y Haz Crecer tu Grupo o Canal de Whatsapp</title>
+        
+        <title>Grupos de Telegram Activos 2025 | Comunidades de Telegram</title>
 
-        {/* ——— DESCRIPTION (≈150 car.) ——— */}
+      
         <meta
           name="description"
-          content="Únete a los grupos de WhatsApp más activos de 2025: tecnología, estudio, ventas y más. Publica tu enlace gratis y conecta con miles de personas afines."
+          content="Encuentra y únete a los mejores grupos de Telegram con enlaces de invitación activos en 2025. Explora categorías como anime, gaming, +18, amistad y más. ¡Publica tu grupo gratis!"
         />
 
-        {/* ——— KEYWORDS (poco peso en Google, pero útil en otros buscadores) ——— */}
-        <meta
-          name="keywords"
-          content="grupos de whatsapp activos 2025, enlaces whatsapp, unirse a grupos whatsapp, publicar grupo whatsapp, comunidades whatsapp, canales whatsapp"
-        />
+        {/* --- KEYWORDS --- (Eliminada por ser obsoleta para Google) */}
 
-        {/* ——— CANONICAL (evita duplicados) ——— */}
-        <link rel="canonical" href="https://joingroups.pro/comunidades/grupos-de-whatsapp" />
+        {/* ——— CANONICAL ——— (Sin cambios, es correcta) */}
+        <link rel="canonical" href="https://joingroups.pro/comunidades/grupos-de-telegram" />
 
-        {/* ——— OPEN GRAPH (FB / WhatsApp) ——— */}
-        <meta property="og:type"        content="website" />
-        <meta property="og:url"         content="https://joingroups.pro/comunidades/grupos-de-whatsapp" />
-        <meta property="og:title"       content="Grupos de WhatsApp Activos 2025 | Únete o Publica el Tuyo" />
-        <meta property="og:description" content="Únete a los grupos de WhatsApp más activos de 2025: tecnología, estudio, ventas y más. Publica tu enlace gratis y conecta con miles de personas afines." />
-        <meta property="og:image"       content="https://joingroups.pro/JoinGroups.ico" />
-        <meta property="og:site_name"   content="JoinGroups" />
+        {/*
+          --- OPEN GRAPH (para Facebook, WhatsApp, etc. ) ---
+          Optimización:
+          - Título y descripción alineados con las metas principales.
+          - **Imagen actualizada a una URL de ejemplo de alta calidad.**
+            ¡IMPORTANTE! Debes reemplazar "og-image-telegram.jpg" por tu propia imagen de 1200x630px.
+        */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://joingroups.pro/comunidades/grupos-de-telegram" />
+        <meta property="og:title" content="Directorio de Enlaces para Grupos de Telegram" />
+        <meta property="og:description" content="La lista más completa de grupos de Telegram activos. Únete a comunidades de todos los temas o comparte tu propio grupo con miles de personas." />
+        <meta property="og:image" content="https://joingroups.pro/images/og-image-telegram.jpg" />
+        <meta property="og:site_name" content="JoinGroups" />
 
-        {/* ——— TWITTER CARDS ——— */}
-        <meta name="twitter:card"        content="summary_large_image" />
-        <meta name="twitter:url"         content="https://joingroups.pro/comunidades/grupos-de-whatsapp" />
-        <meta name="twitter:title"       content="Grupos de WhatsApp Activos 2025 | Únete o Publica el Tuyo" />
-        <meta name="twitter:description" content="Únete a los grupos de WhatsApp más activos de 2025: tecnología, estudio, ventas y más. Publica tu enlace gratis y conecta con miles de personas afines." />
-        <meta name="twitter:image"       content="https://joingroups.pro/JoinGroups.ico" />
+        {/*
+          --- TWITTER CARDS (para Twitter/X ) ---
+          Optimización:
+          - Mensajes directos y adaptados a la plataforma.
+          - **Imagen actualizada.** Reemplaza "twitter-image-telegram.jpg" por tu imagen.
+        */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://joingroups.pro/comunidades/grupos-de-telegram" />
+        <meta name="twitter:title" content="Enlaces para Grupos de Telegram | Únete Ahora" />
+        <meta name="twitter:description" content="Encuentra tu próxima comunidad. Cientos de grupos de Telegram activos y verificados te esperan. ¡Explora por categorías!" />
+        <meta name="twitter:image" content="https://joingroups.pro/images/twitter-image-telegram.jpg" />
 
-        {/* ——— SCHEMA.ORG (JSON-LD) ——— */}
+        {/*
+          --- SCHEMA.ORG (JSON-LD para datos estructurados ) ---
+          Optimización:
+          - **Corregido el error de sintaxis JSON.**
+          - Se unifica todo en un solo script `CollectionPage` para mayor claridad.
+          - Se añade `BreadcrumbList` para mostrar la jerarquía (Inicio > Comunidades > Grupos de Telegram),
+            lo cual es una señal de SEO muy potente.
+          - Las URLs en `itemListElement` son ahora más específicas para la sección de Telegram.
+        */}
         <script type="application/ld+json">
           {`
-          {
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            "name": "Grupos de WhatsApp Activos 2025",
-            "description": "Únete a los grupos de WhatsApp más activos de 2025: tecnología, estudio, ventas y más.",
-            "url": "https://joingroups.pro/comunidades/grupos-de-whatsapp",
-            "mainEntity": {
-              "@type": "ItemList",
-              "name": "Categorías de Grupos de WhatsApp",
-              "itemListElement": [
-                { "@type": "SiteNavigationElement", "position": 1, "name": "Tecnología", "url": "https://joingroups.pro/comunidades/grupos-de-whatsapp/tecnologia" },
-                { "@type": "SiteNavigationElement", "position": 2, "name": "Estudio",     "url": "https://joingroups.pro/comunidades/grupos-de-whatsapp/estudio" },
-                { "@type": "SiteNavigationElement", "position": 3, "name": "+18",        "url": "https://joingroups.pro/comunidades/grupos-de-whatsapp/18" },
-                { "@type": "SiteNavigationElement", "position": 4, "name": "Ventas",     "url": "https://joingroups.pro/comunidades/grupos-de-whatsapp/ventas" }
-              ]
+            {
+              "@context": "https://schema.org",
+              "@type": "CollectionPage",
+              "name": "Directorio de Grupos de Telegram por Categorías",
+              "description": "Descubre y únete a los grupos de Telegram más activos en 2025. Listas actualizadas de enlaces para canales de +18, anime, estudio, tecnología, amistad y mucho más.",
+              "url": "https://joingroups.pro/comunidades/grupos-de-telegram",
+              "mainEntity": {
+                "@type": "ItemList",
+                "name": "Categorías Populares de Grupos de Telegram",
+                "itemListElement": [
+                  { "@type": "SiteNavigationElement", "position": 1, "name": "Grupos de Telegram +18", "url": "https://joingroups.pro/comunidades/grupos-de-telegram/18" },
+                  { "@type": "SiteNavigationElement", "position": 2, "name": "Grupos de Telegram de Anime", "url": "https://joingroups.pro/comunidades/grupos-de-telegram/anime" },
+                  { "@type": "SiteNavigationElement", "position": 3, "name": "Grupos de Telegram de Estudio", "url": "https://joingroups.pro/comunidades/grupos-de-telegram/estudio" },
+                  { "@type": "SiteNavigationElement", "position": 4, "name": "Grupos de Telegram de Tecnología", "url": "https://joingroups.pro/comunidades/grupos-de-telegram/tecnologia" }
+                ]
+              },
+              "breadcrumb": {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Inicio",
+                    "item": "https://joingroups.pro/"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Comunidades",
+                    "item": "https://joingroups.pro/comunidades"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Grupos de Telegram",
+                    "item": "https://joingroups.pro/comunidades/grupos-de-telegram"
+                  }
+                ]
+              }
             }
-          }
           `}
         </script>
       </Helmet>
+
 
       <ScrollArea>
 
@@ -488,7 +528,7 @@ const router = useRouter();
                 })}
             </Box>
           </Group>
-          
+
             <Paper
               withBorder
               radius="md"
@@ -497,31 +537,87 @@ const router = useRouter();
               p="md"
               style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
             >
+            <Title order={2} mb="sm" className={styles.GruposDeTelegram}>
+              Grupos de Telegram con Enlaces Directos (Por Temática y Número de Miembros)
+            </Title>
 
+            <div className={styles.GruposDeTelegram}>
+              <h2>Grupos de Telegram: Conoce Personas y Únete a Comunidades Activas</h2>
+              <p>
+                Un <strong>grupo en Telegram</strong> es una excelente <strong>forma de conocer personas</strong> con intereses similares. Desde tecnología, videojuegos y criptomonedas hasta <strong>amistad</strong> y estudio, existen miles de <strong>grupos y canales</strong> activos esperando nuevos <strong>miembros</strong>. Si estás buscando expandir tu red o simplemente disfrutar contenido entretenido, unirte a <strong>grupos de Telegram</strong> es una excelente opción.
+              </p>
+
+              <h3>Cómo Unirse a Grupos de Telegram en Segundos</h3>
+              <p>
+                <strong>Unirse a un grupo de Telegram</strong> nunca ha sido tan fácil. Con plataformas como JoinGroups <strong>puedes encontrar grupos</strong> organizados por temáticas, idioma, país y cantidad de usuarios. Todo el proceso está optimizado para que accedas rápidamente desde cualquier dispositivo, ya sea <strong>Android</strong> o navegador.
+              </p>
+
+              <h3>Enlaces de Grupos de Telegram Verificados y con Contenido Real</h3>
+              <p>
+                Muchos usuarios se frustran al buscar <strong>grupos en Telegram</strong> por culpa de enlaces rotos. En JoinGroups nos aseguramos de que cada enlace esté activo y el <strong>contenido</strong> sea relevante. Nuestros moderadores revisan manualmente los <strong>canales y grupos</strong> para garantizar una experiencia segura y útil.
+              </p>
+
+              <h3>Buscar Grupos de Telegram por Categoría y Número de Miembros</h3>
+              <p>
+                ¿Te interesa un grupo de anime, música, marketing o desarrollo web? Nuestro sistema de filtros te permite <strong>buscar grupos</strong> según tus intereses y por número de <strong>miembros</strong>. Así, <strong>puedes encontrar</strong> lo que buscas sin perder tiempo.
+              </p>
+
+              <h3>Grupos Públicos de Telegram para Todos los Usuarios</h3>
+              <p>
+                Los <strong>grupos públicos de Telegram</strong> son accesibles para cualquier <strong>usuario</strong>, sin necesidad de invitación. Esto permite <strong>conectar con personas</strong> nuevas, compartir experiencias o simplemente hacer networking en tu área de interés. Desde tu móvil o en <strong>Google</strong>, accede a ellos con un clic.
+              </p>
+
+              <h2>Grupos de Telegram 18+: Comunidades NSFW con Acceso Seguro</h2>
+              <p>
+                Si buscas <strong>grupos de Telegram para adultos</strong>, JoinGroups también ofrece acceso a comunidades NSFW. Todos los enlaces están verificados y acompañados de advertencias claras. Solo para mayores de edad, con acceso directo, sin spam y sin riesgo.
+              </p>
+
+              <h3>Explora los Mejores Grupos de Telegram en 2025</h3>
+              <p>
+                En JoinGroups hemos recopilado los <strong>mejores grupos</strong> del año según actividad, número de <strong>usuarios</strong> y calidad del <strong>contenido</strong>. No pierdas tiempo buscando en foros: accede directamente a los <strong>grupos más populares</strong> y actualizados del momento.
+              </p>
+
+              <p>
+                Ya sea para chatear, aprender, compartir archivos o simplemente pasar un buen rato, en JoinGroups <strong>puedes encontrar el grupo ideal</strong>. Crea conexiones reales, intercambia ideas y únete a comunidades activas.
+              </p>
+
+              <h2>¿Cómo Hacer Crecer tu Grupo de Telegram en 2025?</h2>
+              <p>
+                ¿Te preguntas <strong>cómo hacer crecer tu grupo de Telegram</strong>? Te ayudamos a <strong>crear y gestionar</strong> una comunidad sólida. Desde estrategias de contenido hasta consejos para aumentar la participación, aquí tienes lo que necesitas para triunfar como admin.
+              </p>
+
+              <h3>Promocionar tu Grupo en Canales Relevantes</h3>
+              <p>
+                Una buena estrategia para <strong>hacer crecer tu grupo</strong> es promocionarlo en <strong>canales y grupos relacionados</strong>. Conecta con otros administradores, intercambia menciones o usa plataformas como JoinGroups para llegar a más personas interesadas.
+              </p>
+
+              <h3>¿Cómo Encontrar los Mejores Grupos de Telegram?</h3>
+              <p>
+                La forma más efectiva de <strong>encontrar grupos</strong> es usar sitios que verifiquen sus enlaces, como JoinGroups. Filtra por temática, idioma, número de <strong>miembros</strong> o nivel de actividad y olvídate de enlaces rotos o comunidades vacías.
+              </p>
+            </div>
 
             {isMobile ? (
               <>
                 <Title order={4} mb="xs">
-                  {t('¡Grupos de Whatsapp!')}
+                  {t('Mejores Grupos de Telegram')}
                 </Title>
                 <Text size="sm" color="dimmed" mb="xs">
-                  {t('¿Tienes un grupo de WhatsApp?')} <strong>{t('Publícalo gratis')}</strong> {t('y consigue miembros al instante.')}
+                  {t('¿Tienes un grupo de Telegram?')} <strong>{t('Publícalo gratis en JoinGroups')}</strong> {t('y consigue nuevos miembros fácilmente. Descubre cómo crecer con comunidades activas y visibles en toda la web.')}
                 </Text>
               </>
             ) : (
               <>
                 <Title order={3} mb="xs">
-                  📣 {t('¡Promociona tu Grupo de WhatsApp en JoinGroups!')}
+                  {t('Promociona tu Grupo de Telegram en JoinGroups')}
                 </Title>
                 <Text size="sm" color="dimmed" mb="xs">
-                  📱 {t('¿Tienes un grupo de WhatsApp y quieres hacerlo crecer?')} <strong>{t('En JoinGroups puedes publicar tu grupo gratis')}</strong> {t('y empezar a recibir nuevos miembros interesados.')}<br />
-                  🔍 {t('Explora una lista actualizada de')} <strong>{t('grupos de WhatsApp')}</strong> {t('organizados por categoría e intereses.')}{' '}
-                  🤝 {t('Únete a comunidades activas, comparte tu grupo y conéctate con personas afines usando JoinGroups.')}
+                  {t('¿Tienes un grupo o canal en Telegram y quieres hacerlo crecer?')} <strong>{t('En JoinGroups puedes publicarlo gratis')}</strong> {t('y empezar a recibir nuevos miembros interesados.')}{' '}
+                  {t('Explora los mejores grupos de Telegram organizados por temática, intereses y comunidad.')}{' '}
+                  {t('Utiliza nuestro buscador y encuentra canales, consejos y recursos para hacer destacar tu grupo en el mundo Telegram.')}
                 </Text>
               </>
             )}
-
-
 
             </Paper>
 
@@ -573,7 +669,7 @@ const router = useRouter();
               style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
             >
             <Text size="md" fw={600} mb="sm">
-              {t('¿Quieres que tu grupo de Whatsapp crezca y llegue a más personas?')}
+              {t('¿Quieres que tu grupo de Telegram crezca y llegue a más personas?')}
             </Text>
 
             <Text size="sm" color="dimmed" mb="xs">

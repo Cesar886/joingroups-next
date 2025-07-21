@@ -23,7 +23,7 @@ import { IconBrandWhatsapp } from '@tabler/icons-react';
 
 
 
-export default function GroupForm() {
+export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const { t, i18n } = useTranslation();
   const baseLang = i18n.language.split('-')[0]; // "en-US" → "en"
