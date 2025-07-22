@@ -18,6 +18,7 @@ import {
   ScrollArea,
   Badge,
   Table,
+  Accordion, 
   Text,
   TextInput,
   Button,
@@ -36,6 +37,10 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 
 import { useTranslation } from 'react-i18next';
+
+const placeholder =
+  'It can’t help but hear a pin drop from over half a mile away, so it lives deep in the mountains where there aren’t many people or Pokémon.It was born from sludge on the ocean floor. In a sterile environment, the germs within its body can’t multiply, and it dies.It has no eyeballs, so it can’t see. It checks its surroundings via the ultrasonic waves it emits from its mouth.';
+
 
 
 
@@ -305,7 +310,7 @@ const router = useRouter();
       </Head>
 
 
-      <Container size="lg" px="md">
+      <Container size="lg" px="md" py="xl">
         <ScrollArea>
 
           <TextInput
@@ -318,6 +323,41 @@ const router = useRouter();
 
           {rows.length > 0 ? (
             <>
+
+              <Paper
+                withBorder
+                radius="md"
+                shadow="xs"
+                mt="xl"
+                p="md"
+                style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
+              >
+                {isMobile ? (
+                  <>
+                    <Title order={4} mb="xs">
+                      Clanes activos de Clash Royale en 2025
+                    </Title>
+                    <Text size="sm" color="dimmed" mb="xs">
+                      ¿Buscas un <strong>clan competitivo en Clash Royale</strong>? En <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a> puedes encontrar los <strong>mejores clanes activos del 2025</strong>. <br />
+                      Descubre <strong>cómo unirte a los mejores clanes</strong>, quiénes están en el <strong>top global</strong> y cómo mejorar tu experiencia con <strong>decks recomendados</strong> y guías. <br />
+                      Todo en un solo lugar para que subas copas, ganes guerras y conectes con jugadores reales.
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Title order={3} mb="xs">
+                      Encuentra clanes de Clash Royale competitivos y activos (2025)
+                    </Title>
+                    <Text size="sm" color="dimmed" mb="xs">
+                      ¿Quieres unirte al <strong>mejor clan de Clash Royale</strong>? En <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a> reunimos clanes activos, filtrados por copas, idioma y estilo de juego. <br />
+                      Aprende <strong>qué es un clan</strong>, cómo encontrar uno ideal, o incluso <strong>cómo crear y publicar tu propio clan</strong> en minutos. <br />
+                      También respondemos dudas frecuentes como: ¿<strong>Quién es el líder del mejor clan?</strong> ¿<strong>Clash Royale o Clash of Clans</strong>? <br />
+                      Todo lo que necesitas para destacar en 2025: <strong>clanes actualizados</strong>, <strong>estrategias</strong> y <strong>guías exclusivas</strong>.
+                    </Text>
+                  </>
+                )}
+              </Paper>
+
               <Group gap='xs' mb="md" justify="center">
                 <Button
                   variant="light"
@@ -368,39 +408,7 @@ const router = useRouter();
                 </Button>
               </Group>
 
-              <Paper
-                withBorder
-                radius="md"
-                shadow="xs"
-                mt="xl"
-                p="md"
-                style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
-              >
 
-              {isMobile ? (
-                <>
-                  <Title order={4} mb="xs">
-                    📣 {t('¡Promociona tu Clan de Clash Royale en JoinGroups!')}
-                  </Title>
-                  <Text size="sm" color="dimmed" mb="xs">
-                    📱 {t('¿Tienes un clan de Clash Royale?')} <strong>{t('Publícalo gratis')}</strong> {t('y consigue miembros al instante.')}
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Title order={3} mb="xs">
-                    📣 {t('¡Promociona tu Clan de Clash Royale en JoinGroups!')}
-                  </Title>
-                  <Text size="sm" color="dimmed" mb="xs">
-                    📱 {t('¿Tienes un clan de Clash Royale y quieres hacerlo crecer?')} <strong>{t('En JoinGroups puedes publicar tu clan gratis')}</strong> {t('y empezar a recibir nuevos miembros interesados.')}<br />
-                    🔍 {t('Explora una lista actualizada de')} <strong>{t('clanes de Clash Royale')}</strong> {t('organizados por categoría e intereses.')}{' '}
-                    🤝 {t('Únete a comunidades activas, comparte tu clan y conéctate con personas afines usando JoinGroups.')}
-                  </Text>
-                </>
-              )}
-
-
-              </Paper>
 
               {rows}
 
@@ -441,6 +449,87 @@ const router = useRouter();
                 </Button>
               </Group>
 
+              <Container size="sm" className={styles.wrapper}>
+                <Title ta="center" className={styles.title}>
+                  Preguntas frecuentes
+                </Title>
+
+                <Accordion variant="separated">
+
+                  <Accordion.Item className={styles.item} value="que-es-clan">
+                    <Accordion.Control>¿Qué es un clan en Clash Royale?</Accordion.Control>
+                    <Accordion.Panel>
+                      Un clan en Clash Royale es un grupo de jugadores que se unen para apoyarse mutuamente. Puedes donar y recibir cartas, participar en guerras de clanes y subir en el ranking global. Es una forma de jugar en equipo y avanzar más rápido en el juego.
+                    </Accordion.Panel>
+                  </Accordion.Item>
+
+                  <Accordion.Item className={styles.item} value="mejor-clan">
+                    <Accordion.Control>¿Cuál es el mejor clan de Clash Royale?</Accordion.Control>
+                    <Accordion.Panel>
+                      No hay un único "mejor clan", pero los más destacados tienen jugadores activos, buena coordinación y excelentes resultados en guerras. Si buscas uno competitivo o por región, visita <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a> para explorar clanes recomendados.
+                    </Accordion.Panel>
+                  </Accordion.Item>
+
+                  <Accordion.Item className={styles.item} value="unirse-clan">
+                    <Accordion.Control>¿Cómo unirse a un buen clan de Clash Royale?</Accordion.Control>
+                    <Accordion.Panel>
+                      Para unirte a un buen clan, revisa que tenga miembros activos, buenos comentarios y un historial de guerras. Puedes hacerlo desde el juego o explorar opciones en <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>, donde los clanes se filtran por idioma, copas y tipo de jugador.
+                    </Accordion.Panel>
+                  </Accordion.Item>
+
+                  <Accordion.Item className={styles.item} value="buscar-clan">
+                    <Accordion.Control>¿Cómo buscar un clan en Clash Royale?</Accordion.Control>
+                    <Accordion.Panel>
+                      Dentro del juego puedes usar el buscador de clanes, pero si quieres más detalles o filtros, lo mejor es visitar <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>. Ahí mostramos clanes activos del 2025, con descripciones y requisitos claros para que encuentres el ideal para ti.
+                    </Accordion.Panel>
+                  </Accordion.Item>
+
+                  <Accordion.Item className={styles.item} value="encontrar-clanes">
+                    <Accordion.Control>¿Dónde encontrar clanes activos de Clash Royale?</Accordion.Control>
+                    <Accordion.Panel>
+                      La mejor forma de encontrar clanes activos es en <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>, donde actualizamos semanalmente los clanes más movidos. Ideal si buscas actividad constante y compañeros con los que avanzar.
+                    </Accordion.Panel>
+                  </Accordion.Item>
+
+                  <Accordion.Item className={styles.item} value="publicar-clan">
+                    <Accordion.Control>¿Cómo publicar mi clan de Clash Royale?</Accordion.Control>
+                    <Accordion.Panel>
+                      Si quieres que más jugadores encuentren tu clan, publícalo en <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>. Solo llena un formulario y tu clan aparecerá en la lista. Es rápido, gratis y te ayudará a crecer tu comunidad.
+                    </Accordion.Panel>
+                  </Accordion.Item>
+
+                  <Accordion.Item className={styles.item} value="ventajas-publicar">
+                    <Accordion.Control>¿Qué ventajas tiene publicar mi clan en JoinGroups?</Accordion.Control>
+                    <Accordion.Panel>
+                      Al publicar tu clan en <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a> te haces visible para cientos de jugadores activos. Es ideal para reclutar nuevos miembros, mejorar el rendimiento en guerras y posicionarte como un clan competitivo dentro de la comunidad.
+                    </Accordion.Panel>
+                  </Accordion.Item>
+
+                  <Accordion.Item className={styles.item} value="crear-clan">
+                    <Accordion.Control>¿Cómo crear un clan en Clash Royale?</Accordion.Control>
+                    <Accordion.Panel>
+                      Dentro del juego, ve a la pestaña de clanes y selecciona "Crear clan". Ponle nombre, escudo, requisitos y listo. Después, súbelo a <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a> para que más jugadores lo conozcan y puedas reclutar rápido.
+                    </Accordion.Panel>
+                  </Accordion.Item>
+
+                  <Accordion.Item className={styles.item} value="top1">
+                    <Accordion.Control>¿Cuál es el clan top 1 de Clash Royale?</Accordion.Control>
+                    <Accordion.Panel>
+                      El clan número 1 de Clash Royale cambia constantemente porque depende de la temporada, el rendimiento en guerras y el nivel de actividad de sus miembros. Sin embargo, siempre destacan clanes competitivos con jugadores del top global.  
+                      Si quieres descubrir cuáles están en la cima actualmente o unirte a uno competitivo, en <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a> publicamos clanes activos y con alto rendimiento, actualizados frecuentemente.
+                    </Accordion.Panel>
+                  </Accordion.Item>
+
+                  <Accordion.Item className={styles.item} value="mejor-cr">
+                    <Accordion.Control>¿Qué es mejor: Clash Royale o Clash of Clans?</Accordion.Control>
+                    <Accordion.Panel>
+                      Depende de tus gustos. Clash Royale es ideal si te gustan los duelos rápidos y estratégicos 1v1. Clash of Clans va más por la construcción y defensa de aldeas, con un ritmo más lento. Ambos son buenos, pero cada uno ofrece una experiencia distinta.
+                    </Accordion.Panel>
+                  </Accordion.Item>
+
+                </Accordion>
+              </Container>
+
               <Paper
                 withBorder
                 radius="md"
@@ -450,19 +539,19 @@ const router = useRouter();
                 style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
               >
               <Text size="md" fw={600} mb="sm">
-                {t('¿Quieres que tu clan de Clash Royale crezca y llegue a más personas?')}
+                ¿Buscas clanes activos de Clash Royale en 2025? ¡Únete o crea el tuyo en <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>!
               </Text>
 
               <Text size="sm" color="dimmed" mb="xs">
-                {t('Publica tu CLAN gratuitamente en')} <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link> {t('y conecta con una comunidad activa que comparte tus intereses.')}
-                {t('Si aún no sabes cómo crear un clan, puedes aprender fácilmente')} {' '}
-                <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>
-                  {t('aquí cómo crear tu clan de Clash Royale')}
-                </Link>.
+                ¿<strong>Clash Royale tiene clanes</strong>? Claro, es la comunidad donde los jugadores compiten, donan cartas y ganan recompensas. <br />
+                ¿<strong>Cómo unirse a un buen clan de Clash Royale</strong>? Usa nuestro <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>buscador de clanes</Link> para encontrar el clan ideal según tu estilo y nivel. <br />
+                ¿<strong>Cuál es el mejor clan</strong>? ¿<strong>Quién es el líder</strong>? Aquí te mostramos los <strong>clanes más activos y mejor rankeados</strong>. <br />
+                También descubre <strong>quién es el top 1 de Clash Royale</strong> o <strong>cómo encontrar tu antiguo clan</strong>. <br />
+                Si aún no tienes clan, aprende fácil <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>cómo crear tu propio clan</Link> paso a paso.
               </Text>
 
               <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
-                {t('Únete a miles de usuarios que ya están haciendo crecer sus clanes de Clash Royale.')}
+                Miles de jugadores ya usan <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a> para encontrar o publicar sus clanes de Clash Royale. ¡Únete y mejora tu juego hoy!
               </Text>
               </Paper>
             </>
