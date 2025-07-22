@@ -83,6 +83,7 @@
 @media (max-width: 768px) {
   .mobileContainerFix {
     padding: 0 !important;
+    margin: 0 16px;
   }
 
   .mobileContainerFix > div[class*="Container-inner"] {

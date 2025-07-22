@@ -156,6 +156,9 @@ export default function Page() {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [buttonPosition, setButtonPosition] = useState('top-left');
   const positionRef = useRef('top-left');
+  const [groupsTelegram, setGroupsTelegram] = useState([]);
+  const [groupsWhatsapp, setGroupsWhatsapp] = useState([]);
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -169,30 +172,66 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       const groupsSnapshot = await getDocs(collection(db, 'groups'));
-      const allGroups = groupsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const allGroups = groupsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-      //Controlar el Preview de los grupos
-      const destacadosGroups = allGroups.filter(g => g.destacado).slice(0, 1);
-      const masNuevosGroups = [...allGroups]
+      // Ordenar todos por fecha (más nuevos primero)
+      const sortedGroups = [...allGroups]
         .filter(g => g.createdAt)
-        .sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis())
-        .slice(0, 4);
-      setGroups([...destacadosGroups, ...masNuevosGroups]);
+        .sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
 
+      // ---------- GRUPOS GENERALES ----------
+      const destacadosGroups = sortedGroups.filter(g => g.destacado === true);
+      const sinDestacados = sortedGroups.filter(g => !destacadosGroups.some(d => d.id === g.id));
+      const gruposFinales = [...destacadosGroups, ...sinDestacados].slice(0, 5);
+      setGroups(gruposFinales);
+
+      // ---------- TELEGRAM ----------
+      const destacadosTelegram = sortedGroups.filter(
+        g => g.tipo?.toLowerCase() === 'telegram' && g.destacado === true
+      );
+      const nuevosTelegram = sortedGroups.filter(
+        g =>
+          g.tipo?.toLowerCase() === 'telegram' &&
+          !destacadosTelegram.some(d => d.id === g.id)
+      );
+      const telegramGroups = [...destacadosTelegram, ...nuevosTelegram].slice(0, 5);
+      setGroupsTelegram(telegramGroups);
+
+      // ---------- WHATSAPP ----------
+      const destacadosWhatsapp = sortedGroups.filter(
+        g => g.tipo?.toLowerCase() === 'whatsapp' && g.destacado === true
+      );
+      const nuevosWhatsapp = sortedGroups.filter(
+        g =>
+          g.tipo?.toLowerCase() === 'whatsapp' &&
+          !destacadosWhatsapp.some(d => d.id === g.id)
+      );
+      const whatsappGroups = [...destacadosWhatsapp, ...nuevosWhatsapp].slice(0, 5);
+      setGroupsWhatsapp(whatsappGroups);
+
+      // ---------- CLANES ----------
       const clanesSnapshot = await getDocs(collection(db, 'clanes'));
-      const allClanes = clanesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const allClanes = clanesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-      //Controlar el Preview de los clanes
-      const destacadosClanes = allClanes.filter(c => c.destacado).slice(0, 1);
-      const masNuevosClanes = [...allClanes]
+      const destacadosClanes = allClanes.filter(c => c.destacado === true);
+      const nuevosClanes = allClanes
         .filter(c => c.createdAt)
         .sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis())
-        .slice(0, 4);
-      setClanes([...destacadosClanes, ...masNuevosClanes]);
+        .filter(c => !destacadosClanes.some(d => d.id === c.id))
+        .slice(0, 4 - destacadosClanes.length);
 
+      setClanes([...destacadosClanes, ...nuevosClanes]);
     };
+
     fetchData();
   }, []);
+
 
   useEffect(() => {
     const positions = ['top-left', 'bottom-right', 'top-right', 'bottom-left'];
@@ -389,16 +428,53 @@ export default function Page() {
 
 
         <Paper mt="xl" withBorder shadow="sm" p="md" radius="lg">
-          <Title order={2} mb="sm" fz={isMobile ? 20 : 26}>{isMobile ? '🎯 Grupos nuevos' : '🎯 Grupos nuevos y destacados'}</Title>
-          <Stack>
-            {groups.map((group, i) => renderCard(group, i, true))}
+          <Group align="center" spacing="sm">
+            <Title order={2} mb="sm" fz={isMobile ? 20 : 26}>
+              {isMobile
+                ? '✨ Grupos nuevos de Telegram'
+                : '✨ Grupos nuevos y destacados de Telegram'}
+            </Title>
+          </Group>
+
+          <Stack mt="sm">
+            {groupsTelegram.map((group, i) => renderCard(group, i, true))}
           </Stack>
+
           <Center mt="md">
-            <Button variant="light" component={Link} radius="md" href="/comunidades">
-              Ver todos los grupos
+            <Button
+              variant="light"
+              component={Link}
+              radius="md"
+              href="/comunidades/grupos-de-telegram"
+            >
+              Ver todos los grupos de Telegram
             </Button>
           </Center>
         </Paper>
+
+        <Paper mt="xl" withBorder shadow="sm" p="md" radius="lg">
+          <Group align="center" spacing="sm">
+            <Title order={2} mb="sm" fz={isMobile ? 20 : 26}>
+              {isMobile ? '✨ Grupos nuevos de WhatsApp' : '✨ Grupos nuevos y destacados de WhatsApp'}
+            </Title>
+          </Group>
+
+          <Stack mt="sm">
+            {groupsWhatsapp.map((group, i) => renderCard(group, i, true))}
+          </Stack>
+
+          <Center mt="md">
+            <Button
+              variant="light"
+              component={Link}
+              radius="md"
+              href="/comunidades/grupos-de-whatsapp"            
+            >
+              Ver todos los grupos de WhatsApp
+            </Button>
+          </Center>
+        </Paper>
+
 
         <Paper mt="xl" withBorder shadow="sm" p="md" radius="lg">
           <Title order={2} mb="sm" fz={isMobile ? 20 : 26}>{isMobile ? '🏆 Clanes destacados' : '🏆 Clanes destacados y con más vistas'}</Title>

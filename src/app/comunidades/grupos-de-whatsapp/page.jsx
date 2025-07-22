@@ -412,8 +412,18 @@ export default function Whatsapp() {
                 <Group mt="md" mb="md">
                   <Button onClick={() => router.push('?orden=top')} variant={orden === 'top' ? 'filled' : 'light'}>Top</Button>
                   <Button onClick={() => router.push('?orden=nuevos')} variant={orden === 'nuevos' ? 'filled' : 'light'}>Nuevos</Button>
-                  <Button onClick={() => router.push('')} variant={!orden ? 'filled' : 'light'}>Destacados</Button>
-                </Group>
+                  <Button
+                    onClick={() => {
+                      const params = new URLSearchParams(location.search);
+                      params.delete('orden'); // quitar orden para mostrar "destacados"
+                      const search = params.toString();
+                      router.push(`?${search}`);
+                    }}
+                    variant={!orden ? 'filled' : 'light'}
+                  >
+                    Destacados
+                  </Button>                   
+                 </Group>
               </Group>
 
 
