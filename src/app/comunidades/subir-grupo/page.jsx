@@ -385,7 +385,7 @@ export default function Form() {
       </Helmet>
 
       <Container size="lg" px="md">
-        <Stack spacing="sm" mb="md">
+        <Stack spacing="sm" mb="md" mt="md">
           <Title order={2}>
             {t('Publica tu Grupo')}
           </Title>

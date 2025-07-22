@@ -326,70 +326,66 @@ export default function Page() {
       </Helmet>
 
 
-      <Container
-        size="md"
-        py="xl"
-        className={styles.mobileContainerFix}
-      >
+      <Container size="lg" py="md" className={styles.mobileContainerFix}>
 
-      <Stack align="center" spacing="lg" px="md">
-        <Title
-          order={1}
-          ta="center"
-          fw={isMobile ? 600 : 800}
-          fz={isMobile ? 28 : 36} // puedes ajustar estos valores según tu diseño
-        >
-          {isMobile
-            ? 'Grupos de Telegram, WhatsApp y Juegos'
-            : 'Los mejores Grupos de Telegram, WhatsApp y Clanes de Juegos Activos'}
-        </Title>
+        <Stack align="center" spacing="lg" px="md" mt="md">
+          <Title
+            order={1}
+            ta="center"
+            fw={isMobile ? 600 : 800}
+            fz={isMobile ? 28 : 36} // puedes ajustar estos valores según tu diseño
+          >
+            {isMobile
+              ? 'Grupos de Telegram, WhatsApp y Juegos'
+              : 'Los mejores Grupos de Telegram, WhatsApp y Clanes de Juegos Activos'}
+          </Title>
 
 
-        <Text ta="center" c="dimmed" fz="md" maw={700} mx="auto">
-          {isMobile
-            ? 'Únete a comunidades en Telegram, WhatsApp y juegos populares.'
-            : (
-                <>
-                  En <strong>JoinGroups.pro</strong> puedes unirte fácilmente a comunidades populares en <strong>Telegram</strong>, <strong>WhatsApp</strong> y juegos como <strong>Clash Royale</strong>. Explora grupos organizados por temas, idiomas y más.
-                </>
-              )}
-        </Text>
-        <Button
-          size="lg"
-          color="blue"
-          component={Link}
-          variant="light"
-          radius="lg"
-          href="/comunidades"
-          style={{ fontWeight: 600 }}
-        >
-          Explorar Grupos Populares
-        </Button>
-      </Stack>
+          <Text ta="center" c="dimmed" fz="md" maw={700} mx="auto">
+            {isMobile
+              ? 'Únete a comunidades en Telegram, WhatsApp y juegos populares.'
+              : (
+                  <>
+                    En <strong>JoinGroups.pro</strong> puedes unirte fácilmente a comunidades populares en <strong>Telegram</strong>, <strong>WhatsApp</strong> y juegos como <strong>Clash Royale</strong>. Explora grupos organizados por temas, idiomas y más.
+                  </>
+                )}
+          </Text>
+          <Button
+            size="lg"
+            color="blue"
+            component={Link}
+            variant="light"
+            radius="lg"
+            href="/comunidades"
+            style={{ fontWeight: 600 }}
+          >
+            Explorar Grupos Populares
+          </Button>
+        </Stack>
 
 
-      <Box className={styles['scrolling-container']} mt="xl" >
-        <div className={styles['scrolling-track']}>
-          {[...featuredButtons, ...featuredButtons].map((b, i) => (
-            <Button
-              key={i}
-              component={Link}
-              href={b.to}
-              leftSection={b.icon}
-              variant="light"
-              radius="xl"
-              color={b.color}
-              style={{
-                whiteSpace: 'nowrap',
-                pointerEvents: 'auto',
-                flexShrink: 0,
-              }}
-            >
-              {b.label}
-            </Button>
-          ))}
-        </div>
-      </Box>
+        <Box className={styles['scrolling-container']} mt="xl" >
+          <div className={styles['scrolling-track']}>
+            {[...featuredButtons, ...featuredButtons].map((b, i) => (
+              <Button
+                key={i}
+                component={Link}
+                href={b.to}
+                leftSection={b.icon}
+                variant="light"
+                radius="xl"
+                color={b.color}
+                style={{
+                  whiteSpace: 'nowrap',
+                  pointerEvents: 'auto',
+                  flexShrink: 0,
+                }}
+              >
+                {b.label}
+              </Button>
+            ))}
+          </div>
+        </Box>
 
 
         <Paper mt="xl" withBorder shadow="sm" p="md" radius="lg">
@@ -521,10 +517,6 @@ export default function Page() {
           </Text>
         </Box>
 
-
-
-
-        {/* Botón flotante con cambio de posición */}
         <Button
           component={Link}
           href="/comunidades/subir-grupo"
@@ -552,6 +544,7 @@ export default function Page() {
         >
           {t('¿Tienes problemas? O quisieras sugerir un cambio en la página? Escríbenos por WhatsApp')}
         </Button>
+
       </Container>
     </>
 

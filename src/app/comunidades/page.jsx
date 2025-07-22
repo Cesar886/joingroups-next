@@ -448,6 +448,7 @@ export default function TableSort() {
           <TextInput
             placeholder={t('Buscar por nombre, categoría o contenido...')}
             mb="md"
+            mt="md"
             leftSection={<IconSearch size={16} stroke={1.5} />}
             value={search}
             onChange={handleSearchChange}
