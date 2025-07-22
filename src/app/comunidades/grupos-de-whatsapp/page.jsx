@@ -27,7 +27,8 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
+
 import  { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 
@@ -337,7 +338,7 @@ export default function Whatsapp() {
 
   return (
     <>
-      <Helmet>
+      <Head>
         {/* --- ETIQUETAS FUNDAMENTALES --- */}
         <title>Grupos de WhatsApp por Temas [Actualizado 2025] - JoinGroups.pro</title>
         <meta name="description" content="Descubre y únete a grupos de WhatsApp activos de todas las categorías: amor, amistad, stickers, etc. Enlaces de invitación verificados y actualizados." />
@@ -359,7 +360,7 @@ export default function Whatsapp() {
         {/* --- ETIQUETAS ADICIONALES --- */}
         <meta name="keywords" content="grupos de whatsapp, enlaces de whatsapp, unirse a grupo whatsapp, links de whatsapp, grupos de wasap, whatsapp grupos amistad" />
         <meta name="robots" content="index, follow" />
-      </Helmet>
+      </Head>
 
 
       <Container size="lg" px="md">

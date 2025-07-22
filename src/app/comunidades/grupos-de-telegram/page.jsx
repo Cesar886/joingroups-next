@@ -28,7 +28,7 @@ import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
 import styles from '@/app/styles/TableSortTelegram.module.css';
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
 import  { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 const getCategoryUrl = (category, currentPath) => {
@@ -338,7 +338,7 @@ export default function Telegram() {
 
   return (
     <>
-      <Helmet>
+      <Head>
         {/* --- ETIQUETAS FUNDAMENTALES --- */}
         <title>Grupos de Telegram Activos por Categoría [2025] - JoinGroups.pro</title>
         <meta name="description" content="Encuentra y únete a los mejores grupos de Telegram en español. Listas actualizadas de enlaces de invitación a comunidades activas y canales." />
@@ -360,7 +360,7 @@ export default function Telegram() {
         {/* --- ETIQUETAS ADICIONALES --- */}
         <meta name="keywords" content="grupos de telegram, enlaces de telegram, unirse a grupo telegram, canales de telegram, telegram grupos español, links de telegram" />
         <meta name="robots" content="index, follow" />
-      </Helmet>
+      </Head>
 
 
       <Container size="lg" px="md">

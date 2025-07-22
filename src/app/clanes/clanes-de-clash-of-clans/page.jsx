@@ -28,7 +28,8 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
+
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 
@@ -228,7 +229,7 @@ const router = useRouter();
 
   return (
     <>
-      <Helmet>
+      <Head>
         {/* --- ETIQUETAS FUNDAMENTALES --- */}
         <title>Clanes de Clash of Clans Activos [2025] | Únete o Publica tu clan</title>
         <meta name="description" content="Encuentra los mejores clanes de Clash of Clans activos en 2025. Busca por nivel y únete, o publica tu clan GRATIS para reclutar nuevos miembros y dominar las guerras." />
@@ -253,7 +254,7 @@ const router = useRouter();
         {/* --- ETIQUETAS ADICIONALES --- */}
         <meta name="keywords" content="clanes clash of clans, clanes activos, reclutar miembros coc, unirse a clan, buscar clan clash of clans, publicar clan gratis, guerra de clanes, clanes coc español" />
         <meta name="robots" content="index, follow" />
-      </Helmet>
+      </Head>
 
           
       <Container size="lg" px="md">

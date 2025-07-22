@@ -29,7 +29,8 @@ import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
 import styles from '@/app/styles/TableSortClanes.module.css';
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
+
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 
@@ -285,7 +286,7 @@ export default function Clanes() {
 
   return (
     <>
-      <Helmet>
+      <Head>
         {/* ——— TITLE ——— */}
         <title>Clanes de Videojuegos Activos 2025: Únete o Publica tu Clan Gratis</title>
 
@@ -357,7 +358,7 @@ export default function Clanes() {
           }
           `}
         </script>
-      </Helmet>
+      </Head>
 
       <Container size="lg" px="md">        
         <ScrollArea>

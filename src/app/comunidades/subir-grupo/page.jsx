@@ -21,7 +21,8 @@ import { useRef, useState } from 'react';
 import slugify from '@/lib/slugify'
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
+
 import { IconBrandWhatsapp } from '@tabler/icons-react';
 
 
@@ -337,7 +338,7 @@ export default function Form() {
 
   return (
     <>
-      <Helmet>
+      <Head>
         <title>Publicar Grupo de Telegram o WhatsApp | Gratis en JoinGroups 2025</title>
         <meta name="description" content="Envía tu grupo o canal de Telegram o WhatsApp para ser listado en el directorio verificado JoinGroups. +18, anime, estudio, tecnología y más. ¡Publicar es gratis y fácil!" />
         <link rel="canonical" href="https://joingroups.pro/form" />
@@ -382,7 +383,7 @@ export default function Form() {
             }
           `}
         </script>
-      </Helmet>
+      </Head>
 
       <Container size="lg" px="md">
         <Stack spacing="sm" mb="md" mt="md">

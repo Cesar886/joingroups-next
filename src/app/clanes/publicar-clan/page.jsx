@@ -27,7 +27,8 @@ import { useRef, useState } from 'react';
 import slugify from '@/lib/slugify';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
+
 import { IconBrandWhatsapp } from '@tabler/icons-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
@@ -268,7 +269,7 @@ export default function ClanesGroupForm() {
   /* ───────────────────────── Render ──────────────────────────── */
   return (
     <>
-      <Helmet>
+      <Head>
         <title>{`Publicar Clan de ${game} | Gratis en JoinGroups 2025`}</title>
         <meta
           name="description"
@@ -278,7 +279,7 @@ export default function ClanesGroupForm() {
           rel="canonical"
           href="https://joingroups.pro/clanes/form"
         />
-      </Helmet>
+      </Head>
 
       <Container size="lg" px="md">      
         <Stack spacing="sm" mb="md">

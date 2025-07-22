@@ -34,7 +34,8 @@ import { useTranslation } from 'react-i18next';
 import slugify from '@/lib/slugify';
 import { useRouter } from 'next/navigation';
 import '@/locales/i18n'; // Importa tus archivos de traducción
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
+
 
 
 
@@ -338,7 +339,7 @@ export default function Page() {
 
   return (
     <>
-      <Helmet>
+      <Head>
         {/* --- ETIQUETAS FUNDAMENTALES --- */}
         <title>Grupos de Telegram y WhatsApp Activos - joingroups.pro</title>
         <meta name="description" content="Encuentra y únete a los mejores grupos de Telegram y WhatsApp. Listas actualizadas para 2025 con comunidades activas y clanes de juegos." />
@@ -362,7 +363,7 @@ export default function Page() {
         <meta name="robots" content="index, follow" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Helmet>
+      </Head>
 
 
       <Container size="lg" py="md" className={styles.mobileContainerFix}>

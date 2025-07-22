@@ -29,7 +29,7 @@ import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
 // import { useLocation } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
 import styles from '@/app/styles/ClanClashRoyale.module.css';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
@@ -241,32 +241,68 @@ const router = useRouter();
 
   return (
     <>
-      <Helmet>
+      <Head>
         {/* --- ETIQUETAS FUNDAMENTALES --- */}
         <title>Clanes de Clash Royale Activos [2025] | Únete o Publica tu Clan</title>
-        <meta name="description" content="La mejor lista de clanes de Clash Royale activos en 2025. Busca clanes por trofeos, únete al que más te guste o publica el tuyo GRATIS para reclutar jugadores." />
-        <link rel="canonical" href="https://joingroups.pro/clanes/clanes-de-clash-royale" />
+        <meta
+          name="description"
+          content="La mejor lista de clanes de Clash Royale activos en 2025. Busca clanes por trofeos, únete al que más te guste o publica el tuyo GRATIS para reclutar jugadores."
+        />
+        <link
+          rel="canonical"
+          href="https://joingroups.pro/clanes/clanes-de-clash-royale"
+        />
 
-        {/* --- ETIQUETAS PARA REDES SOCIALES (OPEN GRAPH ) --- */}
-        <meta property="og:title" content="Clanes de Clash Royale | Encuentra tu Clan Ideal o Recluta Miembros" />
-        <meta property="og:description" content="¿Buscas clan en Clash Royale? Filtra por número de trofeos y encuentra tu equipo perfecto. Si eres líder, publica tu clan y consigue nuevos miembros hoy mismo." />
+        {/* --- OPEN GRAPH --- */}
+        <meta
+          property="og:title"
+          content="Clanes de Clash Royale | Encuentra tu Clan Ideal o Recluta Miembros"
+        />
+        <meta
+          property="og:description"
+          content="¿Buscas clan en Clash Royale? Filtra por número de trofeos y encuentra tu equipo perfecto. Si eres líder, publica tu clan y consigue nuevos miembros hoy mismo."
+        />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://joingroups.pro/clanes/clanes-de-clash-royale" />
-        <meta property="og:image" content="https://joingroups.pro/clashRoyaleFondo1.png" />
-        <meta property="og:image:alt" content="El Rey y varios personajes de Clash Royale en la arena de batalla" />
+        <meta
+          property="og:url"
+          content="https://joingroups.pro/clanes/clanes-de-clash-royale"
+        />
+        <meta
+          property="og:image"
+          content="https://joingroups.pro/clashRoyaleFondo1.png"
+        />
+        <meta
+          property="og:image:alt"
+          content="El Rey y varios personajes de Clash Royale en la arena de batalla"
+        />
         <meta property="og:site_name" content="JoinGroups.pro" />
 
-        {/* --- ETIQUETAS PARA TWITTER --- */}
+        {/* --- TWITTER --- */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Clanes de Clash Royale Activos [2025] | Únete o Recluta Jugadores" />
-        <meta name="twitter:description" content="¿Buscas clan en Clash Royale? Filtra por número de trofeos y encuentra tu equipo perfecto. Si eres líder, publica tu clan y consigue nuevos miembros hoy mismo." />
-        <meta name="twitter:image" content="https://joingroups.pro/clashRoyaleFondo1.png" />
-        <meta name="twitter:image:alt" content="El Rey y varios personajes de Clash Royale en la arena de batalla" />
+        <meta
+          name="twitter:title"
+          content="Clanes de Clash Royale Activos [2025] | Únete o Recluta Jugadores"
+        />
+        <meta
+          name="twitter:description"
+          content="¿Buscas clan en Clash Royale? Filtra por número de trofeos y encuentra tu equipo perfecto. Si eres líder, publica tu clan y consigue nuevos miembros hoy mismo."
+        />
+        <meta
+          name="twitter:image"
+          content="https://joingroups.pro/clashRoyaleFondo1.png"
+        />
+        <meta
+          name="twitter:image:alt"
+          content="El Rey y varios personajes de Clash Royale en la arena de batalla"
+        />
 
-        {/* --- ETIQUETAS ADICIONALES --- */}
-        <meta name="keywords" content="clanes clash royale, clanes activos, reclutar jugadores clash royale, unirse a clan, buscar clan clash royale, publicar clan gratis, guerra de clanes, clanes cr español" />
+        {/* --- EXTRA --- */}
+        <meta
+          name="keywords"
+          content="clanes clash royale, clanes activos, reclutar jugadores clash royale, unirse a clan, buscar clan clash royale, publicar clan gratis, guerra de clanes, clanes cr español"
+        />
         <meta name="robots" content="index, follow" />
-      </Helmet>
+      </Head>
 
 
       <Container size="lg" px="md">

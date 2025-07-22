@@ -1,4 +1,5 @@
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
+
 import { useEffect } from 'react';
 import { Title, Text, List, ListItem, Anchor } from '@mantine/core';
 
@@ -9,7 +10,7 @@ export default function InstruccionesCrearGrupoTelegramOptimizado() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <Helmet>
+      <Head>
         <title>Cómo Crear un Grupo de Telegram Exitoso: Guía Completa para Principiantes y Expertos</title>
         <meta
           name="description"
@@ -39,7 +40,7 @@ export default function InstruccionesCrearGrupoTelegramOptimizado() {
           content="Guía definitiva para crear, gestionar y hacer crecer tu grupo de Telegram. Incluye optimización SEO y videos de YouTube incrustados."
         />
         <meta name="twitter:image" content="https://joingroups.pro/og-preview.png" />
-      </Helmet>
+      </Head>
 
       <Title order={1} className="text-3xl font-bold mb-8">Cómo Crear un Grupo de Telegram Exitoso: Guía Completa para Principiantes y Expertos</Title>
       <Text className="mb-8">

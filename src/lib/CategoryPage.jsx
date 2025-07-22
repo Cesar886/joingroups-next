@@ -19,7 +19,8 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify'; // Asegúrate de que esta ruta sea correcta
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
+
 import { useTranslation } from 'react-i18next';
 
 // Mapa de países para emojis (si lo usas en tus grupos)
@@ -405,7 +406,7 @@ const router = useRouter();
 
   return (
     <>
-      <Helmet>
+      <Head>
         {/* TÍTULO ÚNICO POR CATEGORÍA */}
         <title>{categoryContent.title} Activos 2025 | Enlaces Directos JoinGroups</title>
 
@@ -498,7 +499,7 @@ const router = useRouter();
             }
           `}
         </script>
-      </Helmet>
+      </Head>
 
       <ScrollArea>
         <TextInput

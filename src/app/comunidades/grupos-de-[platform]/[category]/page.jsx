@@ -23,7 +23,8 @@ import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify'; // Asegúrate de que esta ruta sea correcta
 import { useTranslation } from 'react-i18next';
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
+
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 
@@ -419,7 +420,7 @@ export default function CategoryPage() {
 
   return (
     <>
-      <Helmet>
+      <Head>
         <title>{categoryContent.title}</title>
         <meta name="description" content={categoryContent.description} />
         <link
@@ -430,7 +431,7 @@ export default function CategoryPage() {
         <meta property="og:title" content={categoryContent.title} />
         <meta property="og:description" content={categoryContent.description} />
         <meta property="og:type" content="website" />
-      </Helmet>
+      </Head>
 
       <Container size="lg" px="md">
         <ScrollArea>

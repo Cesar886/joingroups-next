@@ -30,7 +30,8 @@ import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
 import styles from '@/app/styles/TableSort.module.css';
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
+
 import { useTranslation } from 'react-i18next';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
@@ -416,7 +417,7 @@ export default function TableSort() {
 
   return (
     <>
-      <Helmet>
+      <Head>
         {/* --- ETIQUETAS FUNDAMENTALES --- */}
         <title>Grupos de Telegram y WhatsApp por Categorías - JoinGroups.pro</title>
         <meta name="description" content="Encuentra los mejores enlaces de invitación para grupos de Telegram y WhatsApp. Comunidades activas y actualizadas en 2025, organizadas por temas." />
@@ -440,7 +441,7 @@ export default function TableSort() {
         <meta name="robots" content="index, follow" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Helmet>
+      </Head>
 
 
       <Container size="lg" px="md">
