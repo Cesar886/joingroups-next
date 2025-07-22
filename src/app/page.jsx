@@ -417,7 +417,7 @@ export default function Page() {
         </Paper>
 
         <Center mt="xl">
-          <Button component={Link} href="/clanes/form" variant='light' color="violet" size="lg" radius='lg'>
+          <Button component={Link} href="/clanes/publicar-clan" variant='light' color="violet" size="lg" radius='lg'>
             Publica tu CLAN ahora
           </Button>
         </Center>
@@ -527,7 +527,7 @@ export default function Page() {
         {/* Botón flotante con cambio de posición */}
         <Button
           component={Link}
-          href="/comunidades/form"
+          href="/comunidades/subir-grupo"
           color="rgba(255, 0, 0, 1)"
           size="sm"
           variant='filled'
