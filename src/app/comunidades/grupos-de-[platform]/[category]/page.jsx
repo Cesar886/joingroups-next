@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import Link from 'next/link';
 import {
   IconSearch,
 } from '@tabler/icons-react';
@@ -10,6 +10,7 @@ import {
   Group,
   Paper,
   ScrollArea,
+  Container,
   Badge,
   Table,
   Text,
@@ -21,8 +22,8 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify'; // Asegúrate de que esta ruta sea correcta
-import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet-async';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 
@@ -246,22 +247,31 @@ function sortData(data, { search, category, orden }) {
 
 export default function CategoryPage() {
   const { t, i18n } = useTranslation();
-const router = useRouter();
-  const location = useLocation();
-  const { category } = useParams(); // Obtiene la categoría de la URL (ej. 'anime')
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();   
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [currentPage, setCurrentPage] = useState(1);
   const [collections, setCollections] = useState([]); // Para los badges de otras categorías
+  const [category, setCategory] = useState('');
+  const [platform, setPlatform] = useState('');
   
-  const searchParams = new URLSearchParams(location.search);
   const orden = searchParams.get('orden'); // Obtiene el parámetro de ordenamiento (ej. 'top')
   
   // Determinar el tipo de plataforma (telegram/whatsapp) desde la URL
-  const platform = location.pathname.includes('/grupos-de-telegram') ? 'telegram' : 'whatsapp';
   const platformName = capitalize(platform); // 'Telegram' o 'Whatsapp'
+
+  useEffect(() => {
+    const pathParts = pathname?.split('/');
+    const currentPlatform = pathParts?.[3]?.replace('grupos-de-', '');
+    const currentCategory = pathParts?.[4];
+
+    setPlatform(currentPlatform);
+    setCategory(currentCategory);
+  }, [pathname]);
   
   // Obtener contenido específico de la categoría para SEO y UX
   const categoryContent = getCategoryContent(category, platform);
@@ -410,408 +420,332 @@ const router = useRouter();
   return (
     <>
       <Helmet>
-        {/* TÍTULO ÚNICO POR CATEGORÍA */}
-        <title>{categoryContent.title} Activos 2025 | Enlaces Directos JoinGroups</title>
-
-        {/* DESCRIPCIÓN ÚNICA POR CATEGORÍA */}
-        <meta
-          name="description"
-          content={`${categoryContent.description} Enlaces verificados y actualizados en 2025. Únete gratis a las mejores comunidades de ${category}.`}
+        <title>{categoryContent.title}</title>
+        <meta name="description" content={categoryContent.description} />
+        <link
+          rel="canonical"
+          href={`https://joingroups.pro/comunidades/grupos-de-${platform}/${category}`}
         />
 
-        {/* CANONICAL ÚNICO */}
-        <link rel="canonical" href={`https://joingroups.pro/comunidades/grupos-de-${platform}/${category}`} />
-
-        {/* OPEN GRAPH ÚNICO */}
+        <meta property="og:title" content={categoryContent.title} />
+        <meta property="og:description" content={categoryContent.description} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={`https://joingroups.pro/comunidades/grupos-de-${platform}/${category}`} />
-        <meta property="og:title" content={`${categoryContent.title} | Los Mejores Grupos de ${platformName}`} />
-        <meta property="og:description" content={`${categoryContent.description} Comunidad activa y verificada de ${category} en ${platformName}.`} />
-        {/* IMPORTANTE: Reemplaza estas URLs con tus propias imágenes de alta calidad para cada categoría/plataforma */}
-        <meta property="og:image" content={`https://joingroups.pro/images/og-${platform}-${category}.jpg`} />
-        <meta property="og:site_name" content="JoinGroups" />
-
-        {/* TWITTER CARDS ÚNICO */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={`https://joingroups.pro/comunidades/grupos-de-${platform}/${category}`} />
-        <meta name="twitter:title" content={`${categoryContent.title} | Únete Ahora`} />
-        <meta name="twitter:description" content={`Descubre los mejores grupos de ${category} en ${platformName}. Enlaces directos y comunidades activas.`} />
-        {/* IMPORTANTE: Reemplaza estas URLs con tus propias imágenes de alta calidad para cada categoría/plataforma */}
-        <meta name="twitter:image" content={`https://joingroups.pro/images/twitter-${platform}-${category}.jpg`} />
-
-        {/* SCHEMA.ORG ÚNICO POR CATEGORÍA */}
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "CollectionPage",
-              "name": "${categoryContent.title} en ${platformName}",
-              "description": "${categoryContent.description}",
-              "url": "https://joingroups.pro/comunidades/grupos-de-${platform}/${category}",
-              "mainEntity": {
-                "@type": "ItemList",
-                "name": "Grupos de ${capitalize(category )} en ${platformName}",
-                "description": "Lista curada de los mejores grupos de ${capitalize(category)} activos en ${platformName}",
-                "numberOfItems": ${sortedData.length},
-                "itemListElement": ${JSON.stringify(
-                  currentGroups.slice(0, 5).map((group, index) => ({
-                    "@type": "ListItem",
-                    "position": index + 1,
-                    "name": group.name,
-                    "description": typeof group.description === 'object' 
-                      ? group.description[baseLang] || group.description['es'] 
-                      : group.description,
-                    "url": `https://joingroups.pro/comunidades/grupos-de-${platform}/${group.slug || slugify(group.name )}`
-                  }))
-                )}
-              },
-              "breadcrumb": {
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                  {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Inicio",
-                    "item": "https://joingroups.pro/"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "Comunidades",
-                    "item": "https://joingroups.pro/comunidades"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 3,
-                    "name": "Grupos de ${platformName}",
-                    "item": "https://joingroups.pro/comunidades/grupos-de-${platform}"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 4,
-                    "name": "${capitalize(category )}",
-                    "item": "https://joingroups.pro/comunidades/grupos-de-${platform}/${category}"
-                  }
-                ]
-              },
-              "about": {
-                "@type": "Thing",
-                "name": "${capitalize(category )}",
-                "description": "${categoryContent.content.intro}"
-              }
-            }
-          `}
-        </script>
       </Helmet>
 
-      <ScrollArea>
-        <TextInput
-          placeholder={t(`Buscar grupos de ${category}...`)}
-          mb="md"
-          leftSection={<IconSearch size={16} stroke={1.5} />}
-          value={search}
-          onChange={handleSearchChange}
-        />
+      <Container size="lg" px="md">
+        <ScrollArea>
+          <TextInput
+            placeholder={t(`Buscar grupos de ${category}...`)}
+            mb="md"
+            leftSection={<IconSearch size={16} stroke={1.5} />}
+            value={search}
+            onChange={handleSearchChange}
+          />
 
-        <Group gap='xs' mb="md" justify="center">
-          {/* Botones de Plataforma (Telegram/WhatsApp) */}
-          <Button
-            variant="light"
-            size="xs"
-            radius="md"
-            onClick={() => router.push('/comunidades/grupos-de-telegram')}
-            leftSection={
-              <img
-                src="/telegramicons.png"
-                alt="Telegram"
-                style={{ width: 16, height: 16 }}
-              />
-            }
-          >
-            {t('Telegram')}
-          </Button>
-
-          <Button
-            variant="light"
-            size="xs"
-            radius="md"
-            onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
-            leftSection={
-              <img
-                src="/wapp.webp"
-                alt="Whatsapp"
-                style={{ width: 29, height: 29 }}
-              />
-            }
-          >
-            {t('Whatsapp')}
-          </Button>
-
-          {/* Botones de Ordenamiento (Top, Nuevos, Destacados) */}
-          <Group mt="md" mb="md">
+          <Group gap='xs' mb="md" justify="center">
+            {/* Botones de Plataforma (Telegram/WhatsApp) */}
             <Button
-              onClick={() => {
-                const params = new URLSearchParams(location.search);
-                const currentOrden = params.get('orden');
-                if (currentOrden === 'top') {
-                  params.delete('orden'); // Quitar si ya estaba activo (para deseleccionar)
-                } else {
-                  params.set('orden', 'top');
-                }
-                router.push({ search: params.toString() }, { replace: false });
-              }}
-              variant={orden === 'top' ? 'filled' : 'light'}
+              variant="light"
+              size="xs"
+              radius="md"
+              onClick={() => router.push('/comunidades/grupos-de-telegram')}
+              leftSection={
+                <img
+                  src="/telegramicons.png"
+                  alt="Telegram"
+                  style={{ width: 16, height: 16 }}
+                />
+              }
             >
-              Top
+              {t('Telegram')}
             </Button>
 
             <Button
-              onClick={() => {
-                const params = new URLSearchParams(location.search);
-                const currentOrden = params.get('orden');
-                if (currentOrden === 'nuevos') {
-                  params.delete('orden');
-                } else {
-                  params.set('orden', 'nuevos');
-                }
-                router.push({ search: params.toString() }, { replace: false });
-              }}
-              variant={orden === 'nuevos' ? 'filled' : 'light'}
+              variant="light"
+              size="xs"
+              radius="md"
+              onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
+              leftSection={
+                <img
+                  src="/wapp.webp"
+                  alt="Whatsapp"
+                  style={{ width: 29, height: 29 }}
+                />
+              }
             >
-              Nuevos
+              {t('Whatsapp')}
             </Button>
 
-            <Button
-              onClick={() => {
-                const params = new URLSearchParams(location.search);
-                params.delete('orden');
-                router.push({ search: params.toString() }, { replace: false });
-              }}
-              variant={!orden ? 'filled' : 'light'}
-            >
-              Destacados
-            </Button>
-          </Group>
-
-          {/* BADGES DE OTRAS CATEGORÍAS */}
-          <Box
-            style={{
-              display: 'flex',
-              overflowX: 'auto',
-              gap: '10px',
-              padding: '10px 0',
-              WebkitOverflowScrolling: 'touch',
-            }}
-          >
-            {collectionsExist &&
-              collections
-                .filter(cat => slugify(cat).toLowerCase() !== category.toLowerCase()) // Excluir la categoría actual
-                .map((cat, i) => (
-                  <Badge
-                    key={i}
-                    variant="light"
-                    color="violet"
-                    size="lg"
-                    radius="xl"
-                    onClick={() => router.push(`/comunidades/grupos-de-${platform}/${slugify(cat)}`)}
-                    style={{
-                      padding: '10px 16px',
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      backgroundColor: '#f3e8ff',
-                      color: '#4a0080',
-                      whiteSpace: 'nowrap',
-                      flexShrink: 0,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                    }}
-                  >
-                    {cat}
-                  </Badge>
-                ))}
-          </Box>
-        </Group>
-
-        <Paper
-        withBorder
-        radius="md"
-        shadow="xs"
-        mt={isMobile ? 'md' : 'xl'}
-        p={isMobile ? 'sm' : 'md'}
-        style={{
-            backgroundColor: '#f9f9f9',
-            marginBottom: isMobile ? '12px' : '20px',
-            paddingBottom: isMobile ? '6px' : '10px',
-        }}
-        >
-
-        <Title order={1} mb="sm">
-            {categoryContent.title} Activos 2025
-        </Title>
-
-        <Text size="md" mb="md">
-            {isMobile
-            ? categoryContent.content.intro.slice(0, 100) + '...'
-            : categoryContent.content.intro}
-        </Text>
-
-        <Title order={3} mb="sm">
-            ¿Por qué elegir nuestros grupos de {capitalize(category)}?
-        </Title>
-
-        <Box mb="md">
-            {categoryContent.content.benefits.slice(0, isMobile ? 2 : categoryContent.content.benefits.length).map((benefit, index) => (
-            <Text key={index} size="sm" mb="xs" style={{ display: 'flex', alignItems: 'center' }}>
-                <span style={{ color: '#5e2ca5', marginRight: '8px', fontWeight: 'bold' }}>✓</span>
-                {benefit}
-            </Text>
-            ))}
-        </Box>
-
-        <Text size="sm" c="dimmed" mb="md">
-            {isMobile
-            ? categoryContent.content.popular.slice(0, 80) + '...'
-            : categoryContent.content.popular}
-        </Text>
-
-        {/* CONTENIDO ESPECÍFICO ADICIONAL POR CATEGORÍA */}
-        {category === 'anime' && (
-            <Box mb="md">
-            <Title order={4} mb="xs">Géneros de Anime Más Populares</Title>
-            <Text size="sm" c="dimmed">
-                {isMobile
-                ? 'Grupos de Shonen, Seinen, Isekai y más.'
-                : 'Encuentra grupos especializados en Shonen (Naruto, Dragon Ball), Seinen (Attack on Titan, Tokyo Ghoul), Shojo (Sailor Moon, Fruits Basket), Isekai (Re:Zero, Overlord) y muchos más géneros. Cada grupo está moderado por fans expertos que mantienen discusiones de calidad.'}
-            </Text>
-            </Box>
-        )}
-
-        {category === 'gaming' && (
-            <Box mb="md">
-            <Title order={4} mb="xs">Plataformas de Gaming Cubiertas</Title>
-            <Text size="sm" c="dimmed">
-                {isMobile
-                ? 'Grupos de Free Fire, LoL, Valorant y más.'
-                : 'Desde gaming móvil (Free Fire, PUBG Mobile, Call of Duty Mobile) hasta PC gaming (Valorant, CS:GO, League of Legends) y consolas (FIFA, Fortnite, Apex Legends). Encuentra equipos, participa en torneos y mejora tu gameplay.'}
-            </Text>
-            </Box>
-        )}
-
-        {category === 'tecnologia' && (
-            <Box mb="md">
-            <Title order={4} mb="xs">Áreas Tecnológicas Especializadas</Title>
-            <Text size="sm" c="dimmed">
-                {isMobile
-                ? 'Grupos de programación, IA y más.'
-                : 'Programación (Python, JavaScript, React), Inteligencia Artificial, Blockchain y Criptomonedas, Ciberseguridad, DevOps, y las últimas tendencias en tecnología. Networking profesional y oportunidades laborales.'}
-            </Text>
-            </Box>
-        )}
-
-        {category === '18' && (
-            <Box mb="md">
-            <Title order={4} mb="xs">Acceso Verificado y Seguro</Title>
-            <Text size="sm" c="dimmed">
-                {isMobile
-                ? 'Grupos verificados +18 con normas claras.'
-                : 'Todos nuestros grupos +18 requieren verificación de edad. Moderación activa 24/7, normas claras de respeto y consenso. Ambiente maduro y responsable para adultos.'}
-            </Text>
-            </Box>
-        )}
-        </Paper>
-
-
-        {rows.length > 0 ? (
-          <>
-            {rows}
-            
-            <Group mt="xl" justify="center" gap="xs">
+            {/* Botones de Ordenamiento (Top, Nuevos, Destacados) */}
+            <Group mt="md" mb="md">
               <Button
-                variant="light"
-                size="xs"
-                radius="md"
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
+                onClick={() => {
+                  const params = new URLSearchParams(location.search);
+                  const currentOrden = params.get('orden');
+                  if (currentOrden === 'top') {
+                    params.delete('orden'); // quitar si ya estaba activo
+                  } else {
+                    params.set('orden', 'top');
+                  }
+                  const search = params.toString();
+                  router.push(`?${search}`);
+                }}
+                variant={orden === 'top' ? 'filled' : 'light'}
               >
-                {t('Inicio (paginación)')}
+                Top
               </Button>
+
               <Button
-                variant="subtle"
-                size="xs"
-                radius="md"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
+                onClick={() => {
+                  const params = new URLSearchParams(location.search);
+                  const currentOrden = params.get('orden');
+                  if (currentOrden === 'nuevos') {
+                    params.delete('orden');
+                  } else {
+                    params.set('orden', 'nuevos');
+                  }
+                  const search = params.toString();
+                  router.push(`?${search}`);                  
+                }}
+                variant={orden === 'nuevos' ? 'filled' : 'light'}
               >
-                ← {t('Anterior')}
+                Nuevos
               </Button>
-              <Text size="sm" fw={500} mt={4}>
-                {t('Página')} <strong>{currentPage}</strong>
-              </Text>
+
               <Button
-                variant="subtle"
-                size="xs"
-                radius="md"
-                onClick={() =>
-                  setCurrentPage((prev) =>
-                    indexOfLastGroup < sortedData.length ? prev + 1 : prev
-                  )
-                }
-                disabled={indexOfLastGroup >= sortedData.length}
+                onClick={() => {
+                  const params = new URLSearchParams(location.search);
+                  params.delete('orden'); // quitar orden para mostrar "destacados"
+                  const search = params.toString();
+                  router.push(`?${search}`);
+                }}
+                variant={!orden ? 'filled' : 'light'}
               >
-                {t('Siguiente')} →
+                Destacados
               </Button>
             </Group>
-          </>
-        ) : (
-          <Box ta="center" mt="xl">
-            <Text fw={500} c="dimmed" mb="sm">
-              {t(`No se encontraron grupos de ${category} en este momento.`)}
-            </Text>
-            <Text size="sm" c="dimmed" mb="md">
-              {t('¿Tienes un grupo de esta categoría? ¡Publícalo gratis!')}
-            </Text>
-            <Button
-              component={Link}
-              href="/comunidades/form"
-              variant="filled"
-              color="violet"
-            >
-              {t('Publicar mi grupo')}
-            </Button>
-          </Box>
-        )}
 
-        <Paper
+            {/* BADGES DE OTRAS CATEGORÍAS */}
+            <Box
+              style={{
+                display: 'flex',
+                overflowX: 'auto',
+                gap: '10px',
+                padding: '10px 0',
+                WebkitOverflowScrolling: 'touch',
+              }}
+            >
+              {collectionsExist &&
+                collections
+                .filter(cat => slugify(cat).toLowerCase() !== (category || '').toLowerCase())
+                  .map((cat, i) => (
+                    <Badge
+                      key={i}
+                      variant="light"
+                      color="violet"
+                      size="lg"
+                      radius="xl"
+                      onClick={() => router.push(`/comunidades/grupos-de-${platform}/${slugify(cat)}`)}
+                      style={{
+                        padding: '10px 16px',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        backgroundColor: '#f3e8ff',
+                        color: '#4a0080',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      {cat}
+                    </Badge>
+                  ))}
+            </Box>
+          </Group>
+
+          <Paper
           withBorder
           radius="md"
           shadow="xs"
-          mt="xl"
-          p="md"
-          style={{ backgroundColor: '#f9f9f9', marginBottom: '20px' }}
-        >
-          <Title order={3} mb="sm">
-            Cómo Unirse a Grupos de {capitalize(category)} en {platformName}
+          mt={isMobile ? 'md' : 'xl'}
+          p={isMobile ? 'sm' : 'md'}
+          style={{
+              backgroundColor: '#f9f9f9',
+              marginBottom: isMobile ? '12px' : '20px',
+              paddingBottom: isMobile ? '6px' : '10px',
+          }}
+          >
+
+          <Title order={1} mb="sm">
+              {categoryContent.title} Activos 2025
           </Title>
 
-          <Text size="sm" color="dimmed" mb="md">
-            Unirse a nuestros grupos de {category} es completamente gratuito y seguro. 
-            Simplemente haz clic en cualquier grupo que te interese y serás redirigido automáticamente a {platformName}. 
-            Todos los enlaces están verificados y actualizados regularmente para garantizar el acceso.
+          <Text size="md" mb="md">
+              {isMobile
+              ? categoryContent.content.intro.slice(0, 100) + '...'
+              : categoryContent.content.intro}
           </Text>
 
-          <Text size="sm" color="dimmed" mb="md">
-            ¿Tienes un grupo de {category} y quieres hacerlo crecer? {' '}
-            <Link href="/comunidades/form" style={{ color: '#228be6', textDecoration: 'underline' }}>
-              Publícalo gratis en JoinGroups
-            </Link> y llega a miles de usuarios interesados en {category}.
+          <Title order={3} mb="sm">
+              ¿Por qué elegir nuestros grupos de {capitalize(category)}?
+          </Title>
+
+          <Box mb="md">
+              {categoryContent.content.benefits.slice(0, isMobile ? 2 : categoryContent.content.benefits.length).map((benefit, index) => (
+              <Text key={index} size="sm" mb="xs" style={{ display: 'flex', alignItems: 'center' }}>
+                  <span style={{ color: '#5e2ca5', marginRight: '8px', fontWeight: 'bold' }}>✓</span>
+                  {benefit}
+              </Text>
+              ))}
+          </Box>
+
+          <Text size="sm" c="dimmed" mb="md">
+              {isMobile
+              ? categoryContent.content.popular.slice(0, 80) + '...'
+              : categoryContent.content.popular}
           </Text>
 
-          <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
-            Grupos de {capitalize(category)}, {platformName} {category}, Comunidades de {category}, 
-            Enlaces {category}, Unirse grupos {category}, {category} 2025
-          </Text>
-        </Paper>
-      </ScrollArea>
+          {/* CONTENIDO ESPECÍFICO ADICIONAL POR CATEGORÍA */}
+          {category === 'anime' && (
+              <Box mb="md">
+              <Title order={4} mb="xs">Géneros de Anime Más Populares</Title>
+              <Text size="sm" c="dimmed">
+                  {isMobile
+                  ? 'Grupos de Shonen, Seinen, Isekai y más.'
+                  : 'Encuentra grupos especializados en Shonen (Naruto, Dragon Ball), Seinen (Attack on Titan, Tokyo Ghoul), Shojo (Sailor Moon, Fruits Basket), Isekai (Re:Zero, Overlord) y muchos más géneros. Cada grupo está moderado por fans expertos que mantienen discusiones de calidad.'}
+              </Text>
+              </Box>
+          )}
+
+          {category === 'gaming' && (
+              <Box mb="md">
+              <Title order={4} mb="xs">Plataformas de Gaming Cubiertas</Title>
+              <Text size="sm" c="dimmed">
+                  {isMobile
+                  ? 'Grupos de Free Fire, LoL, Valorant y más.'
+                  : 'Desde gaming móvil (Free Fire, PUBG Mobile, Call of Duty Mobile) hasta PC gaming (Valorant, CS:GO, League of Legends) y consolas (FIFA, Fortnite, Apex Legends). Encuentra equipos, participa en torneos y mejora tu gameplay.'}
+              </Text>
+              </Box>
+          )}
+
+          {category === 'tecnologia' && (
+              <Box mb="md">
+              <Title order={4} mb="xs">Áreas Tecnológicas Especializadas</Title>
+              <Text size="sm" c="dimmed">
+                  {isMobile
+                  ? 'Grupos de programación, IA y más.'
+                  : 'Programación (Python, JavaScript, React), Inteligencia Artificial, Blockchain y Criptomonedas, Ciberseguridad, DevOps, y las últimas tendencias en tecnología. Networking profesional y oportunidades laborales.'}
+              </Text>
+              </Box>
+          )}
+
+          {category === '18' && (
+              <Box mb="md">
+              <Title order={4} mb="xs">Acceso Verificado y Seguro</Title>
+              <Text size="sm" c="dimmed">
+                  {isMobile
+                  ? 'Grupos verificados +18 con normas claras.'
+                  : 'Todos nuestros grupos +18 requieren verificación de edad. Moderación activa 24/7, normas claras de respeto y consenso. Ambiente maduro y responsable para adultos.'}
+              </Text>
+              </Box>
+          )}
+          </Paper>
+
+
+          {rows.length > 0 ? (
+            <>
+              {rows}
+              
+              <Group mt="xl" justify="center" gap="xs">
+                <Button
+                  variant="light"
+                  size="xs"
+                  radius="md"
+                  onClick={() => setCurrentPage(1)}
+                  disabled={currentPage === 1}
+                >
+                  {t('Inicio (paginación)')}
+                </Button>
+                <Button
+                  variant="subtle"
+                  size="xs"
+                  radius="md"
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  ← {t('Anterior')}
+                </Button>
+                <Text size="sm" fw={500} mt={4}>
+                  {t('Página')} <strong>{currentPage}</strong>
+                </Text>
+                <Button
+                  variant="subtle"
+                  size="xs"
+                  radius="md"
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      indexOfLastGroup < sortedData.length ? prev + 1 : prev
+                    )
+                  }
+                  disabled={indexOfLastGroup >= sortedData.length}
+                >
+                  {t('Siguiente')} →
+                </Button>
+              </Group>
+            </>
+          ) : (
+            <Box ta="center" mt="xl">
+              <Text fw={500} c="dimmed" mb="sm">
+                {t(`No se encontraron grupos de ${category} en este momento.`)}
+              </Text>
+              <Text size="sm" c="dimmed" mb="md">
+                {t('¿Tienes un grupo de esta categoría? ¡Publícalo gratis!')}
+              </Text>
+              <Button
+                component={Link}
+                href="/comunidades/form"
+                variant="filled"
+                color="violet"
+              >
+                {t('Publicar mi grupo')}
+              </Button>
+            </Box>
+          )}
+
+          <Paper
+            withBorder
+            radius="md"
+            shadow="xs"
+            mt="xl"
+            p="md"
+            style={{ backgroundColor: '#f9f9f9', marginBottom: '20px' }}
+          >
+            <Title order={3} mb="sm">
+              Cómo Unirse a Grupos de {capitalize(category)} en {platformName}
+            </Title>
+
+            <Text size="sm" color="dimmed" mb="md">
+              Unirse a nuestros grupos de {category} es completamente gratuito y seguro. 
+              Simplemente haz clic en cualquier grupo que te interese y serás redirigido automáticamente a {platformName}. 
+              Todos los enlaces están verificados y actualizados regularmente para garantizar el acceso.
+            </Text>
+
+            <Text size="sm" color="dimmed" mb="md">
+              ¿Tienes un grupo de {category} y quieres hacerlo crecer? {' '}
+              <Link href="/comunidades/form" style={{ color: '#228be6', textDecoration: 'underline' }}>
+                Publícalo gratis en JoinGroups
+              </Link> y llega a miles de usuarios interesados en {category}.
+            </Text>
+
+            <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
+              Grupos de {capitalize(category)}, {platformName} {category}, Comunidades de {category}, 
+              Enlaces {category}, Unirse grupos {category}, {category} 2025
+            </Text>
+          </Paper>
+        </ScrollArea>
+      </Container>
+
     </>
   );
 }

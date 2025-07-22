@@ -339,100 +339,29 @@ export default function Telegram() {
   return (
     <>
       <Helmet>
-        
-        <title>Grupos de Telegram Activos 2025 | Comunidades de Telegram</title>
+        {/* --- ETIQUETAS FUNDAMENTALES --- */}
+        <title>Grupos de Telegram Activos por Categoría [2025] - JoinGroups.pro</title>
+        <meta name="description" content="Encuentra y únete a los mejores grupos de Telegram en español. Listas actualizadas de enlaces de invitación a comunidades activas y canales." />
+        <link rel="canonical" href="https://joingroups.pro/grupos-de-telegram" />
 
-      
-        <meta
-          name="description"
-          content="Encuentra y únete a los mejores grupos de Telegram con enlaces de invitación activos en 2025. Explora categorías como anime, gaming, +18, amistad y más. ¡Publica tu grupo gratis!"
-        />
-
-        {/* --- KEYWORDS --- (Eliminada por ser obsoleta para Google) */}
-
-        {/* ——— CANONICAL ——— (Sin cambios, es correcta) */}
-        <link rel="canonical" href="https://joingroups.pro/comunidades/grupos-de-telegram" />
-
-        {/*
-          --- OPEN GRAPH (para Facebook, WhatsApp, etc. ) ---
-          Optimización:
-          - Título y descripción alineados con las metas principales.
-          - **Imagen actualizada a una URL de ejemplo de alta calidad.**
-            ¡IMPORTANTE! Debes reemplazar "og-image-telegram.jpg" por tu propia imagen de 1200x630px.
-        */}
+        {/* --- ETIQUETAS PARA REDES SOCIALES (OPEN GRAPH ) --- */}
+        <meta property="og:title" content="Únete a los Mejores Grupos de Telegram | JoinGroups.pro" />
+        <meta property="og:description" content="Explora miles de grupos de Telegram activos, organizados por temas como amistad, juegos, noticias y más. ¡Nuevos enlaces todos los días!" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://joingroups.pro/comunidades/grupos-de-telegram" />
-        <meta property="og:title" content="Directorio de Enlaces para Grupos de Telegram" />
-        <meta property="og:description" content="La lista más completa de grupos de Telegram activos. Únete a comunidades de todos los temas o comparte tu propio grupo con miles de personas." />
-        <meta property="og:image" content="https://joingroups.pro/images/og-image-telegram.jpg" />
-        <meta property="og:site_name" content="JoinGroups" />
+        <meta property="og:url" content="https://joingroups.pro/grupos-de-telegram" />
+        <meta property="og:image" content="https://joingroups.pro/JoinGroup.png" />
 
-        {/*
-          --- TWITTER CARDS (para Twitter/X ) ---
-          Optimización:
-          - Mensajes directos y adaptados a la plataforma.
-          - **Imagen actualizada.** Reemplaza "twitter-image-telegram.jpg" por tu imagen.
-        */}
+        {/* --- ETIQUETAS PARA TWITTER --- */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://joingroups.pro/comunidades/grupos-de-telegram" />
-        <meta name="twitter:title" content="Enlaces para Grupos de Telegram | Únete Ahora" />
-        <meta name="twitter:description" content="Encuentra tu próxima comunidad. Cientos de grupos de Telegram activos y verificados te esperan. ¡Explora por categorías!" />
-        <meta name="twitter:image" content="https://joingroups.pro/images/twitter-image-telegram.jpg" />
+        <meta name="twitter:title" content="Grupos de Telegram Activos por Categoría [2025] - JoinGroups.pro" />
+        <meta name="twitter:description" content="Encuentra y únete a los mejores grupos de Telegram en español. Listas actualizadas de enlaces de invitación." />
+        <meta name="twitter:image" content="https://joingroups.pro/JoinGroup.png" />
 
-        {/*
-          --- SCHEMA.ORG (JSON-LD para datos estructurados ) ---
-          Optimización:
-          - **Corregido el error de sintaxis JSON.**
-          - Se unifica todo en un solo script `CollectionPage` para mayor claridad.
-          - Se añade `BreadcrumbList` para mostrar la jerarquía (Inicio > Comunidades > Grupos de Telegram),
-            lo cual es una señal de SEO muy potente.
-          - Las URLs en `itemListElement` son ahora más específicas para la sección de Telegram.
-        */}
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "CollectionPage",
-              "name": "Directorio de Grupos de Telegram por Categorías",
-              "description": "Descubre y únete a los grupos de Telegram más activos en 2025. Listas actualizadas de enlaces para canales de +18, anime, estudio, tecnología, amistad y mucho más.",
-              "url": "https://joingroups.pro/comunidades/grupos-de-telegram",
-              "mainEntity": {
-                "@type": "ItemList",
-                "name": "Categorías Populares de Grupos de Telegram",
-                "itemListElement": [
-                  { "@type": "SiteNavigationElement", "position": 1, "name": "Grupos de Telegram +18", "url": "https://joingroups.pro/comunidades/grupos-de-telegram/18" },
-                  { "@type": "SiteNavigationElement", "position": 2, "name": "Grupos de Telegram de Anime", "url": "https://joingroups.pro/comunidades/grupos-de-telegram/anime" },
-                  { "@type": "SiteNavigationElement", "position": 3, "name": "Grupos de Telegram de Estudio", "url": "https://joingroups.pro/comunidades/grupos-de-telegram/estudio" },
-                  { "@type": "SiteNavigationElement", "position": 4, "name": "Grupos de Telegram de Tecnología", "url": "https://joingroups.pro/comunidades/grupos-de-telegram/tecnologia" }
-                ]
-              },
-              "breadcrumb": {
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                  {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Inicio",
-                    "item": "https://joingroups.pro/"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "Comunidades",
-                    "item": "https://joingroups.pro/comunidades"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 3,
-                    "name": "Grupos de Telegram",
-                    "item": "https://joingroups.pro/comunidades/grupos-de-telegram"
-                  }
-                ]
-              }
-            }
-          `}
-        </script>
+        {/* --- ETIQUETAS ADICIONALES --- */}
+        <meta name="keywords" content="grupos de telegram, enlaces de telegram, unirse a grupo telegram, canales de telegram, telegram grupos español, links de telegram" />
+        <meta name="robots" content="index, follow" />
       </Helmet>
+
 
       <Container size="lg" px="md">
         <ScrollArea>

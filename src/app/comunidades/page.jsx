@@ -417,9 +417,31 @@ export default function TableSort() {
   return (
     <>
       <Helmet>
-        <title>Comunidades - JoinGroups.pro</title>
-        <meta name="description" content="Explora y únete a grupos de Telegram y WhatsApp clasificados por categorías. Actualizado para 2025." />
+        {/* --- ETIQUETAS FUNDAMENTALES --- */}
+        <title>Grupos de Telegram y WhatsApp por Categorías - JoinGroups.pro</title>
+        <meta name="description" content="Encuentra los mejores enlaces de invitación para grupos de Telegram y WhatsApp. Comunidades activas y actualizadas en 2025, organizadas por temas." />
+        <link rel="canonical" href="https://joingroups.pro/comunidades" /> {/* <-- IMPORTANTE: Cambia la URL */}
+
+        {/* --- ETIQUETAS PARA REDES SOCIALES (OPEN GRAPH ) --- */}
+        <meta property="og:title" content="Grupos de Telegram y WhatsApp por Categorías" />
+        <meta property="og:description" content="Explora miles de grupos activos. Únete con un solo clic a comunidades de tu interés: amistad, hobbies, noticias y más." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://oups.pro/tu-ruta-a-esta-pagina" /> {/* <-- IMPORTANTE: Cambia la URL */}
+        <meta property="og:image" content="https://joingroups.pro/JoinGroup.png" /> {/* <-- IMPORTANTE: Usa una imagen específica para esta sección */}
+
+        {/* --- ETIQUETAS PARA TWITTER --- */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Grupos de Telegram y WhatsApp por Categorías" />
+        <meta name="twitter:description" content="Explora miles de grupos activos. Únete con un solo clic a comunidades de tu interés: amistad, hobbies, noticias y más." />
+        <meta name="twitter:image" content="https://joingroups.pro/JoinGroup.png" /> {/* <-- IMPORTANTE: Usa la misma imagen */}
+
+        {/* --- ETIQUETAS ADICIONALES --- */}
+        <meta name="keywords" content="grupos de telegram, grupos de whatsapp, enlaces de telegram, enlaces de whatsapp, unirse a grupos, grupos por categoria, grupos 2025" />
+        <meta name="robots" content="index, follow" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
+
 
       <Container size="lg" px="md">
         <ScrollArea>

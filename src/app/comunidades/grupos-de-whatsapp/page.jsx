@@ -338,62 +338,29 @@ export default function Whatsapp() {
   return (
     <>
       <Helmet>
-        {/* ——— TITLE (≤60 car.) ——— */}
-        <title>Grupos de WhatsApp ACTIVOS 2025 | Publica y Haz Crecer tu Grupo o Canal de Whatsapp</title>
+        {/* --- ETIQUETAS FUNDAMENTALES --- */}
+        <title>Grupos de WhatsApp por Temas [Actualizado 2025] - JoinGroups.pro</title>
+        <meta name="description" content="Descubre y únete a grupos de WhatsApp activos de todas las categorías: amor, amistad, stickers, etc. Enlaces de invitación verificados y actualizados." />
+        <link rel="canonical" href="https://joingroups.pro/grupos-de-whatsapp" />
 
-        {/* ——— DESCRIPTION (≈150 car.) ——— */}
-        <meta
-          name="description"
-          content="Únete a los grupos de WhatsApp más activos de 2025: tecnología, estudio, ventas y más. Publica tu enlace gratis y conecta con miles de personas afines."
-        />
+        {/* --- ETIQUETAS PARA REDES SOCIALES (OPEN GRAPH ) --- */}
+        <meta property="og:title" content="Los Mejores Grupos de WhatsApp para Unirte | JoinGroups.pro" />
+        <meta property="og:description" content="Busca entre cientos de grupos de WhatsApp y únete con un solo clic. Comunidades activas de todo el mundo y en español." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://joingroups.pro/grupos-de-whatsapp" />
+        <meta property="og:image" content="https://joingroups.pro/wapp.webp" />
 
-        {/* ——— KEYWORDS (poco peso en Google, pero útil en otros buscadores) ——— */}
-        <meta
-          name="keywords"
-          content="grupos de whatsapp activos 2025, enlaces whatsapp, unirse a grupos whatsapp, publicar grupo whatsapp, comunidades whatsapp, canales whatsapp"
-        />
+        {/* --- ETIQUETAS PARA TWITTER --- */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Grupos de WhatsApp por Temas [Actualizado 2025] - JoinGroups.pro" />
+        <meta name="twitter:description" content="Descubre y únete a grupos de WhatsApp activos de todas las categorías. Enlaces de invitación verificados." />
+        <meta name="twitter:image" content="https://joingroups.pro/wapp.webp" />
 
-        {/* ——— CANONICAL (evita duplicados) ——— */}
-        <link rel="canonical" href="https://joingroups.pro/comunidades/grupos-de-whatsapp" />
-
-        {/* ——— OPEN GRAPH (FB / WhatsApp) ——— */}
-        <meta property="og:type"        content="website" />
-        <meta property="og:url"         content="https://joingroups.pro/comunidades/grupos-de-whatsapp" />
-        <meta property="og:title"       content="Grupos de WhatsApp Activos 2025 | Únete o Publica el Tuyo" />
-        <meta property="og:description" content="Únete a los grupos de WhatsApp más activos de 2025: tecnología, estudio, ventas y más. Publica tu enlace gratis y conecta con miles de personas afines." />
-        <meta property="og:image"       content="https://joingroups.pro/JoinGroups.ico" />
-        <meta property="og:site_name"   content="JoinGroups" />
-
-        {/* ——— TWITTER CARDS ——— */}
-        <meta name="twitter:card"        content="summary_large_image" />
-        <meta name="twitter:url"         content="https://joingroups.pro/comunidades/grupos-de-whatsapp" />
-        <meta name="twitter:title"       content="Grupos de WhatsApp Activos 2025 | Únete o Publica el Tuyo" />
-        <meta name="twitter:description" content="Únete a los grupos de WhatsApp más activos de 2025: tecnología, estudio, ventas y más. Publica tu enlace gratis y conecta con miles de personas afines." />
-        <meta name="twitter:image"       content="https://joingroups.pro/JoinGroups.ico" />
-
-        {/* ——— SCHEMA.ORG (JSON-LD) ——— */}
-        <script type="application/ld+json">
-          {`
-          {
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            "name": "Grupos de WhatsApp Activos 2025",
-            "description": "Únete a los grupos de WhatsApp más activos de 2025: tecnología, estudio, ventas y más.",
-            "url": "https://joingroups.pro/comunidades/grupos-de-whatsapp",
-            "mainEntity": {
-              "@type": "ItemList",
-              "name": "Categorías de Grupos de WhatsApp",
-              "itemListElement": [
-                { "@type": "SiteNavigationElement", "position": 1, "name": "Tecnología", "url": "https://joingroups.pro/comunidades/grupos-de-whatsapp/tecnologia" },
-                { "@type": "SiteNavigationElement", "position": 2, "name": "Estudio",     "url": "https://joingroups.pro/comunidades/grupos-de-whatsapp/estudio" },
-                { "@type": "SiteNavigationElement", "position": 3, "name": "+18",        "url": "https://joingroups.pro/comunidades/grupos-de-whatsapp/18" },
-                { "@type": "SiteNavigationElement", "position": 4, "name": "Ventas",     "url": "https://joingroups.pro/comunidades/grupos-de-whatsapp/ventas" }
-              ]
-            }
-          }
-          `}
-        </script>
+        {/* --- ETIQUETAS ADICIONALES --- */}
+        <meta name="keywords" content="grupos de whatsapp, enlaces de whatsapp, unirse a grupo whatsapp, links de whatsapp, grupos de wasap, whatsapp grupos amistad" />
+        <meta name="robots" content="index, follow" />
       </Helmet>
+
 
       <Container size="lg" px="md">
         <ScrollArea>

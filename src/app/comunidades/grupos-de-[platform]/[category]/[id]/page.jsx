@@ -1,10 +1,11 @@
-import { useParams } from 'react-router-dom';
+'use client';
+
 import { useEffect, useState } from 'react';
 import {
   collection, query, where, getDocs,
   limit, runTransaction, updateDoc
 } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@/firebase/firebase';
 import {
   Box, Button, Center, Container, Divider,
   Group, Paper, Stack, Text, Title, Badge,
@@ -14,6 +15,8 @@ import { showNotification } from '@mantine/notifications';
 import slugify from '@/lib/slugify';     // ⬅️ el mismo helper que usas en TableSort
 import { useTranslation } from 'react-i18next';
 import { useDisclosure } from '@mantine/hooks';
+import { Helmet } from 'react-helmet-async';
+import { useRouter, useSearchParams, usePathname, useParams } from 'next/navigation';
 
 const countryMap = {
   mx: '🇲🇽',

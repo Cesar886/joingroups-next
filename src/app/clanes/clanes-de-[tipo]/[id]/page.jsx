@@ -1,10 +1,12 @@
-import { useParams } from 'react-router-dom';
+'use client';
+
 import { useEffect, useState } from 'react';
 import {
   collection, query, where, getDocs,
   doc, increment, limit, runTransaction, updateDoc
 } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '@/firebase/firebase';
+import { useParams } from 'next/navigation';
 import {
   Box, Button, Center, Container, Divider,
   Group, Paper, Stack, Text, Title,

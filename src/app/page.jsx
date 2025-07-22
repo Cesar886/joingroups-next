@@ -34,6 +34,8 @@ import { useTranslation } from 'react-i18next';
 import slugify from '@/lib/slugify';
 import { useRouter } from 'next/navigation';
 import '@/locales/i18n'; // Importa tus archivos de traducción
+import { Helmet } from 'react-helmet-async';
+
 
 
 const countries = [
@@ -296,232 +298,262 @@ export default function Page() {
 
 
   return (
-    <Container
-      size="md"
-      py="xl"
-      className={styles.mobileContainerFix}
-    >
+    <>
+      <Helmet>
+        {/* --- ETIQUETAS FUNDAMENTALES --- */}
+        <title>Grupos de Telegram y WhatsApp Activos - joingroups.pro</title>
+        <meta name="description" content="Encuentra y únete a los mejores grupos de Telegram y WhatsApp. Listas actualizadas para 2025 con comunidades activas y clanes de juegos." />
+        <link rel="canonical" href="https://joingroups.pro" />
 
-    <Stack align="center" spacing="lg" px="md">
-      <Title
-        order={1}
-        ta="center"
-        fw={isMobile ? 600 : 800}
-        fz={isMobile ? 28 : 36} // puedes ajustar estos valores según tu diseño
+        {/* --- ETIQUETAS PARA REDES SOCIALES (OPEN GRAPH ) --- */}
+        <meta property="og:title" content="Los Mejores Grupos de Telegram, WhatsApp y Clanes de Juegos" />
+        <meta property="og:description" content="Explora y únete a miles de grupos y comunidades activas. Listas organizadas por categorías, temas e idiomas." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://joingroups.pro" />
+        <meta property="og:image" content="https://joingroups.pro/JoinGroup.png" /> {/* <-- IMPORTANTE: Cambia esto por una URL de imagen real */}
+
+        {/* --- ETIQUETAS PARA TWITTER --- */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Los Mejores Grupos de Telegram, WhatsApp y Clanes de Juegos" />
+        <meta name="twitter:description" content="Explora y únete a miles de grupos y comunidades activas. Listas organizadas por categorías, temas e idiomas." />
+        <meta name="twitter:image" content="https://joingroups.pro/JoinGroup.png" /> {/* <-- IMPORTANTE: Usa la misma imagen que en og:image */}
+
+        {/* --- ETIQUETAS ADICIONALES --- */}
+        <meta name="keywords" content="grupos de telegram, grupos de whatsapp, clanes de juegos, unirse a grupos, grupos activos, comunidades online, clash royale clanes" />
+        <meta name="robots" content="index, follow" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Helmet>
+
+
+      <Container
+        size="md"
+        py="xl"
+        className={styles.mobileContainerFix}
       >
-        {isMobile
-          ? 'Grupos de Telegram, WhatsApp y Juegos'
-          : 'Los mejores Grupos de Telegram, WhatsApp y Clanes de Juegos Activos'}
-      </Title>
+
+      <Stack align="center" spacing="lg" px="md">
+        <Title
+          order={1}
+          ta="center"
+          fw={isMobile ? 600 : 800}
+          fz={isMobile ? 28 : 36} // puedes ajustar estos valores según tu diseño
+        >
+          {isMobile
+            ? 'Grupos de Telegram, WhatsApp y Juegos'
+            : 'Los mejores Grupos de Telegram, WhatsApp y Clanes de Juegos Activos'}
+        </Title>
 
 
-      <Text ta="center" c="dimmed" fz="md" maw={700} mx="auto">
-        {isMobile
-          ? 'Únete a comunidades en Telegram, WhatsApp y juegos populares.'
-          : (
-              <>
-                En <strong>JoinGroups.pro</strong> puedes unirte fácilmente a comunidades populares en <strong>Telegram</strong>, <strong>WhatsApp</strong> y juegos como <strong>Clash Royale</strong>. Explora grupos organizados por temas, idiomas y más.
-              </>
-            )}
-      </Text>
-      <Button
-        size="lg"
-        color="blue"
-        component={Link}
-        variant="light"
-        radius="lg"
-        href="/comunidades"
-        style={{ fontWeight: 600 }}
-      >
-        Explorar Grupos Populares
-      </Button>
-    </Stack>
-
-
-    <Box className={styles['scrolling-container']} mt="xl" >
-      <div className={styles['scrolling-track']}>
-        {[...featuredButtons, ...featuredButtons].map((b, i) => (
-          <Button
-            key={i}
-            component={Link}
-            href={b.to}
-            leftSection={b.icon}
-            variant="light"
-            radius="xl"
-            color={b.color}
-            style={{
-              whiteSpace: 'nowrap',
-              pointerEvents: 'auto',
-              flexShrink: 0,
-            }}
-          >
-            {b.label}
-          </Button>
-        ))}
-      </div>
-    </Box>
-
-
-      <Paper mt="xl" withBorder shadow="sm" p="md" radius="lg">
-        <Title order={2} mb="sm" fz={isMobile ? 20 : 26}>{isMobile ? '🎯 Grupos nuevos' : '🎯 Grupos nuevos y destacados'}</Title>
-        <Stack>
-          {groups.map((group, i) => renderCard(group, i, true))}
-        </Stack>
-        <Center mt="md">
-          <Button variant="light" component={Link} radius="md" href="/comunidades">
-            Ver todos los grupos
-          </Button>
-        </Center>
-      </Paper>
-
-      <Paper mt="xl" withBorder shadow="sm" p="md" radius="lg">
-        <Title order={2} mb="sm" fz={isMobile ? 20 : 26}>{isMobile ? '🏆 Clanes destacados' : '🏆 Clanes destacados y con más vistas'}</Title>
-        <Stack>
-          {clanes.map((clan, i) => renderCard(clan, i, false))}
-        </Stack>
-        <Center mt="md">
-          <Button variant="light" component={Link} radius="md" href="/clanes" color='violet'>
-            Ver todos los clanes
-          </Button>
-        </Center>
-      </Paper>
-
-      <Center mt="xl">
-        <Button component={Link} href="/clanes/form" variant='light' color="violet" size="lg" radius='lg'>
-          Publica tu CLAN ahora
+        <Text ta="center" c="dimmed" fz="md" maw={700} mx="auto">
+          {isMobile
+            ? 'Únete a comunidades en Telegram, WhatsApp y juegos populares.'
+            : (
+                <>
+                  En <strong>JoinGroups.pro</strong> puedes unirte fácilmente a comunidades populares en <strong>Telegram</strong>, <strong>WhatsApp</strong> y juegos como <strong>Clash Royale</strong>. Explora grupos organizados por temas, idiomas y más.
+                </>
+              )}
+        </Text>
+        <Button
+          size="lg"
+          color="blue"
+          component={Link}
+          variant="light"
+          radius="lg"
+          href="/comunidades"
+          style={{ fontWeight: 600 }}
+        >
+          Explorar Grupos Populares
         </Button>
-      </Center>
+      </Stack>
 
-      <Box
-        onPointerDownCapture={(e) => e.stopPropagation()}
-        onWheel={(e) => e.stopPropagation()}
-      >
-        <Menu shadow="md" width={200} withinPortal position="bottom-end">
-          <Menu.Target>
-            <ActionIcon
-              size="lg"
+
+      <Box className={styles['scrolling-container']} mt="xl" >
+        <div className={styles['scrolling-track']}>
+          {[...featuredButtons, ...featuredButtons].map((b, i) => (
+            <Button
+              key={i}
+              component={Link}
+              href={b.to}
+              leftSection={b.icon}
+              variant="light"
               radius="xl"
-              variant="subtle"
+              color={b.color}
               style={{
-                fontSize: rem(24),
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
+                whiteSpace: 'nowrap',
+                pointerEvents: 'auto',
+                flexShrink: 0,
               }}
             >
-              <span style={{
-                fontSize: '16px',
-                display: 'inline-block',
-                lineHeight: '1',
-                borderRadius: '2px',
-                overflow: 'hidden',
-                width: '20px',
-                height: '14px',
-              }}>
-                {countries.find((c) => c.value === subdomain)?.emoji ?? '🇲🇽'}
-              </span>
-              <span style={{ fontSize: '0.75rem', transform: 'translateY(1px)' }}>▼</span>
-            </ActionIcon>
+              {b.label}
+            </Button>
+          ))}
+        </div>
+      </Box>
 
-          </Menu.Target>
 
-          <Menu.Dropdown
-            style={{
-              maxHeight: rem(300),
-              overflowY: 'auto',
-            }}
-            onWheel={(e) => e.stopPropagation()}
-          >
-            {countries.map((country) => (
-              <Menu.Item
-                key={country.value}
-                leftSection={
-                  <span style={{
-                    fontSize: '16px',
-                    display: 'inline-block',
-                    lineHeight: '1',
-                    borderRadius: '2px',
-                    overflow: 'hidden',
-                    width: '20px',
-                    height: '14px',
-                  }}>
-                    {country.emoji}
-                  </span>
-                }
-                onClick={() => {
-                  const currentPath = window.location.pathname + window.location.search;
-                  i18n.changeLanguage(country.lang);
-                  window.location.href = `https://${country.value}.joingroups.pro${currentPath}`;
+        <Paper mt="xl" withBorder shadow="sm" p="md" radius="lg">
+          <Title order={2} mb="sm" fz={isMobile ? 20 : 26}>{isMobile ? '🎯 Grupos nuevos' : '🎯 Grupos nuevos y destacados'}</Title>
+          <Stack>
+            {groups.map((group, i) => renderCard(group, i, true))}
+          </Stack>
+          <Center mt="md">
+            <Button variant="light" component={Link} radius="md" href="/comunidades">
+              Ver todos los grupos
+            </Button>
+          </Center>
+        </Paper>
+
+        <Paper mt="xl" withBorder shadow="sm" p="md" radius="lg">
+          <Title order={2} mb="sm" fz={isMobile ? 20 : 26}>{isMobile ? '🏆 Clanes destacados' : '🏆 Clanes destacados y con más vistas'}</Title>
+          <Stack>
+            {clanes.map((clan, i) => renderCard(clan, i, false))}
+          </Stack>
+          <Center mt="md">
+            <Button variant="light" component={Link} radius="md" href="/clanes" color='violet'>
+              Ver todos los clanes
+            </Button>
+          </Center>
+        </Paper>
+
+        <Center mt="xl">
+          <Button component={Link} href="/clanes/form" variant='light' color="violet" size="lg" radius='lg'>
+            Publica tu CLAN ahora
+          </Button>
+        </Center>
+
+        <Box
+          onPointerDownCapture={(e) => e.stopPropagation()}
+          onWheel={(e) => e.stopPropagation()}
+        >
+          <Menu shadow="md" width={200} withinPortal position="bottom-end">
+            <Menu.Target>
+              <ActionIcon
+                size="lg"
+                radius="xl"
+                variant="subtle"
+                style={{
+                  fontSize: rem(24),
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
                 }}
               >
-                {country.label}
-              </Menu.Item>
-            ))}
-          </Menu.Dropdown>
+                <span style={{
+                  fontSize: '16px',
+                  display: 'inline-block',
+                  lineHeight: '1',
+                  borderRadius: '2px',
+                  overflow: 'hidden',
+                  width: '20px',
+                  height: '14px',
+                }}>
+                  {countries.find((c) => c.value === subdomain)?.emoji ?? '🇲🇽'}
+                </span>
+                <span style={{ fontSize: '0.75rem', transform: 'translateY(1px)' }}>▼</span>
+              </ActionIcon>
 
-        </Menu>
-      </Box>
+            </Menu.Target>
 
-      <Box mt="xl" mx="auto" style={isMobile ? { textAlign: 'center' } : {}}>
-        <Divider my="lg" />
-        <Title order={2} mb="xs">Únete a los mejores grupos y canales de Telegram, WhatsApp y más</Title>
+            <Menu.Dropdown
+              style={{
+                maxHeight: rem(300),
+                overflowY: 'auto',
+              }}
+              onWheel={(e) => e.stopPropagation()}
+            >
+              {countries.map((country) => (
+                <Menu.Item
+                  key={country.value}
+                  leftSection={
+                    <span style={{
+                      fontSize: '16px',
+                      display: 'inline-block',
+                      lineHeight: '1',
+                      borderRadius: '2px',
+                      overflow: 'hidden',
+                      width: '20px',
+                      height: '14px',
+                    }}>
+                      {country.emoji}
+                    </span>
+                  }
+                  onClick={() => {
+                    const currentPath = window.location.pathname + window.location.search;
+                    i18n.changeLanguage(country.lang);
+                    window.location.href = `https://${country.value}.joingroups.pro${currentPath}`;
+                  }}
+                >
+                  {country.label}
+                </Menu.Item>
+              ))}
+            </Menu.Dropdown>
 
-        <Text fz="sm" c="dimmed" mb="sm">
-          ¿Quieres encontrar un <strong>grupo</strong> o <strong>canal</strong> activo en <strong>Telegram</strong>, <strong>WhatsApp</strong> o incluso juegos? En <strong>JoinGroups</strong> puedes <strong>descubrir, conocer</strong> y unirte fácilmente a miles de <strong>grupos</strong> clasificados por temática, país y número de <strong>miembros</strong>. 
-        </Text>
+          </Menu>
+        </Box>
 
-        <Text fz="sm" c="dimmed" mb="sm">
-          Nuestra plataforma te ayuda a encontrar <strong>canales</strong> de calidad en categorías como anime, música, desarrollo, amistad, NSFW, salud, IA, memes y más. Todos los <strong>grupos</strong> son verificados y contienen contenido actualizado.
-        </Text>
+        <Box mt="xl" mx="auto" style={isMobile ? { textAlign: 'center' } : {}}>
+          <Divider my="lg" />
+          <Title order={2} mb="xs">Únete a los mejores grupos y canales de Telegram, WhatsApp y más</Title>
 
-        <Text fz="sm" c="dimmed" mb="sm">
-          <strong>JoinGroups</strong> ha sido diseñado para que <strong>puedas</strong> navegar rápidamente, desde cualquier dispositivo, ya sea <strong>Android</strong> o PC. Utiliza nuestros filtros inteligentes por idioma, país o tipo de <strong>contenido</strong> para encontrar exactamente lo que buscas.
-        </Text>
+          <Text fz="sm" c="dimmed" mb="sm">
+            ¿Quieres encontrar un <strong>grupo</strong> o <strong>canal</strong> activo en <strong>Telegram</strong>, <strong>WhatsApp</strong> o incluso juegos? En <strong>JoinGroups</strong> puedes <strong>descubrir, conocer</strong> y unirte fácilmente a miles de <strong>grupos</strong> clasificados por temática, país y número de <strong>miembros</strong>. 
+          </Text>
 
-        <Text fz="sm" c="dimmed" mb="sm">
-          Si eres creador, también puedes <strong>crear</strong> tu propio <strong>grupo</strong> y publicarlo gratis. Miles de <strong>usuarios</strong> buscan comunidades nuevas cada día, así que no pierdas la oportunidad de hacer crecer la tuya.
-        </Text>
+          <Text fz="sm" c="dimmed" mb="sm">
+            Nuestra plataforma te ayuda a encontrar <strong>canales</strong> de calidad en categorías como anime, música, desarrollo, amistad, NSFW, salud, IA, memes y más. Todos los <strong>grupos</strong> son verificados y contienen contenido actualizado.
+          </Text>
 
-        <Text fz="sm" c="dimmed" mb="sm">
-          En <strong>JoinGroups</strong> priorizamos la seguridad: no recopilamos datos personales y verificamos cada enlace manualmente. Nuestra misión es ayudarte a <strong>conectar</strong> con <strong>personas</strong> reales y comunidades auténticas, sin spam.
-        </Text>
+          <Text fz="sm" c="dimmed" mb="sm">
+            <strong>JoinGroups</strong> ha sido diseñado para que <strong>puedas</strong> navegar rápidamente, desde cualquier dispositivo, ya sea <strong>Android</strong> o PC. Utiliza nuestros filtros inteligentes por idioma, país o tipo de <strong>contenido</strong> para encontrar exactamente lo que buscas.
+          </Text>
 
-        <Text fz="sm" c="dimmed">
-          Ya sea que quieras hacer nuevos amigos, aprender algo nuevo o simplemente pasar el rato, aquí encontrarás la <strong>forma</strong> más fácil de acceder a las mejores comunidades. Incluso si vienes desde <strong>Google</strong>, te damos la bienvenida a JoinGroups.
-        </Text>
-      </Box>
+          <Text fz="sm" c="dimmed" mb="sm">
+            Si eres creador, también puedes <strong>crear</strong> tu propio <strong>grupo</strong> y publicarlo gratis. Miles de <strong>usuarios</strong> buscan comunidades nuevas cada día, así que no pierdas la oportunidad de hacer crecer la tuya.
+          </Text>
+
+          <Text fz="sm" c="dimmed" mb="sm">
+            En <strong>JoinGroups</strong> priorizamos la seguridad: no recopilamos datos personales y verificamos cada enlace manualmente. Nuestra misión es ayudarte a <strong>conectar</strong> con <strong>personas</strong> reales y comunidades auténticas, sin spam.
+          </Text>
+
+          <Text fz="sm" c="dimmed">
+            Ya sea que quieras hacer nuevos amigos, aprender algo nuevo o simplemente pasar el rato, aquí encontrarás la <strong>forma</strong> más fácil de acceder a las mejores comunidades. Incluso si vienes desde <strong>Google</strong>, te damos la bienvenida a JoinGroups.
+          </Text>
+        </Box>
 
 
 
 
-      {/* Botón flotante con cambio de posición */}
-      <Button
-        component={Link}
-        href="/comunidades/form"
-        color="rgba(255, 0, 0, 1)"
-        size="sm"
-        variant='filled'
-        radius="xl"
-        className={styles['floating-publish-button']}
-        style={{
-          ...floatingStyle(buttonPosition),
-        }}
-      >
-        Publica tu grupo GRATIS !!
-      </Button>
+        {/* Botón flotante con cambio de posición */}
+        <Button
+          component={Link}
+          href="/comunidades/form"
+          color="rgba(255, 0, 0, 1)"
+          size="sm"
+          variant='filled'
+          radius="xl"
+          className={styles['floating-publish-button']}
+          style={{
+            ...floatingStyle(buttonPosition),
+          }}
+        >
+          Publica tu grupo GRATIS !!
+        </Button>
 
-      <Button
-        variant="outline"
-        color="blue"
-        mt='xl'
-        component="a"
-        href="https://wa.me/5212284935831?text=Hola,%20quisiera%20sugerir%20un%20cambio%20para%20la%20pagina%20de%20JoinGroups"
-        target="_blank"
-        rel="noopener noreferrer"
-        fullWidth
-      >
-        {t('¿Tienes problemas? O quisieras sugerir un cambio en la página? Escríbenos por WhatsApp')}
-      </Button>
-    </Container>
+        <Button
+          variant="outline"
+          color="blue"
+          mt='xl'
+          component="a"
+          href="https://wa.me/5212284935831?text=Hola,%20quisiera%20sugerir%20un%20cambio%20para%20la%20pagina%20de%20JoinGroups"
+          target="_blank"
+          rel="noopener noreferrer"
+          fullWidth
+        >
+          {t('¿Tienes problemas? O quisieras sugerir un cambio en la página? Escríbenos por WhatsApp')}
+        </Button>
+      </Container>
+    </>
+
   );
 }
