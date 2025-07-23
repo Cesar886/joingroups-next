@@ -11,15 +11,22 @@ const resources = {
   en: { translation: translationEN },
 };
 
-// Solo inicializar si aún no se ha hecho (evita re-inicialización)
+function detectLangFromHostname() {
+  if (typeof window === 'undefined') return 'es';
+  const subdomain = window.location.hostname.split('.')[0]; // us.joingroups.pro → "us"
+  if (subdomain === 'us') return 'en';
+  if (subdomain === 'mx' || subdomain === 'es') return 'es';
+  return 'es'; // fallback
+}
+
 if (!i18n.isInitialized) {
-  const savedLang = typeof window !== 'undefined' ? sessionStorage.getItem('lang') : null;
+  const detectedLang = detectLangFromHostname();
 
   i18n
     .use(initReactI18next)
     .init({
       resources,
-      lng: savedLang || 'es',
+      lng: detectedLang,
       fallbackLng: 'es',
       interpolation: {
         escapeValue: false,
