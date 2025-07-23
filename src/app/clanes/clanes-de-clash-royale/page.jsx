@@ -2,7 +2,8 @@
 
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
-import ClashRoyaleClient from './ClashRoyaleClient'; // ✅ Importación corregida
+import ClashRoyaleClient from './ClashRoyaleClient';
+import Head from 'next/head'; // Asegúrate de importar esto si no usas app router con metadata export
 
 export const metadata = {
   title: 'Clanes de Clash Royale Activos 2025 ⚔️ | Únete, Busca o Recluta Jugadores',
@@ -13,7 +14,7 @@ export const metadata = {
     canonical: 'https://joingroups.pro/clanes/clanes-de-clash-royale',
   },
   openGraph: {
-    title: '🛡️ Mejores Clanes de Clash Royale 2025 | Encuentra o Publica el Tuyo',
+    title: '⚔️ Clanes de Clash Royale Activos 2025 | Encuentra o Publica el Tuyo',
     description: 'Descubre clanes activos de Clash Royale y encuentra el mejor para ti. ¿Eres líder? Publica tu clan gratis y consigue jugadores activos fácilmente.',
     url: 'https://joingroups.pro/clanes/clanes-de-clash-royale',
     siteName: 'JoinGroups.pro',
@@ -35,24 +36,67 @@ export const metadata = {
   },
 };
 
-
-
 export default async function ClashRoyalePage() {
-    const snapshot = await getDocs(collection(db, 'clanes'));
-    const groups = snapshot.docs.map(doc => {
+  const snapshot = await getDocs(collection(db, 'clanes'));
+  const groups = snapshot.docs.map(doc => {
     const data = doc.data();
     return {
-        id: doc.id,
-        ...data,
-        createdAt: data.createdAt?.toDate?.().toISOString() || null, // <-- 🔥 Esto es lo importante
+      id: doc.id,
+      ...data,
+      createdAt: data.createdAt?.toDate?.().toISOString() || null,
     };
-    });
-
+  });
 
   const clashRoyaleFilter = groups.filter(g => g.tipo === 'clash-royale');
   const destacados = clashRoyaleFilter.filter(g => g.destacado);
   const normales = clashRoyaleFilter.filter(g => !g.destacado);
-  const serverData = [...destacados, ...normales];
+  const sorted = [...destacados, ...normales];
 
-  return <ClashRoyaleClient serverData={serverData} />;
+  const itemListElements = sorted.map((g, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: g.name,
+    url: g.url,
+  }));
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Clanes de Clash Royale Activos 2025',
+    description: metadata.description,
+    url: 'https://joingroups.pro/clanes/clanes-de-clash-royale',
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://joingroups.pro/' },
+        { '@type': 'ListItem', position: 2, name: 'Clanes', item: 'https://joingroups.pro/clanes' },
+        { '@type': 'ListItem', position: 3, name: 'Clash Royale', item: 'https://joingroups.pro/clanes/clanes-de-clash-royale' }
+      ]
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: itemListElements,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Clanes de Clash Royale',
+      url: 'https://joingroups.pro',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://joingroups.pro/icon-512.png',
+      }
+    }
+  };
+
+  return (
+    <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </Head>
+      <ClashRoyaleClient serverData={sorted} />
+    </>
+  );
 }
