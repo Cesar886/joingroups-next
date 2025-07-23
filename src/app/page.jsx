@@ -8,18 +8,18 @@ export const metadata = {
   keywords: 'grupos de Telegram, grupos de WhatsApp, clanes de videojuegos, comunidades activas, clash royale, clash of clans, grupos por país',
   robots: 'index, follow',
   alternates: {
-    canonical: 'https://joingroups.pro/comunidades',
+    canonical: 'https://joingroups.pro',
     languages: {
-      'es-MX': 'https://mx.joingroups.pro/comunidades',
-      'es-ES': 'https://es.joingroups.pro/comunidades',
-      'pt-BR': 'https://br.joingroups.pro/comunidades',
-      'en-US': 'https://us.joingroups.pro/comunidades',
+      'es-MX': 'https://mx.joingroups.pro',
+      'es-ES': 'https://es.joingroups.pro',
+      'pt-BR': 'https://br.joingroups.pro',
+      'en-US': 'https://us.joingroups.pro',
     },
   },
   openGraph: {
     title: 'Grupos de Telegram, WhatsApp y Clanes - JoinGroups.pro',
     description: 'Un catálogo completo de comunidades activas. Filtra y únete fácil por país y categoría.',
-    url: 'https://joingroups.pro/comunidades',
+    url: 'https://joingroups.pro/',
     siteName: 'JoinGroups.pro',
     images: [
       {
