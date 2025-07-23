@@ -37,6 +37,9 @@ export const metadata = {
     description: 'Explora comunidades activas por categoría y país. Publica o descubre grupos fácilmente.',
     images: ['https://joingroups.pro/opengraph-image.png'],
   },
+    other: {
+    'yandex-verification': '6a0e37aeb6ffa1fa',
+    }
 };
 
 export default async function Page() {
