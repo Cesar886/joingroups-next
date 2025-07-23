@@ -376,72 +376,72 @@ export default function ClashRoyaleClient({ serverData }) {
               
               <Container size="lg" className={styles.wrapper}>
                     <Title ta="center" order={2} className={styles.title}>
-                      {t('mobile1.acordion.clashroyale.titulo')}
+                      {t('mobile0.acordion.clashroyale.titulo')}
                     </Title>
 
                     <Accordion variant="contained" radius="md">
                       <Accordion.Item className={styles.item} value="que-es-clan">
-                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p1.q')}</Accordion.Control>
-                        <Accordion.Panel>{t('mobile1.acordion.clashroyale.p1.a')}</Accordion.Panel>
+                        <Accordion.Control>{t('mobile0.acordion.clashroyale.p1.q')}</Accordion.Control>
+                        <Accordion.Panel>{t('mobile0.acordion.clashroyale.p1.a')}</Accordion.Panel>
                       </Accordion.Item>
 
                       <Accordion.Item className={styles.item} value="donde-encontrar">
-                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p2.q')}</Accordion.Control>
+                        <Accordion.Control>{t('mobile0.acordion.clashroyale.p2.q')}</Accordion.Control>
                         <Accordion.Panel>
-                          {t('mobile1.acordion.clashroyale.p2.a.1')} <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>{' '}
-                          {t('mobile1.acordion.clashroyale.p2.a.2')}
+                          {t('mobile0.acordion.clashroyale.p2.a.1')} <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>{' '}
+                          {t('mobile0.acordion.clashroyale.p2.a.2')}
                         </Accordion.Panel>
                       </Accordion.Item>
 
                       <Accordion.Item className={styles.item} value="mejor-clan">
-                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p3.q')}</Accordion.Control>
+                        <Accordion.Control>{t('mobile0.acordion.clashroyale.p3.q')}</Accordion.Control>
                         <Accordion.Panel>
-                          {t('mobile1.acordion.clashroyale.p3.a.1')} <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>{' '}
-                          {t('mobile1.acordion.clashroyale.p3.a.2')}
+                          {t('mobile0.acordion.clashroyale.p3.a.1')} <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>{' '}
+                          {t('mobile0.acordion.clashroyale.p3.a.2')}
                         </Accordion.Panel>
                       </Accordion.Item>
 
                       <Accordion.Item className={styles.item} value="publicar">
-                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p4.q')}</Accordion.Control>
+                        <Accordion.Control>{t('mobile0.acordion.clashroyale.p4.q')}</Accordion.Control>
                         <Accordion.Panel>
-                          {t('mobile1.acordion.clashroyale.p4.a.1')} <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>{' '}
-                          {t('mobile1.acordion.clashroyale.p4.a.2')}
+                          {t('mobile0.acordion.clashroyale.p4.a.1')} <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>{' '}
+                          {t('mobile0.acordion.clashroyale.p4.a.2')}
                         </Accordion.Panel>
                       </Accordion.Item>
 
                       <Accordion.Item className={styles.item} value="unirse">
-                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p5.q')}</Accordion.Control>
-                        <Accordion.Panel>{t('mobile1.acordion.clashroyale.p5.a')}</Accordion.Panel>
+                        <Accordion.Control>{t('mobile0.acordion.clashroyale.p5.q')}</Accordion.Control>
+                        <Accordion.Panel>{t('mobile0.acordion.clashroyale.p5.a')}</Accordion.Panel>
                       </Accordion.Item>
 
                       <Accordion.Item className={styles.item} value="ventajas">
-                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p6.q')}</Accordion.Control>
-                        <Accordion.Panel>{t('mobile1.acordion.clashroyale.p6.a')}</Accordion.Panel>
+                        <Accordion.Control>{t('mobile0.acordion.clashroyale.p6.q')}</Accordion.Control>
+                        <Accordion.Panel>{t('mobile0.acordion.clashroyale.p6.a')}</Accordion.Panel>
                       </Accordion.Item>
 
                       <Accordion.Item className={styles.item} value="buscar">
-                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p7.q')}</Accordion.Control>
+                        <Accordion.Control>{t('mobile0.acordion.clashroyale.p7.q')}</Accordion.Control>
                         <Accordion.Panel>
-                          {t('mobile1.acordion.clashroyale.p7.a.1')} <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>{' '}
-                          {t('mobile1.acordion.clashroyale.p7.a.2')}
+                          {t('mobile0.acordion.clashroyale.p7.a.1')} <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>{' '}
+                          {t('mobile0.acordion.clashroyale.p7.a.2')}
                         </Accordion.Panel>
                       </Accordion.Item>
 
                       <Accordion.Item className={styles.item} value="crear">
-                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p8.q')}</Accordion.Control>
-                        <Accordion.Panel>{t('mobile1.acordion.clashroyale.p8.a')}</Accordion.Panel>
+                        <Accordion.Control>{t('mobile0.acordion.clashroyale.p8.q')}</Accordion.Control>
+                        <Accordion.Panel>{t('mobile0.acordion.clashroyale.p8.a')}</Accordion.Panel>
                       </Accordion.Item>
 
                       <Accordion.Item className={styles.item} value="top1">
-                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p9.q')}</Accordion.Control>
+                        <Accordion.Control>{t('mobile0.acordion.clashroyale.p9.q')}</Accordion.Control>
                         <Accordion.Panel>
-                          {t('mobile1.acordion.clashroyale.p9.a.1')} <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>.
+                          {t('mobile0.acordion.clashroyale.p9.a.1')} <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>.
                         </Accordion.Panel>
                       </Accordion.Item>
 
                       <Accordion.Item className={styles.item} value="mejor-juego">
-                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p10.q')}</Accordion.Control>
-                        <Accordion.Panel>{t('mobile1.acordion.clashroyale.p10.a')}</Accordion.Panel>
+                        <Accordion.Control>{t('mobile0.acordion.clashroyale.p10.q')}</Accordion.Control>
+                        <Accordion.Panel>{t('mobile0.acordion.clashroyale.p10.a')}</Accordion.Panel>
                       </Accordion.Item>
                     </Accordion>
               </Container>
