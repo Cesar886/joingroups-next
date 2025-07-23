@@ -70,14 +70,6 @@ export default function Header() {
       setSubdomain(hostname.split('.')[0]);
     }
   }, []);
-  const currentLang = subdomain === 'us' ? 'en' : 'es';
-
-  // Forzar idioma desde subdominio
-  useEffect(() => {
-    if (i18n.language !== currentLang) {
-      i18n.changeLanguage(currentLang);
-    }
-  }, [i18n, currentLang]);
 
   const isClanesSection = pathname.startsWith('/clanes');
   

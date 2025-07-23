@@ -142,8 +142,91 @@
   
   "Detectado: grupo de WhatsApp": "Detected: WhatsApp group",
   "Detectado: canal de WhatsApp": "Detected: WhatsApp channel",
-  "Enlace no válido de grupo o canal": "Invalid group or channel link"
+  "Enlace no válido de grupo o canal": "Invalid group or channel link",
 
 
+"mobileTitle": "Active Clash Royale Clans in 2025",
+  "mobile1": "Looking for a",
+  "mobile2": "competitive Clash Royale clan",
+  "mobile3": "At",
+  "mobile4": "you can find the",
+  "mobile5": "best active clans of 2025",
+  "mobile6": "Discover",
+  "mobile7": "how to join the best clans",
+  "mobile8": "who's in the",
+  "mobile9": "global top",
+  "mobile10": "and how to improve your experience with",
+  "mobile11": "recommended decks",
+  "mobile12": "and guides.",
+  "mobile13": "All in one place so you can climb trophies, win wars, and connect with real players.",
 
+  "desktopTitle": "Find the most competitive and active Clash Royale clans (2025)",
+  "desktop1": "Want to join the",
+  "desktop2": "best Clash Royale clan",
+  "desktop3": "At",
+  "desktop4": "we gather active clans, filtered by trophies, language, and play style.",
+  "desktop5": "Learn",
+  "desktop6": "what a clan is",
+  "desktop7": "how to find the ideal one",
+  "desktop8": "how to create and publish your own clan",
+  "desktop9": "in minutes.",
+  "desktop10": "We also answer common questions like:",
+  "desktop11": "Who is the leader of the best clan?",
+  "desktop12": "Clash Royale or Clash of Clans?",
+  "desktop13": "Everything you need to stand out in 2025:",
+  "desktop14": "updated clans",
+  "desktop15": "strategies",
+  "desktop16": "exclusive guides",
+
+   "mobile1": {
+    "acordion": {
+      "clashroyale": {
+        "titulo": "Frequently Asked Questions about Clash Royale Clans",
+        "p1": {
+          "q": "What is a clan in Clash Royale?",
+          "a": "A clan is a community of players who support each other to progress in the game."
+        },
+        "p2": {
+          "q": "Where can I find active Clash Royale clans?",
+          "a.1": "You can find them on",
+          "a.2": ", where active clans are posted daily."
+        },
+        "p3": {
+          "q": "What is the best Clash Royale clan?",
+          "a.1": "Check out the most recent rankings on",
+          "a.2": "and find the highest-rated clans."
+        },
+        "p4": {
+          "q": "How do I publish my Clash Royale clan?",
+          "a.1": "Fill out the form at",
+          "a.2": "to showcase your clan to potential new members."
+        },
+        "p5": {
+          "q": "How to join a good clan?",
+          "a": "Look for clans with daily activity, good communication, and common goals."
+        },
+        "p6": {
+          "q": "What are the benefits of publishing my clan?",
+          "a": "Increase visibility and make it easier to recruit active members."
+        },
+        "p7": {
+          "q": "How to search for a clan in Clash Royale?",
+          "a.1": "You can use the in-game search tool or visit",
+          "a.2": "to explore clans organized by language or trophies."
+        },
+        "p8": {
+          "q": "How to create a clan in Clash Royale?",
+          "a": "From the game, in the clans tab, select 'Create Clan'."
+        },
+        "p9": {
+          "q": "What is the top 1 Clash Royale clan?",
+          "a.1": "The ranking changes frequently, you can check it out on"
+        },
+        "p10": {
+          "q": "Which is better: Clash Royale or Clash of Clans?",
+          "a": "Clash Royale is ideal for quick matches, while Clash of Clans is more strategic."
+        }
+      }
+    }
+  }
 }

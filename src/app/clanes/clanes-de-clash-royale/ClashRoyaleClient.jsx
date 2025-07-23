@@ -44,8 +44,6 @@ const placeholder =
   'It can’t help but hear a pin drop from over half a mile away, so it lives deep in the mountains where there aren’t many people or Pokémon.It was born from sludge on the ocean floor. In a sterile environment, the germs within its body can’t multiply, and it dies.It has no eyeballs, so it can’t see. It checks its surroundings via the ultrasonic waves it emits from its mouth.';
 
 
-
-
 function Th({ children, reversed, sorted, onSort }) {
   const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
   
@@ -114,41 +112,6 @@ export default function ClashRoyaleClient({ serverData }) {
     setCurrentPage(1);
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const snapshot = await getDocs(collection(db, 'clanes'));
-  //     const groups = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-  //     // Filtrar solo grupos de tipo "clashroyale"
-  //     const clashRoyaleFilter = groups.filter(g => g.tipo === 'clash-royale');
-
-  //     const fetchCollections = async () => {
-  //       const snapshot = await getDocs(collection(db, 'colections'));
-  //       const docs = snapshot.docs.map(doc => doc.data());
-  //       const allCollections = docs.flatMap(doc => Array.isArray(doc.colections) ? doc.colections : []);
-  //       setCollections([...new Set(allCollections)]);
-  //     };
-
-  //     fetchCollections();
-
-  //     const destacados = clashRoyaleFilter.filter(g => g.destacado);
-  //     const normales = clashRoyaleFilter.filter(g => !g.destacado);
-  //     const ordenados = [...destacados, ...normales];
-
-  //     setData(ordenados);
-  //     setSortedData(ordenados);
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-
-  // const setSorting = (field) => {
-  //   const reversed = field === sortBy ? !reverseSortDirection : false;
-  //   setReverseSortDirection(reversed);
-  //   setSortBy(field);
-  //   setSortedData(sortData(data, { sortBy: field, reversed, search }));
-  // };
 
   const handleSearchChange = (event) => {
     const value = event.currentTarget.Telegramvalue;
@@ -270,30 +233,54 @@ export default function ClashRoyaleClient({ serverData }) {
                 p="md"
                 style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
               >
-                {isMobile ? (
-                  <>
-                    <Title order={4} mb="xs">
-                      Clanes activos de Clash Royale en 2025
-                    </Title>
-                    <Text size="sm" color="dimmed" mb="xs">
-                      ¿Buscas un <strong>clan competitivo en Clash Royale</strong>? En <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a> puedes encontrar los <strong>mejores clanes activos del 2025</strong>. <br />
-                      Descubre <strong>cómo unirte a los mejores clanes</strong>, quiénes están en el <strong>top global</strong> y cómo mejorar tu experiencia con <strong>decks recomendados</strong> y guías. <br />
-                      Todo en un solo lugar para que subas copas, ganes guerras y conectes con jugadores reales.
-                    </Text>
-                  </>
-                ) : (
-                  <>
-                    <Title order={3} mb="xs">
-                      Encuentra los clanes de Clash Royale mas competitivos y activos (2025)
-                    </Title>
-                    <Text size="sm" color="dimmed" mb="xs">
-                      ¿Quieres unirte al <strong>mejor clan de Clash Royale</strong>? En <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a> reunimos clanes activos, filtrados por copas, idioma y estilo de juego. <br />
-                      Aprende <strong>qué es un clan</strong>, cómo encontrar uno ideal, o incluso <strong>cómo crear y publicar tu propio clan</strong> en minutos. <br />
-                      También respondemos dudas frecuentes como: ¿<strong>Quién es el líder del mejor clan?</strong> ¿<strong>Clash Royale o Clash of Clans</strong>? <br />
-                      Todo lo que necesitas para destacar en 2025: <strong>clanes actualizados</strong>, <strong>estrategias</strong> y <strong>guías exclusivas</strong>.
-                    </Text>
-                  </>
-                )}
+              {isMobile ? (
+                <>
+                  <Title order={4} mb="xs">
+                    {t('mobileTitle')}
+                  </Title>
+                  <Text size="sm" color="dimmed" mb="xs">
+                    {t('mobile1')} <strong>{t('mobile2')}</strong>? {t('mobile3')}{' '}
+                    <a
+                      href="https://www.joingroups.pro/clanes/clanes-de-clash-royale"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#228be6', textDecoration: 'underline' }}
+                    >
+                      JoinGroups
+                    </a>{' '}
+                    {t('mobile4')} <strong>{t('mobile5')}</strong>. <br />
+                    {t('mobile6')} <strong>{t('mobile7')}</strong>, {t('mobile8')}{' '}
+                    <strong>{t('mobile9')}</strong> {t('mobile10')} <strong>{t('mobile11')}</strong>{' '}
+                    {t('mobile12')} <br />
+                    {t('mobile13')}
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Title order={3} mb="xs">
+                    {t('desktopTitle')}
+                  </Title>
+                  <Text size="sm" color="dimmed" mb="xs">
+                    {t('desktop1')} <strong>{t('desktop2')}</strong>? {t('desktop3')}{' '}
+                    <a
+                      href="https://www.joingroups.pro/clanes/clanes-de-clash-royale"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#228be6', textDecoration: 'underline' }}
+                    >
+                      JoinGroups
+                    </a>{' '}
+                    {t('desktop4')} <br />
+                    {t('desktop5')} <strong>{t('desktop6')}</strong>, {t('desktop7')}, o incluso{' '}
+                    <strong>{t('desktop8')}</strong> {t('desktop9')} <br />
+                    {t('desktop10')} <strong>{t('desktop11')}</strong>{' '}
+                    <strong>{t('desktop12')}</strong> <br />
+                    {t('desktop13')} <strong>{t('desktop14')}</strong>, <strong>{t('desktop15')}</strong> y{' '}
+                    <strong>{t('desktop16')}</strong>.
+                  </Text>
+                </>
+              )}
+
               </Paper>
 
               <Group gap='xs' mb="md" justify="center">
@@ -388,81 +375,75 @@ export default function ClashRoyaleClient({ serverData }) {
               </Group>
               
               <Container size="lg" className={styles.wrapper}>
-                <Title ta="center" order={2} className={styles.title}>
-                  Preguntas frecuentes
-                </Title>
+                    <Title ta="center" order={2} className={styles.title}>
+                      {t('mobile1.acordion.clashroyale.titulo')}
+                    </Title>
 
-                <Accordion variant="contained" radius="md">
-                  <Accordion.Item className={styles.item} value="que-es-clan">
-                    <Accordion.Control>¿Qué es un clan en Clash Royale?</Accordion.Control>
-                    <Accordion.Panel>
-                      Un clan en Clash Royale es un grupo de jugadores...
-                    </Accordion.Panel>
-                  </Accordion.Item>
+                    <Accordion variant="contained" radius="md">
+                      <Accordion.Item className={styles.item} value="que-es-clan">
+                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p1.q')}</Accordion.Control>
+                        <Accordion.Panel>{t('mobile1.acordion.clashroyale.p1.a')}</Accordion.Panel>
+                      </Accordion.Item>
 
-                  <Accordion.Item className={styles.item} value="donde-encontrar">
-                    <Accordion.Control>¿Dónde encontrar clanes activos de Clash Royale?</Accordion.Control>
-                    <Accordion.Panel>
-                      Puedes buscarlos en <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>.
-                    </Accordion.Panel>
-                  </Accordion.Item>
+                      <Accordion.Item className={styles.item} value="donde-encontrar">
+                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p2.q')}</Accordion.Control>
+                        <Accordion.Panel>
+                          {t('mobile1.acordion.clashroyale.p2.a.1')} <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>{' '}
+                          {t('mobile1.acordion.clashroyale.p2.a.2')}
+                        </Accordion.Panel>
+                      </Accordion.Item>
 
-                  <Accordion.Item className={styles.item} value="mejor-clan">
-                    <Accordion.Control>¿Cuál es el mejor clan de Clash Royale?</Accordion.Control>
-                    <Accordion.Panel>
-                      No hay un único mejor clan, pero puedes ver los destacados...
-                    </Accordion.Panel>
-                  </Accordion.Item>
+                      <Accordion.Item className={styles.item} value="mejor-clan">
+                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p3.q')}</Accordion.Control>
+                        <Accordion.Panel>
+                          {t('mobile1.acordion.clashroyale.p3.a.1')} <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>{' '}
+                          {t('mobile1.acordion.clashroyale.p3.a.2')}
+                        </Accordion.Panel>
+                      </Accordion.Item>
 
-                  <Accordion.Item className={styles.item} value="publicar">
-                    <Accordion.Control>¿Cómo publicar mi clan de Clash Royale?</Accordion.Control>
-                    <Accordion.Panel>
-                      Ve a <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>.
-                    </Accordion.Panel>
-                  </Accordion.Item>
+                      <Accordion.Item className={styles.item} value="publicar">
+                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p4.q')}</Accordion.Control>
+                        <Accordion.Panel>
+                          {t('mobile1.acordion.clashroyale.p4.a.1')} <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>{' '}
+                          {t('mobile1.acordion.clashroyale.p4.a.2')}
+                        </Accordion.Panel>
+                      </Accordion.Item>
 
-                  <Accordion.Item className={styles.item} value="unirse">
-                    <Accordion.Control>¿Cómo unirse a un buen clan?</Accordion.Control>
-                    <Accordion.Panel>
-                      Busca clanes activos y con buen historial.
-                    </Accordion.Panel>
-                  </Accordion.Item>
+                      <Accordion.Item className={styles.item} value="unirse">
+                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p5.q')}</Accordion.Control>
+                        <Accordion.Panel>{t('mobile1.acordion.clashroyale.p5.a')}</Accordion.Panel>
+                      </Accordion.Item>
 
-                  <Accordion.Item className={styles.item} value="ventajas">
-                    <Accordion.Control>¿Qué ventajas tiene publicar mi clan?</Accordion.Control>
-                    <Accordion.Panel>
-                      Reclutas más miembros y creces más rápido.
-                    </Accordion.Panel>
-                  </Accordion.Item>
+                      <Accordion.Item className={styles.item} value="ventajas">
+                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p6.q')}</Accordion.Control>
+                        <Accordion.Panel>{t('mobile1.acordion.clashroyale.p6.a')}</Accordion.Panel>
+                      </Accordion.Item>
 
-                  <Accordion.Item className={styles.item} value="buscar">
-                    <Accordion.Control>¿Cómo buscar un clan?</Accordion.Control>
-                    <Accordion.Panel>
-                      Usa el buscador del juego o visita <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>.
-                    </Accordion.Panel>
-                  </Accordion.Item>
+                      <Accordion.Item className={styles.item} value="buscar">
+                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p7.q')}</Accordion.Control>
+                        <Accordion.Panel>
+                          {t('mobile1.acordion.clashroyale.p7.a.1')} <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>{' '}
+                          {t('mobile1.acordion.clashroyale.p7.a.2')}
+                        </Accordion.Panel>
+                      </Accordion.Item>
 
-                  <Accordion.Item className={styles.item} value="crear">
-                    <Accordion.Control>¿Cómo crear un clan?</Accordion.Control>
-                    <Accordion.Panel>
-                      Desde el juego, en la pestaña de clanes, puedes crear uno.
-                    </Accordion.Panel>
-                  </Accordion.Item>
+                      <Accordion.Item className={styles.item} value="crear">
+                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p8.q')}</Accordion.Control>
+                        <Accordion.Panel>{t('mobile1.acordion.clashroyale.p8.a')}</Accordion.Panel>
+                      </Accordion.Item>
 
-                  <Accordion.Item className={styles.item} value="top1">
-                    <Accordion.Control>¿Cuál es el clan top 1?</Accordion.Control>
-                    <Accordion.Panel>
-                      Cambia constantemente, puedes verlo en JoinGroups.
-                    </Accordion.Panel>
-                  </Accordion.Item>
+                      <Accordion.Item className={styles.item} value="top1">
+                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p9.q')}</Accordion.Control>
+                        <Accordion.Panel>
+                          {t('mobile1.acordion.clashroyale.p9.a.1')} <Link href="/clanes" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>.
+                        </Accordion.Panel>
+                      </Accordion.Item>
 
-                  <Accordion.Item className={styles.item} value="mejor-juego">
-                    <Accordion.Control>¿Qué es mejor: Clash Royale o Clash of Clans?</Accordion.Control>
-                    <Accordion.Panel>
-                      Clash Royale es para partidas rápidas, Clash of Clans para estrategia.
-                    </Accordion.Panel>
-                  </Accordion.Item>
-                </Accordion>
+                      <Accordion.Item className={styles.item} value="mejor-juego">
+                        <Accordion.Control>{t('mobile1.acordion.clashroyale.p10.q')}</Accordion.Control>
+                        <Accordion.Panel>{t('mobile1.acordion.clashroyale.p10.a')}</Accordion.Panel>
+                      </Accordion.Item>
+                    </Accordion>
               </Container>
 
               <Paper
