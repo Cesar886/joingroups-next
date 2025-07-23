@@ -111,5 +111,17 @@
         }
       }
     }
+  },
+
+    "clashRoyale": {
+    "intro": "¿Buscas clanes activos de Clash Royale en 2025? ¡Únete o crea el tuyo en",
+    "faq1": "¿Clash Royale tiene clanes? Claro, es la comunidad donde los jugadores compiten, donan cartas y ganan recompensas.",
+    "faq2": "¿Cómo unirse a un buen clan de Clash Royale? Usa nuestro",
+    "linkSearch": "buscador de clanes",
+    "faq3": "¿Cuál es el mejor clan? ¿Quién es el líder? Aquí te mostramos los clanes más activos y mejor rankeados.",
+    "faq4": "También descubre quién es el top 1 de Clash Royale o cómo encontrar tu antiguo clan.",
+    "faq5": "Si aún no tienes clan, aprende fácil",
+    "linkCreate": "cómo crear tu propio clan",
+    "cta": "Miles de jugadores ya usan JoinGroups para encontrar o publicar sus clanes de Clash Royale. ¡Únete y mejora tu juego hoy"
   }
 }

@@ -455,19 +455,19 @@ export default function ClashRoyaleClient({ serverData }) {
                 style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
               >
               <Text size="md" fw={600} mb="sm">
-                ¿Buscas clanes activos de Clash Royale en 2025? ¡Únete o crea el tuyo en <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>!
+                {t('clashRoyale.intro')} <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>!
               </Text>
 
               <Text size="sm" color="dimmed" mb="xs">
-                ¿<strong>Clash Royale tiene clanes</strong>? Claro, es la comunidad donde los jugadores compiten, donan cartas y ganan recompensas. <br />
-                ¿<strong>Cómo unirse a un buen clan de Clash Royale</strong>? Usa nuestro <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>buscador de clanes</Link> para encontrar el clan ideal según tu estilo y nivel. <br />
-                ¿<strong>Cuál es el mejor clan</strong>? ¿<strong>Quién es el líder</strong>? Aquí te mostramos los <strong>clanes más activos y mejor rankeados</strong>. <br />
-                También descubre <strong>quién es el top 1 de Clash Royale</strong> o <strong>cómo encontrar tu antiguo clan</strong>. <br />
-                Si aún no tienes clan, aprende fácil <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>cómo crear tu propio clan</Link> paso a paso.
+                {t('clashRoyale.faq1')} <br />
+                {t('clashRoyale.faq2')} <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>{t('clashRoyale.linkSearch')}</Link> <br />
+                {t('clashRoyale.faq3')} <br />
+                {t('clashRoyale.faq4')} <br />
+                {t('clashRoyale.faq5')} <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>{t('clashRoyale.linkCreate')}</Link>.
               </Text>
 
               <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
-                Miles de jugadores ya usan <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a> para encontrar o publicar sus clanes de Clash Royale. ¡Únete y mejora tu juego hoy!
+                {t('clashRoyale.cta')} <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>.
               </Text>
               </Paper>
             </>
