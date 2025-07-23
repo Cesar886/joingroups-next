@@ -284,7 +284,7 @@ export default function ClashRoyaleClient({ serverData }) {
                 ) : (
                   <>
                     <Title order={3} mb="xs">
-                      Encuentra clanes de Clash Royale competitivos y activos (2025)
+                      Encuentra los clanes de Clash Royale mas competitivos y activos (2025)
                     </Title>
                     <Text size="sm" color="dimmed" mb="xs">
                       ¿Quieres unirte al <strong>mejor clan de Clash Royale</strong>? En <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a> reunimos clanes activos, filtrados por copas, idioma y estilo de juego. <br />
