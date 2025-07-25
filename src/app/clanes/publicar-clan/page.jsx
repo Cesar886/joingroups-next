@@ -29,8 +29,8 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
 import Head from 'next/head';
 
-import { IconBrandWhatsapp } from '@tabler/icons-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 
 export default function ClanesGroupForm() {
@@ -48,18 +48,17 @@ export default function ClanesGroupForm() {
 
   /* ───────────────────────── useForm ─────────────────────────── */
   const form = useForm({
-    initialValues: {
-      name: '',
-      link: '',
-      email: '',
-      emailRepeat: '',
-      descriptionEs: '',
-      descriptionEn: '',
-      city: '',
-      categories: '',
-      content18: '',
-      acceptTerms: false,
-    },
+  initialValues: {
+    name: '',
+    link: '',
+    email: '',
+    emailRepeat: '',
+    descriptionEs: '',
+    descriptionEn: '',
+    categories: '',
+    content18: '',
+    acceptTerms: false,
+  },
     validate: {
       email: (v) =>
         /^\S+@\S+\.\S+$/.test(v) ? null : t('Email inválido'),
@@ -88,6 +87,9 @@ export default function ClanesGroupForm() {
               'You must write a description in English or Spanish (20–320 characters)'
             );
       },
+      categories: (v) =>
+        v && v.length > 0 ? null : t('Debes seleccionar una categoría'),
+
       link: (v) => {
         const val = v.trim();
         if (game === 'Clash Royale' && !clashRoyaleClanRegex.test(val))
@@ -153,118 +155,145 @@ export default function ClanesGroupForm() {
     }
   }, 900);
 
-  const handleVerify = async (token) => {
-    if (!token) return;
-    setModalOpen(false);
-    setIsLoading(true);
+  
+  
+const handleVerify = async (token) => {
+  if (!token) {
+    console.warn('⚠️ No se recibió token de hCaptcha');
+    return;
+  }
 
-    try {
-      /* 1. Normalizar link */
-      const rawLink = form.values.link.trim();
-      const cleanLink = rawLink.endsWith('/')
-        ? rawLink.slice(0, -1)
-        : rawLink;
+  setModalOpen(false);
+  setIsLoading(true);
 
-      /* 2. Duplicado por link */
-      const qLink = query(
-        collection(db, 'clanes'),
-        where('link', '==', cleanLink)
-      );
-      if (!(await getDocs(qLink)).empty) {
-        showNotification({
-          title: t('Enlace duplicado'),
-          message: t('Este clan ya fue publicado antes 📌'),
-          color: 'red',
-        });
-        return;
-      }
+  try {
+    // 🧠 Extraer tag desde el link
+    const rawLink = form.values.link.trim();
 
-      /* 3. Duplicado por slug */
-      const slug = slugify(form.values.name);
-      const qSlug = query(
-        collection(db, 'clanes'),
-        where('slug', '==', slug)
-      );
-      if (!(await getDocs(qSlug)).empty) {
-        showNotification({
-          title: t('Nombre duplicado'),
-          message: t('Ya existe un clan con ese nombre 📌'),
-          color: 'red',
-        });
-        return;
-      }
+    let tag = '';
 
-      const tipo = game.toLowerCase().replace(/\s+/g, '-');
+    if (game.toLowerCase() === 'clash royale') {
+      const url = new URL(rawLink);
+      const params = new URLSearchParams(url.search);
+      tag = params.get('tag') || '';
+    } else if (game.toLowerCase() === 'clash of clans') {
+      const url = new URL(rawLink);
+      const params = new URLSearchParams(url.search);
+      tag = params.get('tag') || '';
+    } else {
+      console.warn('⚠️ Juego no reconocido:', game);
+    }
 
-      /* 4. Alta en Firestore */
-      const {
-        descriptionEs,
-        descriptionEn,
-        ...plainValues
-      } = form.values;
-
-      const docRef = await addDoc(collection(db, 'clanes'), {
-        ...plainValues,
-        juego: game.toLowerCase().replace(/\s+/g, '-'), // clash-royale | clash-of-clans
-        description: {
-          es: descriptionEs.trim(),
-          en: descriptionEn.trim(),
-        },
-        link: cleanLink,
-        destacado: false,
-        visitas: 0,
-        createdAt: new Date(),
-        slug,
-        tipo,
-        translationPending:
-          !descriptionEs.trim() || !descriptionEn.trim(),
-      });
-
+    if (!tag) {
+      console.error('❌ No se pudo extraer el tag del enlace');
       showNotification({
-        title: t('¡Éxito!'),
-        message: t('Clan publicado correctamente'),
-        color: 'green',
-      });
-
-      /* 5. Traducción automática (opcional) */
-      if (!descriptionEs.trim() || !descriptionEn.trim()) {
-        const text = descriptionEs.trim() || descriptionEn.trim();
-        const source = descriptionEs.trim() ? 'ES' : 'EN';
-        const target = descriptionEs.trim() ? 'EN' : 'ES';
-
-        let attempts = 0;
-        const intervalId = setInterval(async () => {
-          attempts += 1;
-          try {
-            const translated = await translateText(text, source, target);
-            if (translated && translated.length >= 20) {
-              await updateDoc(docRef, {
-                [`description.${target.toLowerCase()}`]: translated,
-                translationPending: false,
-              });
-              clearInterval(intervalId);
-            }
-          } catch {
-            /* ignore */
-          }
-          if (attempts > 60) clearInterval(intervalId);
-        }, 5000);
-      }
-
-      /* 6. Reset + navegación */
-      form.reset();
-      router.push(`/clanes/clanes-de-${game.toLowerCase().replace(/\s+/g, '-')}/${slug}`);
-    } catch (error) {
-      console.error(error);
-      showNotification({
-        title: t('Error'),
-        message: t('No se pudo guardar.'),
+        title: t('Error al extraer tag'),
+        message: t('No se pudo extraer el tag del enlace'),
         color: 'red',
       });
-    } finally {
-      setIsLoading(false);
+      return;
     }
-  };
+
+    tag = tag.replace(/^%23/, '').replace(/^#/, '').toUpperCase();
+    const encodedTag = encodeURIComponent(`#${tag}`);
+
+    const url = `${API_URL}/api/clash?tag=${encodedTag}&type=full`;
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+
+    const clanName = data?.info?.name?.trim() || data?.name?.trim() || '';
+    if (!clanName) {
+      console.warn('❌ No se obtuvo el nombre del clan desde la API');
+      showNotification({
+        title: t('Error al obtener clan'),
+        message: t('No se pudo obtener el nombre del clan.'),
+        color: 'red',
+      });
+      return;
+    }
+
+
+    const slug = slugify(clanName);
+
+    const { descriptionEs, descriptionEn, ...plainValues } = form.values;
+
+    const inviteLink = rawLink; // 🔄 O reemplaza si tienes otro link final
+
+    const docRef = await addDoc(collection(db, 'clanes'), {
+      ...plainValues,
+      juego: game.toLowerCase().replace(/\s+/g, '-'),
+      tag: `%23${tag}`, // ← con #
+      name: clanName,
+      slug,
+      link: inviteLink,
+      description: {
+        es: descriptionEs.trim(),
+        en: descriptionEn.trim(),
+      },
+      destacado: false,
+      visitas: 0,
+      createdAt: new Date(),
+      tipo: game.toLowerCase().replace(/\s+/g, '-'),
+      translationPending: !descriptionEs.trim() || !descriptionEn.trim(),
+    });
+
+
+    showNotification({
+      title: t('¡Éxito!'),
+      message: t('Clan publicado correctamente'),
+      color: 'green',
+    });
+
+    // 🈯 Traducción automática si falta
+    if (!descriptionEs.trim() || !descriptionEn.trim()) {
+      const text = descriptionEs.trim() || descriptionEn.trim();
+      const source = descriptionEs.trim() ? 'ES' : 'EN';
+      const target = descriptionEs.trim() ? 'EN' : 'ES';
+
+
+      let attempts = 0;
+      const intervalId = setInterval(async () => {
+        attempts += 1;
+
+        try {
+          const translated = await translateText(text, source, target);
+
+          if (translated && translated.length >= 20) {
+            await updateDoc(docRef, {
+              [`description.${target.toLowerCase()}`]: translated,
+              translationPending: false,
+            });
+            clearInterval(intervalId);
+          }
+        } catch (e) {
+          console.warn('⚠️ Error durante la traducción automática:', e);
+        }
+
+        if (attempts > 60) {
+          console.warn('🚫 Se alcanzó el máximo de intentos de traducción.');
+          clearInterval(intervalId);
+        }
+      }, 5000);
+    }
+
+    form.reset();
+    router.push(`/clanes/clanes-de-${game.toLowerCase().replace(/\s+/g, '-')}/${slug}`);
+  } catch (error) {
+    console.error('🔥 Error en handleVerify:', error);
+    showNotification({
+      title: t('Error'),
+      message: t('No se pudo guardar.'),
+      color: 'red',
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+
 
   /* ───────────────────────── Render ──────────────────────────── */
   return (
@@ -277,7 +306,7 @@ export default function ClanesGroupForm() {
         />
         <link
           rel="canonical"
-          href="https://joingroups.pro/clanes/form"
+          href="https://joingroups.pro/clanes/publicar-clan"
         />
       </Head>
 
@@ -288,7 +317,6 @@ export default function ClanesGroupForm() {
           </Title>
 
           <Button
-            leftIcon={<IconBrandWhatsapp size={18} />}
             variant="outline"
             color="blue"
             component="a"
@@ -318,14 +346,6 @@ export default function ClanesGroupForm() {
               allowDeselect={false}
             />
 
-            {/* Nombre */}
-            <TextInput
-              label={t('Nombre del Clan')}
-              required
-              {...form.getInputProps('name')}
-            />
-
-            {/* Link */}
             <TextInput
               label={t('Enlace de invitación')}
               placeholder={
@@ -374,6 +394,18 @@ export default function ClanesGroupForm() {
                       form.values.link.trim()
                     ))
                 ) && t('Enlace no válido de clan')}
+              </Text>
+            )}
+
+            {/* Feedback visual del tag */}
+            {form.values.tag && (
+              <Text
+                size="xs"
+                c={/^#[A-Z0-9]{5,}$/.test(form.values.tag.trim()) ? 'green' : 'red'}
+              >
+                {/^#[A-Z0-9]{5,}$/.test(form.values.tag.trim())
+                  ? t('Tag válido')
+                  : t('Formato incorrecto. Ejemplo: #ABC123')}
               </Text>
             )}
 
@@ -429,12 +461,6 @@ export default function ClanesGroupForm() {
                 debouncedTranslate();
               }}
               error={form.errors.descriptionEn}
-            />
-
-            {/* Ciudad (opcional) */}
-            <TextInput
-              label={t('Tu ciudad (opcional)')}
-              {...form.getInputProps('city')}
             />
 
             {/* Categorías */}

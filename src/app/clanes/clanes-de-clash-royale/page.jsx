@@ -96,7 +96,7 @@ export default async function ClashRoyalePage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </Head>
-      <ClashRoyaleClient serverData={sorted} />
+      <ClashRoyaleClient initialData={sorted} />
     </>
   );
 }

@@ -1,0 +1,92 @@
+.card {
+  background: #fefefe;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  max-width: 30rem; /* Adjusted for narrower card on PC */
+  margin-left: auto; /* Center the card */
+  margin-right: auto; /* Center the card */
+  padding-left: 1.5rem; /* Reduced horizontal padding on PC */
+  padding-right: 1.5rem; /* Reduced horizontal padding on PC */
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.statIcon {
+  font-size: 20px;
+  color: var(--mantine-color-dark-5);
+}
+
+.statLabel {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-gray-7);
+  font-weight: 500;
+  white-space: nowrap; /* Prevent wrapping for labels */
+}
+
+.statValue {
+  font-size: var(--mantine-font-size-md);
+  font-weight: 600;
+  color: var(--mantine-color-dark-7);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.statBadge {
+  background-color: #eff6ff;
+  border-radius: 999px;
+  padding: 0px 12px;
+  display: flex; /* Keep flex to center content, but default direction is row */
+  /* flex-direction: column; <--- REMOVE THIS */
+  align-items: center; /* Vertically align items in the badge (icon and text) */
+  justify-content: center; /* Horizontally center items in the badge */
+  /* gap: 2px; <--- REMOVE THIS, Group will handle gap */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  /* width: 100%; <--- We'll let the Grid.Col and Stack handle the width */
+}
+/* Specific styling for the badges in the "Estadísticas Clave" section */
+.statBadge .mantine-Group-root {
+  gap: 4px;
+}
+
+.statBadge .mantine-Text-root:first-of-type {
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 700;
+}
+
+.statBadge .mantine-Text-root:last-of-type {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-gray-7);
+}
+
+
+@media (max-width: 768px) {
+  .statItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card {
+    max-width: 100% !important; /* Ensure full width on mobile */
+    padding: 1rem !important; /* Restore original padding on mobile */
+  }
+
+  .statBadge {
+    /* Adjustments for mobile if needed, though Grid.Col handles most of it */
+    padding: 4px 8px; /* Slightly smaller padding on mobile badges */
+  }
+}
+
+/* Adjustments for smaller screens (e.g., phones) for trophy stats */
+@media (max-width: 480px) {
+  .card .mantine-Group-root[justify="space-around"] {
+    flex-direction: column; /* Stack trophy stats on very small screens */
+    align-items: center;
+    gap: 1rem;
+  }
+}

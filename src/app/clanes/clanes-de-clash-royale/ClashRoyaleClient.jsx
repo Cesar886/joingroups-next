@@ -15,7 +15,6 @@ import {
   Group,
   Container,
   Paper,
-  SimpleGrid,
   ScrollArea,
   Badge,
   Table,
@@ -30,18 +29,12 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import { useMediaQuery } from '@mantine/hooks';
 import slugify from '@/lib/slugify';
-// import { useLocation } from 'react-router-dom';
-import Head from 'next/head';
 import styles from '@/app/styles/ClanClashRoyale.module.css';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-
-
+import { useRouter } from 'next/navigation';
 
 
 import { useTranslation } from 'react-i18next';
-
-const placeholder =
-  'It can’t help but hear a pin drop from over half a mile away, so it lives deep in the mountains where there aren’t many people or Pokémon.It was born from sludge on the ocean floor. In a sterile environment, the germs within its body can’t multiply, and it dies.It has no eyeballs, so it can’t see. It checks its surroundings via the ultrasonic waves it emits from its mouth.';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 
 function Th({ children, reversed, sorted, onSort }) {
@@ -87,9 +80,9 @@ function sortData(data, { sortBy, reversed, search, collectionFilter }) {
 );
 }
 
-export default function ClashRoyaleClient({ serverData }) {
-  const [data, setData] = useState(serverData || []);
-  const [sortedData, setSortedData] = useState(serverData || []);
+export default function ClashRoyaleClient({ initialData }) {
+  const [data, setData] = useState(initialData || []);
+  const [sortedData, setSortedData] = useState(initialData || []);
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const [search, setSearch] = useState('');
@@ -99,6 +92,11 @@ export default function ClashRoyaleClient({ serverData }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [collections, setCollections] = useState([]);
   const [selectedCollection, setSelectedCollection] = useState(null);
+  const [clan, setClan] = useState(null);
+  const [clanDetails, setClanDetails] = useState({});
+  
+
+
   // const location = useLocation();
 
 
@@ -113,8 +111,60 @@ export default function ClashRoyaleClient({ serverData }) {
   };
 
 
+  useEffect(() => {
+    const fetchClan = async () => {
+      const rawTag = data?.[0]?.tag;
+
+      const normalizeTag = (rawTag) => {
+        if (rawTag?.startsWith('#')) {
+          return `%23${rawTag.slice(1)}`;
+        }
+        return rawTag;
+      };
+
+      const tag = normalizeTag(rawTag);
+
+      try {
+        const response = await fetch(`${API_URL}/api/clash?tag=${tag}&type=full`);
+        const result = await response.json();
+        console.log("🚀 ~ fetchClan ~ result:", result)
+        setClan(result); // ✅ aquí guardamos la info completa
+      } catch (error) {
+        console.error('Error al obtener información del clan:', error);
+      }
+    };
+
+    if (data?.length) {
+      fetchClan();
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const fetchAllClanDetails = async () => {
+      const details = {};
+
+      for (const row of data) {
+        const tag = row.tag.replace('#', '%23');
+        try {
+          const res = await fetch(`${API_URL}/api/clash?tag=${tag}&type=full`);
+          const json = await res.json();
+          details[row.tag] = json;
+        } catch (e) {
+          console.error(`Error fetching clan ${row.tag}`, e);
+        }
+      }
+
+      setClanDetails(details);
+    };
+
+    if (data.length) {
+      fetchAllClanDetails();
+    }
+  }, [data]);
+
+
   const handleSearchChange = (event) => {
-    const value = event.currentTarget.Telegramvalue;
+    const value = event.currentTarget.value;
     setSearch(value);
     setSortedData(sortData(data, { search: value, collectionFilter: selectedCollection }));
   };
@@ -140,6 +190,10 @@ export default function ClashRoyaleClient({ serverData }) {
           || row.description[i18n.language]   // intento 2: "en-US"
           || row.description['es']            // intento 3: español por defecto
         : row.description;
+
+
+    const safeNumber = (num) => typeof num === 'number' ? num.toLocaleString() : 'N/A';
+    const clanInfo = clanDetails[row.tag]?.info;
         
 
     return (
@@ -151,48 +205,53 @@ export default function ClashRoyaleClient({ serverData }) {
         key={`${row.id}-${slug}-${idx}`}
         onClick={() => router.push(`/clanes/clanes-de-clash-royale/${slug}`)}
       >
-        <Table horizontalSpacing="md" withRowBorders={false}>
-          <Table.Tbody>
-            <Table.Tr>
-              <Table.Td colSpan={3}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <Text fw={700}>{row.name}</Text>
-          <img
-            src='/clashRoyaleFondo1.png' // Assuming this is the logo for Clash Royale
-            alt={row.name}
-            style={{
-              width: '24px',
-              height: '24px',
-              borderRadius: '4px',
-              objectFit: 'cover',
-              marginLeft: 'auto',
-            }}
-          />
-        </div>
-      </Table.Td>
-            </Table.Tr>
-            <Table.Tr>
-              <Table.Td width="33%">
-                <Text>{t(row.categories)}</Text>
-                <Text size="xs" c="dimmed">{t('Categoría')}</Text>
-              </Table.Td>
-              <Table.Td width="33%">
-                <Text>
-                  {row.content18 === 'Sí'
-                    ? '18+'
-                    : isMobile
-                      ? 'Público'
-                      : 'Apto para todo público'}
-                </Text>
-                <Text size="xs" c="dimmed">{t('Contenido')}</Text>
-              </Table.Td>
-              <Table.Td width="33%">
-                <Text>{row.visitas}</Text>
-                <Text size="xs" c="dimmed">{t('Vistas')}</Text>
-              </Table.Td>
-            </Table.Tr>
-          </Table.Tbody>
-        </Table>
+      <Table horizontalSpacing="md" withRowBorders={false}>
+        <Table.Tbody>
+          <Table.Tr>
+            <Table.Td colSpan={3}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div>
+                  <Text fw={700}>{(clanInfo?.name ?? row.name)}</Text>
+                </div>
+                <img
+                  src='/clashRoyaleFondo1.png'
+                  alt={row.name}
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '4px',
+                    objectFit: 'cover',
+                    marginLeft: 'auto',
+                  }}
+                />
+              </div>
+            </Table.Td>
+          </Table.Tr>
+
+
+          {/* CATEGORÍA - CONTENIDO - VISTAS */}
+          <Table.Tr>
+            <Table.Td width="28%">
+              <Text>{t(row.categories)}</Text>
+              <Text size="xs" c="dimmed">{t('Categoría')}</Text>
+            </Table.Td>
+            <Table.Td width="28%">
+              <Text>{safeNumber(clanInfo?.members ?? row.members)}/50</Text>
+              <Text size="xs" c="dimmed">{t('Miembros')}</Text>
+            </Table.Td>
+            <Table.Td width="28%">
+              <Text>{safeNumber(clanInfo?.requiredTrophies ?? row.requiredTrophies)}</Text>
+              <Text size="xs" c="dimmed">Minimo de Trofeos</Text>
+            </Table.Td>
+            <Table.Td width="28%">
+              <Text>{row.visitas}</Text>
+              <Text size="xs" c="dimmed">{t('Vistas')}</Text>
+            </Table.Td>
+          </Table.Tr>
+
+        </Table.Tbody>
+      </Table>
+
       <Box p="sm" style={{ borderTop: '1px solid #eee', paddingTop: 10 }}>
         <Text
           lineClamp={1}
