@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export default async function handler(req, res) {
   const { tag, type = 'info' } = req.query;
   const API_KEY = process.env.CLASH_API_KEY;
@@ -21,10 +19,22 @@ export default async function handler(req, res) {
   }
 
   const fetchData = async (endpoint) => {
-    const response = await axios.get(`https://api.clashroyale.com/v1${endpoint}`, {
-      headers: { Authorization: `Bearer ${API_KEY}` },
+    const response = await fetch(`https://api.clashroyale.com/v1${endpoint}`, {
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        Accept: 'application/json',
+      },
     });
-    return response.data;
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const error = new Error(errorData?.message || 'Fetch failed');
+      error.status = response.status;
+      error.responseData = errorData;
+      throw error;
+    }
+
+    return await response.json();
   };
 
   try {
@@ -50,10 +60,10 @@ export default async function handler(req, res) {
     const data = await fetchData(endpoints[type]);
     return res.status(200).json(data);
   } catch (error) {
-    console.error('Error in clash API:', error.response?.data || error.message);
-    return res.status(error.response?.status || 500).json({
+    console.error('Error in clash API:', error.responseData || error.message);
+    return res.status(error.status || 500).json({
       error: true,
-      message: error.response?.data?.message || 'Internal Server Error',
+      message: error.responseData?.message || 'Internal Server Error',
     });
   }
 }
