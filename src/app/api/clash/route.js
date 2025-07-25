@@ -1,8 +1,12 @@
-export default async function handler(req, res) {
-  const { tag, type = 'info' } = req.query;
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const tag = searchParams.get('tag');
+  const type = searchParams.get('type') || 'info';
   const API_KEY = process.env.CLASH_API_KEY;
 
-  if (!tag) return res.status(400).json({ error: 'Missing tag' });
+  if (!tag) {
+    return new Response(JSON.stringify({ error: 'Missing tag' }), { status: 400 });
+  }
 
   const encodedTag = encodeURIComponent(tag);
   const endpoints = {
@@ -15,7 +19,7 @@ export default async function handler(req, res) {
   };
 
   if (type !== 'full' && !endpoints[type]) {
-    return res.status(400).json({ error: 'Invalid type' });
+    return new Response(JSON.stringify({ error: 'Invalid type' }), { status: 400 });
   }
 
   const fetchData = async (endpoint) => {
@@ -28,10 +32,10 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      const error = new Error(errorData?.message || 'Fetch failed');
-      error.status = response.status;
-      error.responseData = errorData;
-      throw error;
+      throw {
+        status: response.status,
+        message: errorData?.message || 'Fetch failed',
+      };
     }
 
     return await response.json();
@@ -54,16 +58,16 @@ export default async function handler(req, res) {
         }
       }
 
-      return res.status(200).json(fullData);
+      return new Response(JSON.stringify(fullData), { status: 200 });
     }
 
     const data = await fetchData(endpoints[type]);
-    return res.status(200).json(data);
+    return new Response(JSON.stringify(data), { status: 200 });
   } catch (error) {
-    console.error('Error in clash API:', error.responseData || error.message);
-    return res.status(error.status || 500).json({
+    console.error('Error in clash API:', error);
+    return new Response(JSON.stringify({
       error: true,
-      message: error.responseData?.message || 'Internal Server Error',
-    });
+      message: error.message || 'Internal Server Error',
+    }), { status: error.status || 500 });
   }
 }
