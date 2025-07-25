@@ -1,3 +1,4 @@
+// src/app/api/clash/route.js
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const tag = searchParams.get('tag');
@@ -5,7 +6,10 @@ export async function GET(request) {
   const API_KEY = process.env.CLASH_API_KEY;
 
   if (!tag) {
-    return new Response(JSON.stringify({ error: 'Missing tag' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Missing tag' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   const encodedTag = encodeURIComponent(tag);
@@ -19,26 +23,29 @@ export async function GET(request) {
   };
 
   if (type !== 'full' && !endpoints[type]) {
-    return new Response(JSON.stringify({ error: 'Invalid type' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Invalid type' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   const fetchData = async (endpoint) => {
-    const response = await fetch(`https://api.clashroyale.com/v1${endpoint}`, {
+    const res = await fetch(`https://api.clashroyale.com/v1${endpoint}`, {
       headers: {
         Authorization: `Bearer ${API_KEY}`,
         Accept: 'application/json',
       },
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw {
-        status: response.status,
-        message: errorData?.message || 'Fetch failed',
-      };
+    if (!res.ok) {
+      const errorData = await res.json();
+      const error = new Error(errorData?.message || 'Fetch failed');
+      error.status = res.status;
+      error.responseData = errorData;
+      throw error;
     }
 
-    return await response.json();
+    return await res.json();
   };
 
   try {
@@ -58,16 +65,28 @@ export async function GET(request) {
         }
       }
 
-      return new Response(JSON.stringify(fullData), { status: 200 });
+      return new Response(JSON.stringify(fullData), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     const data = await fetchData(endpoints[type]);
-    return new Response(JSON.stringify(data), { status: 200 });
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
-    console.error('Error in clash API:', error);
-    return new Response(JSON.stringify({
-      error: true,
-      message: error.message || 'Internal Server Error',
-    }), { status: error.status || 500 });
+    console.error('Error in clash API:', error.responseData || error.message);
+    return new Response(
+      JSON.stringify({
+        error: true,
+        message: error.responseData?.message || 'Internal Server Error',
+      }),
+      {
+        status: error.status || 500,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   }
 }
