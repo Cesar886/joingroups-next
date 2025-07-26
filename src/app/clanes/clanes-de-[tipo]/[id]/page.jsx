@@ -25,7 +25,7 @@ import {
   IconTrophy, IconGift, IconShield, IconMapPin, IconTarget, IconCornerLeftDown
 } from '@tabler/icons-react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.gosukbdahdvsade.site';
 
 
 export default function GroupDetailClanes() {

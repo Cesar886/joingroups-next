@@ -30,7 +30,7 @@ import { useForm } from '@mantine/form';
 import Head from 'next/head';
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.gosukbdahdvsade.site';
 
 
 export default function ClanesGroupForm() {

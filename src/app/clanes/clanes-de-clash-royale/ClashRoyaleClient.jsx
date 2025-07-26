@@ -34,7 +34,7 @@ import { useRouter } from 'next/navigation';
 
 
 import { useTranslation } from 'react-i18next';
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.gosukbdahdvsade.site';
 
 
 function Th({ children, reversed, sorted, onSort }) {
