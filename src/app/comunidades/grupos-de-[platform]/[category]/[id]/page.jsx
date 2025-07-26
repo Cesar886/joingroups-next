@@ -142,9 +142,9 @@ export default function GroupDetail() {
 
 
   /* -------------- render -------------- */
-  if (loading)   return <Center><Text>{t('Cargando grupo...')}</Text></Center>;
+  if (loading)   return <Center><Text>{t('Cargando...')}</Text></Center>;
   if (notFound || !group)
-    return <Center><Text>{t('Grupo no encontrado.')}</Text></Center>;
+    return <Center><Text>{t('Clan no encontrado.')}</Text></Center>;
 
   return (
     <Container size="sm" py="xl">
@@ -155,7 +155,7 @@ export default function GroupDetail() {
 
           <Group justify="space-between" align="center" w="100%">
             <Text size="sm" c="dimmed">
-              {t('El grupo tiene')} <strong>{group.visitas || 0} {t('visitas')}</strong>
+              {t('El clan tiene')} <strong>{group.visitas || 0} {t('visitas')}</strong>
             </Text>
 
             {group.city && (

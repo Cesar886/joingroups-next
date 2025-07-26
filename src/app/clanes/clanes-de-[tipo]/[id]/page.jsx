@@ -41,6 +41,7 @@ export default function GroupDetailClanes() {
   const theme = useMantineTheme(); 
 
   useEffect(() => {
+    
     const fetchGroup = async () => {
       try {
         setLoading(true);
