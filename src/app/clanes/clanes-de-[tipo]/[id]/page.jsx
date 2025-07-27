@@ -241,14 +241,14 @@ export default function GroupDetailClanes() {
                 }}
                 leftSection={<IconCornerLeftDown size={13} stroke={2.5} />}
               >
-                Ver Miembros del Clan
+                {t('Ver Miembros del Clan')}
               </Button>
             )}
 
             {/* 2. Insignia: Este segundo elemento se alineará al extremo derecho */}
             {clan?.members && (
               <Badge color="grape" variant="light" size="lg" radius="xl">
-                {clan.members}/50 MIEMBROS
+                {clan.members}/50 {t('Miembros')}
               </Badge>
             )}
           </Group>
@@ -267,7 +267,7 @@ export default function GroupDetailClanes() {
                     style={{ width: '20px', height: '20px' }}
                   />
                   <Text size="sm" c="dimmed">
-                    Trofeos Requeridos
+                    {t('Trofeos Requeridos')}
                   </Text>
                 </Group>
               </Stack>
@@ -284,7 +284,7 @@ export default function GroupDetailClanes() {
                     style={{ width: '20px', height: '20px' }}
                   />
                   <Text size="sm" c="dimmed">
-                    Trofeos de Guerra
+                    {t('Trofeos de Guerra')}
                   </Text>
                 </Group>
               </Stack>
@@ -297,7 +297,7 @@ export default function GroupDetailClanes() {
           {clan && (
             <Box mt="md" w="100%">
               <Text fz="xs" tt="uppercase" fw={700} mb="xs" c="dimmed">
-                Estadísticas Clave
+                {t('Estadísticas Clave')}
               </Text>
 
               <Grid gutter="xs">
@@ -322,7 +322,7 @@ export default function GroupDetailClanes() {
                 <Grid.Col span={{ base: 6, xs: 3 }}>
                   <Group gap="xs" align="center">
                     <Text fz="xs" c="gray.7">
-                      Donaciones
+                      {t('Donaciones')}
                     </Text>
                     <Badge className={classes.statBadge} variant="light" color="green">
                       <Group gap={rem(4)} align="center">
@@ -339,7 +339,7 @@ export default function GroupDetailClanes() {
                 <Grid.Col span={{ base: 6, xs: 3 }}>
                   <Group gap="xs" align="center">
                     <Text fz="xs" c="gray.7">
-                      Miembros
+                      {t('Miembros')}
                     </Text>
                     <Badge className={classes.statBadge} variant="light" color="orange">
                       <Group gap={rem(4)} align="center">
@@ -356,7 +356,7 @@ export default function GroupDetailClanes() {
                 <Grid.Col span={{ base: 6, xs: 3 }}>
                   <Group gap="xs" align="center">
                     <Text fz="xs" c="gray.7">
-                      Ubicación
+                      {t('Ubicación')}
                     </Text>
                     <Badge className={classes.statBadge} variant="light" color="teal">
                       <Group gap={rem(4)} align="center">
@@ -402,7 +402,7 @@ export default function GroupDetailClanes() {
             disabled={!group.link}
           >
             {group.link
-              ? `${clan?.name ?? 'Nombre del Clan'} - ${t('Acceder al Clan')}`
+              ? `${clan?.name ?? 'Clan name'} - ${t('Acceder al Clan')}`
               : t('Enlace no disponible')}
           </Button>
         </Stack>
