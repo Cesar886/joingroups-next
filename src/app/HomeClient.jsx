@@ -356,7 +356,7 @@ export default function HomeClient({ serverData }) {
               ? 'Únete a comunidades en Telegram, WhatsApp y juegos populares.'
               : (
                   <>
-                    En <strong>JoinGroups.pro</strong> puedes unirte fácilmente a comunidades populares en <strong>Telegram</strong>, <strong>WhatsApp</strong> y juegos como <strong>Clash Royale</strong>. Explora grupos organizados por temas, idiomas y más.
+                    {t('En')} <strong>JoinGroups.pro</strong> {t('puedes unirte fácilmente a comunidades populares en')} <strong>Telegram</strong>, <strong>WhatsApp</strong> {t('y juegos como')} <strong>Clash Royale</strong>. {t('Explora grupos organizados por temas, idiomas y más.')}
                   </>
                 )}
           </Text>
@@ -418,7 +418,7 @@ export default function HomeClient({ serverData }) {
               radius="md"
               href="/comunidades/grupos-de-telegram"
             >
-              Ver todos los grupos de Telegram
+              {t('Ver todos los grupos de Telegram')}
             </Button>
           </Center>
         </Paper>
@@ -426,7 +426,7 @@ export default function HomeClient({ serverData }) {
         <Paper mt="xl" withBorder shadow="sm" p="md" radius="lg">
           <Group align="center" spacing="sm">
             <Title order={2} mb="sm" fz={isMobile ? 20 : 26}>
-              {isMobile ? '✨ Grupos nuevos de WhatsApp' : '✨ Grupos nuevos y destacados de WhatsApp'}
+              {isMobile ? '✨ t(Grupos nuevos de WhatsApp)' : '✨ t(Grupos nuevos y destacados de WhatsApp)'}
             </Title>
           </Group>
 
@@ -441,7 +441,7 @@ export default function HomeClient({ serverData }) {
               radius="md"
               href="/comunidades/grupos-de-whatsapp"            
             >
-              Ver todos los grupos de WhatsApp
+              {t('Ver todos los grupos de WhatsApp')}
             </Button>
           </Center>
         </Paper>
@@ -576,7 +576,7 @@ export default function HomeClient({ serverData }) {
             ...floatingStyle(buttonPosition),
           }}
         >
-          Publica tu grupo GRATIS !!
+          {t('Publica tu grupo GRATIS !!')}
         </Button>
 
         <Button
