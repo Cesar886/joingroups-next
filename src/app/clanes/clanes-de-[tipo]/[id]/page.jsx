@@ -183,7 +183,7 @@ export default function GroupDetailClanes() {
                   {clan?.tag} • {clan?.type === 'open' ? 'Abierto' : 'Cerrado'}
                 </Text>
                 <Text size="sm" c="dimmed">
-                  {t('El grupo tiene')}{' '}
+                  {t('El clan tiene')}{' '}
                   <strong>
                     {group.visitas || 0} {t('visitas')}
                   </strong>

@@ -1,4 +1,4 @@
-'use client'; // ¡Esto es crucial! Marca este componente como cliente.
+'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
@@ -7,7 +7,6 @@ import {
   IconChevronUp,
   IconSearch,
   IconSelector,
-  IconSwords,
 } from '@tabler/icons-react';
 import {
   Box,
@@ -86,8 +85,6 @@ export default function ClashRoyaleClient({ initialData }) {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const [search, setSearch] = useState('');
-  // const [sortBy, setSortBy] = useState(null);
-  // const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [currentPage, setCurrentPage] = useState(1);
   const [collections, setCollections] = useState([]);
@@ -586,7 +583,7 @@ export default function ClashRoyaleClient({ initialData }) {
               ...floatingStyle(buttonPosition),
             }}
           >
-            Publica tu clan AHORA !!
+            {t('Publica tu clan AHORA !!')}
           </Button>
         </ScrollArea>
       </Container> 
@@ -594,7 +591,7 @@ export default function ClashRoyaleClient({ initialData }) {
     </>
   );
 }
-
+ 
 export async function getServerSideProps() {
   // Esta lógica ahora se ejecuta en el servidor
   const snapshot = await getDocs(collection(db, 'clanes'));
