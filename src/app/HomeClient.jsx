@@ -369,7 +369,7 @@ export default function HomeClient({ serverData }) {
             href="/comunidades"
             style={{ fontWeight: 600 }}
           >
-            Explorar Grupos Populares
+            {t('Explorar Grupos Populares')}
           </Button>
         </Stack>
 
