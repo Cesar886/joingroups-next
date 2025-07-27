@@ -180,7 +180,7 @@ export default function GroupDetailClanes() {
                   {clan?.location?.name} ({clan?.location?.countryCode})
                 </Text>
                 <Text fz="xs" c="gray.6">
-                  {clan?.tag} • {clan?.type === 'open' ? 'Abierto' : 'Cerrado'}
+                  {clan?.tag} • {clan?.type === 'open' ? 't(Abierto)' : 't(Cerrado)'}
                 </Text>
                 <Text size="sm" c="dimmed">
                   {t('El clan tiene')}{' '}

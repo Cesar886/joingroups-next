@@ -277,7 +277,7 @@ export default function ClashRoyaleClient({ initialData }) {
             </Table.Td>
             <Table.Td width="28%">
               <Text>{safeNumber(clanInfo?.requiredTrophies ?? row.requiredTrophies)}</Text>
-              <Text size="xs" c="dimmed">Minimo de Trofeos</Text>
+              <Text size="xs" c="dimmed">{t('Minimo de Trofeos')}</Text>
             </Table.Td>
             <Table.Td width="28%">
               <Text>{row.visitas}</Text>
