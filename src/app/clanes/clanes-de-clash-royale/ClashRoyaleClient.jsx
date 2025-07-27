@@ -1,6 +1,6 @@
 'use client'; // ¡Esto es crucial! Marca este componente como cliente.
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import {
   IconChevronDown,
@@ -94,9 +94,10 @@ export default function ClashRoyaleClient({ initialData }) {
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [clan, setClan] = useState(null);
   const [clanDetails, setClanDetails] = useState({});
+
+  const [buttonPosition, setButtonPosition] = useState('top-left');
+  const positionRef = useRef('top-left');
   
-
-
   // const location = useLocation();
 
 
@@ -108,6 +109,44 @@ export default function ClashRoyaleClient({ initialData }) {
       collectionFilter: newValue
     }));
     setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    const positions = ['top-left', 'bottom-right', 'top-right', 'bottom-left'];
+
+    const changePosition = () => {
+      let next;
+      do {
+        next = positions[Math.floor(Math.random() * positions.length)];
+      } while (next === positionRef.current); // evitar repetir la misma
+
+      setButtonPosition(next);
+      positionRef.current = next;
+    };
+
+    const interval = setInterval(changePosition, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const floatingStyle = (position) => {
+    const common = {
+      position: 'fixed',
+      zIndex: 1000,
+      animation: 'pulse 1.5s infinite',
+    };
+
+    switch (position) {
+      case 'top-left':
+        return { ...common, top: '60px', left: '20px' };
+      case 'bottom-right':
+        return { ...common, bottom: '20px', right: '20px' };
+      case 'top-right':
+        return { ...common, top: '60px', right: '20px' };
+      case 'bottom-left':
+        return { ...common, bottom: '20px', left: '20px' };
+      default:
+        return common;
+    }
   };
 
 
@@ -128,7 +167,7 @@ export default function ClashRoyaleClient({ initialData }) {
         const response = await fetch(`${API_URL}/api/clash?tag=${tag}&type=full`);
         const result = await response.json();
         console.log("🚀 ~ fetchClan ~ result:", result)
-        setClan(result); // ✅ aquí guardamos la info completa
+        setClan(result);
       } catch (error) {
         console.error('Error al obtener información del clan:', error);
       }
@@ -463,7 +502,7 @@ export default function ClashRoyaleClient({ initialData }) {
                       <Accordion.Item className={styles.item} value="publicar">
                         <Accordion.Control>{t('mobile0.acordion.clashroyale.p4.q')}</Accordion.Control>
                         <Accordion.Panel>
-                          {t('mobile0.acordion.clashroyale.p4.a.1')} <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>{' '}
+                          {t('mobile0.acordion.clashroyale.p4.a.1')} <Link href="/clanes/publicar-clan" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>{' '}
                           {t('mobile0.acordion.clashroyale.p4.a.2')}
                         </Accordion.Panel>
                       </Accordion.Item>
@@ -519,7 +558,7 @@ export default function ClashRoyaleClient({ initialData }) {
 
               <Text size="sm" color="dimmed" mb="xs">
                 {t('clashRoyale.faq1')} <br />
-                {t('clashRoyale.faq2')} <Link href="/clanes/form" style={{ color: '#228be6', textDecoration: 'underline' }}>{t('clashRoyale.linkSearch')}</Link> <br />
+                {t('clashRoyale.faq2')} <Link href="/clanes/publicar-clan" style={{ color: '#228be6', textDecoration: 'underline' }}>{t('clashRoyale.linkSearch')}</Link> <br />
                 {t('clashRoyale.faq3')} <br />
                 {t('clashRoyale.faq4')} <br />
                 {t('clashRoyale.faq5')} <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>{t('clashRoyale.linkCreate')}</Link>.
@@ -535,6 +574,20 @@ export default function ClashRoyaleClient({ initialData }) {
               {t('No se encontraron resultados.')}
             </Text>
           )}
+          <Button
+            component={Link}
+            href="/clanes/publicar-clan"
+            color="red"
+            size="sm"
+            variant='filled'
+            radius="xl"
+            className={styles['floating-publish-button']}
+            style={{
+              ...floatingStyle(buttonPosition),
+            }}
+          >
+            Publica tu clan AHORA !!
+          </Button>
         </ScrollArea>
       </Container> 
 
