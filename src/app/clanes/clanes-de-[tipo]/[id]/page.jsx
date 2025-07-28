@@ -22,7 +22,12 @@ import classes from '@/app/styles/DetailsClans.module.css'; // Your existing CSS
 
 // Import all the icons you'll use directly in this file
 import {
-  IconTrophy, IconGift, IconShield, IconMapPin, IconTarget, IconCornerLeftDown
+  IconTrophy, IconGift, IconShield, IconMapPin, IconTarget, IconCornerLeftDown,
+  IconBrandDiscord,
+  IconBrandWhatsapp,
+  IconBrandTelegram,
+  IconBrandFacebook,
+  IconLink,
 } from '@tabler/icons-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.gosukbdahdvsade.site';
@@ -100,6 +105,15 @@ export default function GroupDetailClanes() {
     fetchGroup();
   }, [id]);
 
+  const [globalRank, setGlobalRank] = useState(null);
+  const [localRank, setLocalRank] = useState(null);
+
+
+
+
+
+
+
   useEffect(() => {
     const fetchClan = async () => {
       const rawTag = group?.tag;
@@ -116,6 +130,8 @@ export default function GroupDetailClanes() {
         const result = await response.json();
         setClan(result.info); // Assuming result.info contains the detailed clan data
         setClanData(result);
+        setGlobalRank(result.globalRank ?? null);
+        setLocalRank(result.localRank ?? null);
       } catch (error) {
         console.error('Error al obtener información del clan:', error);
       }
@@ -335,22 +351,33 @@ export default function GroupDetailClanes() {
                   </Group>
                 </Grid.Col>
 
-                {/* Cofre del Clan */}
-                <Grid.Col span={{ base: 6, xs: 3 }}>
-                  <Group gap="xs" align="center">
-                    <Text fz="xs" c="gray.7">
-                      {t('Miembros')}
-                    </Text>
-                    <Badge className={classes.statBadge} variant="light" color="orange">
-                      <Group gap={rem(4)} align="center">
-                        <IconShield size={14} stroke={1.5} />
-                        <Text fz="xs" fw={700}>
-                          {clan?.members ?? '—'} / 50
-                        </Text>
-                      </Group>
-                    </Badge>
-                  </Group>
-                </Grid.Col>
+                {/* Ranking Global */}
+                {globalRank && (
+                  <Grid.Col span={{ base: 6, xs: 3 }}>
+                    <Group gap="xs" align="center">
+                      <Text fz="xs" c="gray.7">
+                        Ranking Global
+                      </Text>
+                      <Badge className={classes.statBadge} variant="light" color="blue">
+                        <Text fz="xs" fw={800}>#{globalRank}</Text>
+                      </Badge>
+                    </Group>
+                  </Grid.Col>
+                )}
+
+                {/* Ranking Local */}
+                {localRank && (
+                  <Grid.Col span={{ base: 6, xs: 3 }}>
+                    <Group gap="xs" align="center">
+                      <Text fz="xs" c="gray.7">
+                        Ranking Local
+                      </Text>
+                      <Badge className={classes.statBadge} variant="light" color="orange">
+                        <Text fz="xs" fw={800}>#{localRank}</Text>
+                      </Badge>
+                    </Group>
+                  </Grid.Col>
+                )}
 
                 {/* Ubicación */}
                 <Grid.Col span={{ base: 6, xs: 3 }}>
@@ -368,7 +395,15 @@ export default function GroupDetailClanes() {
                     </Badge>
                   </Group>
                 </Grid.Col>
+
+
               </Grid>
+              <Text fz="xs" c="dimmed" mt="md">
+                Grupo de Discord
+              </Text>
+              <Button>
+
+              </Button>
             </Box>
           )}
 
