@@ -740,6 +740,17 @@ export default function TableSortClient({ serverData }) {
                 {t('Grupos de Telegram Activos 2025, Grupos de Telegram, Grupos de WhatsApp, Comunidades de Telegram, Publicar Grupo Telegram, Unirse a Grupos Telegram, Buscar Miembros Telegram, Conocer Personas Telegram')}
               </Text>
               </Paper>
+              
+              <Button
+                radius="md" 
+                component={Link}
+                href="/clanes/clanes-de-clash-royale"
+                variant="light"
+                color="blue"
+                size="lg"
+              >
+                Ver clanes de Clash Royale
+              </Button>
             </>
           {/* Botón flotante con cambio de posición */}
           <Button

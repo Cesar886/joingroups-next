@@ -565,6 +565,17 @@ export default function HomeClient({ serverData }) {
         </Box>
 
         <Button
+          radius="md" 
+          component={Link}
+          href="/clanes/clanes-de-clash-royale"
+          variant="light"
+          color="blue"
+          size="lg"
+        >
+           Ver clanes de Clash Royale
+        </Button>
+
+        <Button
           component={Link}
           href="/comunidades/subir-grupo"
           color="rgba(255, 0, 0, 1)"

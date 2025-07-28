@@ -571,6 +571,16 @@ export default function Whatsapp() {
                 {t('Únete a miles de usuarios que ya están haciendo crecer sus comunidades en Telegram.')}
               </Text>
               </Paper>
+              <Button
+                radius="md" 
+                component={Link}
+                href="/clanes/clanes-de-clash-royale"
+                variant="light"
+                color="blue"
+                size="lg"
+              >
+                  Ver clanes de Clash Royale
+              </Button>
             </>
             <Text ta="center" fw={500} c="dimmed" mt="xl">
               {t('No se encontraron resultados.')}
