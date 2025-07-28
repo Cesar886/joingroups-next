@@ -10,10 +10,8 @@ export const metadata = {
   alternates: {
     canonical: 'https://joingroups.pro',
     languages: {
-      'es-MX': 'https://mx.joingroups.pro',
       'es-ES': 'https://es.joingroups.pro',
-      'pt-BR': 'https://br.joingroups.pro',
-      'en-US': 'https://us.joingroups.pro',
+      'en-US': 'https://en.joingroups.pro',
     },
   },
   openGraph: {
