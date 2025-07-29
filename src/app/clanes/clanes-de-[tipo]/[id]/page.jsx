@@ -396,7 +396,7 @@ export default function GroupDetailClanes() {
                   <Tooltip label="Discord">
                     <Button
                       component="a"
-                      href={group.discord}
+                      href={group.comunidades.discord}
                       target="_blank"
                       variant="light"
                       color="indigo"
@@ -412,7 +412,7 @@ export default function GroupDetailClanes() {
                   <Tooltip label="WhatsApp">
                     <Button
                       component="a"
-                      href={group.whatsapp}
+                      href={group.comunidades.whatsapp}
                       target="_blank"
                       variant="light"
                       color="green"
@@ -428,7 +428,7 @@ export default function GroupDetailClanes() {
                   <Tooltip label="Telegram">
                     <Button
                       component="a"
-                      href={group.telegram}
+                      href={group.comunidades.telegram}
                       target="_blank"
                       variant="light"
                       color="blue"
@@ -444,7 +444,7 @@ export default function GroupDetailClanes() {
                   <Tooltip label="Facebook">
                     <Button
                       component="a"
-                      href={group.facebook}
+                      href={group.comunidades.facebook}
                       target="_blank"
                       variant="light"
                       color="blue"
