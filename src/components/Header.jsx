@@ -21,40 +21,8 @@ import i18n from '@/locales/i18n.jsx';
 
 
 const countries = [
-  { value: 'mx', label: 'México', emoji: '🇲🇽', lang: 'es' },
-  { value: 'us', label: 'Estados Unidos', emoji: '🇺🇸', lang: 'en' },
-  { value: 'ar', label: 'Argentina', emoji: '🇦🇷', lang: 'es' },
-  { value: 'co', label: 'Colombia', emoji: '🇨🇴', lang: 'es' },
-  { value: 'es', label: 'España', emoji: '🇪🇸', lang: 'es' },
-  { value: 'pe', label: 'Perú', emoji: '🇵🇪', lang: 'es' },
-  { value: 'cl', label: 'Chile', emoji: '🇨🇱', lang: 'es' },
-  { value: 've', label: 'Venezuela', emoji: '🇻🇪', lang: 'es' },
-  { value: 'br', label: 'Brasil', emoji: '🇧🇷', lang: 'pt' },
-  { value: 'ec', label: 'Ecuador', emoji: '🇪🇨', lang: 'es' },
-  { value: 'gt', label: 'Guatemala', emoji: '🇬🇹', lang: 'es' },
-  { value: 'bo', label: 'Bolivia', emoji: '🇧🇴', lang: 'es' },
-  { value: 'do', label: 'República Dominicana', emoji: '🇩🇴', lang: 'es' },
-  { value: 'hn', label: 'Honduras', emoji: '🇭🇳', lang: 'es' },
-  { value: 'py', label: 'Paraguay', emoji: '🇵🇾', lang: 'es' },
-  { value: 'sv', label: 'El Salvador', emoji: '🇸🇻', lang: 'es' },
-  { value: 'ni', label: 'Nicaragua', emoji: '🇳🇮', lang: 'es' },
-  { value: 'cr', label: 'Costa Rica', emoji: '🇨🇷', lang: 'es' },
-  { value: 'pa', label: 'Panamá', emoji: '🇵🇦', lang: 'es' },
-  { value: 'uy', label: 'Uruguay', emoji: '🇺🇾', lang: 'es' },
-  { value: 'pr', label: 'Puerto Rico', emoji: '🇵🇷', lang: 'es' },
-  { value: 'ca', label: 'Canadá', emoji: '🇨🇦', lang: 'en' },
-  { value: 'de', label: 'Alemania', emoji: '🇩🇪', lang: 'de' },
-  { value: 'fr', label: 'Francia', emoji: '🇫🇷', lang: 'fr' },
-  { value: 'it', label: 'Italia', emoji: '🇮🇹', lang: 'it' },
-  { value: 'gb', label: 'Reino Unido', emoji: '🇬🇧', lang: 'en' },
-  { value: 'nl', label: 'Países Bajos', emoji: '🇳🇱', lang: 'nl' },
-  { value: 'pt', label: 'Portugal', emoji: '🇵🇹', lang: 'pt' },
-  { value: 'jp', label: 'Japón', emoji: '🇯🇵', lang: 'ja' },
-  { value: 'kr', label: 'Corea del Sur', emoji: '🇰🇷', lang: 'ko' },
-  { value: 'cn', label: 'China', emoji: '🇨🇳', lang: 'zh' },
-  { value: 'in', label: 'India', emoji: '🇮🇳', lang: 'hi' },
-  { value: 'ru', label: 'Rusia', emoji: '🇷🇺', lang: 'ru' },
-  { value: 'au', label: 'Australia', emoji: '🇦🇺', lang: 'en' },
+  { value: 'es', label: 'México', emoji: '🇲🇽', lang: 'es' },
+  { value: 'en', label: 'Estados Unidos', emoji: '🇺🇸', lang: 'en' },
 ];
 
 
@@ -71,7 +39,7 @@ export default function Header() {
     }
   }, []);
 
-  const isClanesSection = pathname.startsWith('/clanes');
+  const isclansSection = pathname.startsWith('/clans') || pathname.startsWith('/clanes');
   
   
   const links = [
