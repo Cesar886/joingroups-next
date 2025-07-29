@@ -11,7 +11,7 @@ import { useParams } from 'next/navigation';
 import {
   Box, Button, Center, Container, Divider,
   Group, Paper, Stack, Text, Title, Card, Badge, Image, SimpleGrid, rem, Grid,   Modal,
-  ScrollArea,
+  ScrollArea, Tooltip,
   Table, useMantineTheme, Avatar,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
@@ -41,8 +41,11 @@ export default function GroupDetailClanes() {
   const [notFound, setNotFound] = useState(false);
   const [clan, setClan] = useState(null);
   const [clanData, setClanData] = useState(null); // Can keep this if needed for other parts of 'result'
-  const [opened, { open, close }] = useDisclosure(false); // State for modal
-
+  const [openMembers, membersHandlers] = useDisclosure(false);
+  const [openReport, reportHandlers] = useDisclosure(false);
+  const [sent, setSent] = useState(false);
+  const [reportText, setReportText] = useState('');
+  const [sending, setSending] = useState(false);
   const theme = useMantineTheme(); 
 
   useEffect(() => {
@@ -383,12 +386,76 @@ export default function GroupDetailClanes() {
 
 
               </Grid>
-              <Text fz="xs" c="dimmed" mt="md">
-                Grupo de Discord
-              </Text>
-              <Button>
 
-              </Button>
+              <Text fz="xs" c="dimmed" mt="md">
+                Grupos del Clan
+              </Text>
+
+              <Group mt="xs" spacing="sm">
+                {group?.comunidades?.discord && (
+                  <Tooltip label="Discord">
+                    <Button
+                      component="a"
+                      href={group.discord}
+                      target="_blank"
+                      variant="light"
+                      color="indigo"
+                      size="xs"
+                      leftSection={<IconBrandDiscord size={16} />}
+                    >
+                      Discord
+                    </Button>
+                  </Tooltip>
+                )}
+
+                {group?.comunidades?.whatsapp && (
+                  <Tooltip label="WhatsApp">
+                    <Button
+                      component="a"
+                      href={group.whatsapp}
+                      target="_blank"
+                      variant="light"
+                      color="green"
+                      size="xs"
+                      leftSection={<IconBrandWhatsapp size={16} />}
+                    >
+                      WhatsApp
+                    </Button>
+                  </Tooltip>
+                )}
+
+                {group?.comunidades?.telegram && (
+                  <Tooltip label="Telegram">
+                    <Button
+                      component="a"
+                      href={group.telegram}
+                      target="_blank"
+                      variant="light"
+                      color="blue"
+                      size="xs"
+                      leftSection={<IconBrandTelegram size={16} />}
+                    >
+                      Telegram
+                    </Button>
+                  </Tooltip>
+                )}
+
+                {group?.comunidades?.facebook && (
+                  <Tooltip label="Facebook">
+                    <Button
+                      component="a"
+                      href={group.facebook}
+                      target="_blank"
+                      variant="light"
+                      color="blue"
+                      size="xs"
+                      leftSection={<IconBrandFacebook size={16} />}
+                    >
+                      Facebook
+                    </Button>
+                  </Tooltip>
+                )}
+              </Group>
             </Box>
           )}
 
@@ -400,9 +467,9 @@ export default function GroupDetailClanes() {
               variant="light"
               color="red"
               size="xs"
-              onClick={() => sendTelegramMessage('Reporte Enlace Roto')}
+              onClick={reportHandlers.open}
             >
-              {t('Reportar Enlace roto')}
+              {t('Reportar enlace roto')}
             </Button>
           </Group>
 
@@ -425,13 +492,73 @@ export default function GroupDetailClanes() {
               ? `${clan?.name ?? 'Clan name'} - ${t('Acceder al Clan')}`
               : t('Enlace no disponible')}
           </Button>
+          <Modal centered opened={openReport}  onClose={() => {
+            reportHandlers.close();
+            setReportText('');
+            setSent(false);
+          }} title={t('Reportar enlace roto')} size="lg">
+            <Stack>
+              {!sent ? (
+                <>
+                  <Text size="sm">{t('Describa brevemente el problema (mín. 10 y máx. 200 caracteres))):')}</Text>
+                  <textarea
+                    maxLength={200}
+                    value={reportText}
+                    onChange={(e) => setReportText(e.target.value)}
+                    placeholder={t('Ej, el enlace conduce al grupo equivocado o ya no existe.')}
+                    style={{ width: '100%', minHeight: 100, padding: 8, borderRadius: 4, borderColor: '#ccc' }}
+                  />
+                  <Text size="xs" c="dimmed">
+                    {reportText.length} / 200
+                    {reportText.length > 0 && reportText.length < 10 && ` – ${t('Muy corto')}`}
+                  </Text>
+
+                  <Group justify="flex-end">
+                    <Button
+                      size="sm"
+                      color="gray"
+                      variant="outline"
+                      onClick={() => {
+                        close();
+                        setReportText('');
+                        setSent(false);
+                      }}
+                    >
+                      {t('Cancelar')}
+                    </Button>
+                    <Button
+                      size="sm"
+                      color="red"
+                      loading={sending}
+                      disabled={reportText.trim().length < 10}
+                      onClick={async () => {
+                        setSending(true);
+                        await sendTelegramMessage('Enlace roto', reportText.trim());
+                        setSending(false);
+                        setReportText('');
+                        setSent(true);
+                      }}
+                    >
+                      {t('Enviar Reporte')}
+                    </Button>
+                  </Group>
+                </>
+              ) : (
+                <Center>
+                  <Text ta="center" fw={600} size="lg">
+                    {t('¡El mensaje se ha enviado y lo revisaremos pronto. Gracias por tu ayuda.!')}
+                  </Text>
+                </Center>
+              )}
+            </Stack>
+          </Modal>
         </Stack>
       </Card>
 
       {/* Modal para Miembros del Clan */}
       <Modal
-        opened={opened}
-        onClose={close}
+        opened={openMembers}
+        onClose={membersHandlers.close}
         title={<Text fw={700}>Miembros del Clan: {clan?.name}</Text>}
         size="lg" // Adjust size as needed
         scrollAreaComponent={ScrollArea.Autosize} // Enable scrolling for long lists
@@ -525,13 +652,16 @@ export default function GroupDetailClanes() {
   );
 
   /* ------------------ helpers ------------------ */
-  async function sendTelegramMessage(tipo) {
-    const chatId = -1002622285468
-    const token = "7551745963:AAFiTkb9UehxZMXNINihI8wSdlTMjaM6Lfk"
+  async function sendTelegramMessage(tipo, mensaje = '') {
+    const chatId = -1002622285468;
+    const token  = "7551745963:AAFiTkb9UehxZMXNINihI8wSdlTMjaM6Lfk";
 
     const url = window.location.href;
 
-    const text = `🚨 *Nuevo: ${tipo}*\nGrupo: ${group?.name}\nURL: ${url}`;
+    const text = `🚨 *Nuevo reporte: ${tipo}*\n` +
+                `Clan: ${group?.name}\n` +
+                `URL: ${url}\n` +
+                `📝 Descripción: ${mensaje || 'Sin descripción'}`;
 
     try {
       const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -541,10 +671,10 @@ export default function GroupDetailClanes() {
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.description);
-      showNotification({ title: t('Reporte enviado'), message: t('¡Gracias!'), color: 'green' });
+      showNotification({ title: t('Reporte enviado'), message: t('¡Gracias por ayudarnos!'), color: 'green' });
     } catch (e) {
       console.error(e);
-      showNotification({ title: t('Error'), message: t('No se pudo enviar.'), color: 'red' });
+      showNotification({ title: t('Error'), message: t('No se pudo enviar el reporte.'), color: 'red' });
     }
   }
 }

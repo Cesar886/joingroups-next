@@ -137,14 +137,11 @@ export default function GroupDetail() {
     /Chrome/.test(navigator.userAgent) &&
     /Android/.test(navigator.userAgent) &&
     !/OPR|Edge/.test(navigator.userAgent);
-    
-
-
 
   /* -------------- render -------------- */
   if (loading)   return <Center><Text>{t('Cargando...')}</Text></Center>;
   if (notFound || !group)
-    return <Center><Text>{t('Clan no encontrado.')}</Text></Center>;
+    return <Center><Text>{t('Grupo no encontrado.')}</Text></Center>;
 
   return (
     <Container size="sm" py="xl">
