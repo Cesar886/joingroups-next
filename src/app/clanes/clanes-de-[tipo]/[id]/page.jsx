@@ -208,34 +208,19 @@ export default function GroupDetailClanes() {
             </Group>
           )}
 
-          {/* Descripción del Clan */}
-          {/* Descripción alternativa */}
-          { group.description && (
+          { clan?.description && (
             <Box>
               <Text fw={600} mb={4}>
                 {t('Descripción del Clan:')}
               </Text>
-              <Text>
-                {typeof group.description === 'object'
-                  ? group.description[baseLang] ||
-                    group.description.es ||
-                    group.description.en ||
-                    t('Sin descripción')
-                  : group.description || t('Sin descripción')}
+              <Text c="gray.7" fz="sm" lineClamp={3}>
+                {clan.description}
               </Text>
+
             </Box>
           )}
 
           <Divider my="md" />
-
-
-          {clan?.description && (
-            <Box>
-              <Text c="gray.7" fz="sm" lineClamp={3}>
-                {clan.description}
-              </Text>
-            </Box>
-          )}
 
 
           {/* <Divider my="md" /> */}
