@@ -549,9 +549,9 @@ export default function ClashRoyaleClient({ initialData }) {
                 p="md"
                 style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
               >
-              <Text size="md" fw={600} mb="sm">
+              <h2 size="md" fw={600} mb="sm">
                 {t('clashRoyale.intro')} <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>!
-              </Text>
+              </h2>
 
               <Text size="sm" color="dimmed" mb="xs">
                 {t('clashRoyale.faq1')} <br />
