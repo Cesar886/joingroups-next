@@ -52,16 +52,16 @@
     <changefreq>monthly</changefreq>
   </url>
 
-  <!-- Clanes -->
+  <!-- clans -->
   <url>
-    <loc>https://joingroups.pro/clanes</loc>
+    <loc>https://joingroups.pro/clans</loc>
     <lastmod>2025-07-04</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
 
   <url>
-    <loc>https://joingroups.pro/clanes/publicar-clan</loc>
+    <loc>https://joingroups.pro/clans/publish-clan</loc>
     <lastmod>2025-07-04</lastmod>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
@@ -75,9 +75,26 @@
   </url>
 
   <url>
-    <loc>https://joingroups.pro/clanes/clanes-de-clash-of-clans</loc>
+    <loc>https://joingroups.pro/clans/clanes-de-clash-of-clans</loc>
     <lastmod>2025-07-04</lastmod>
     <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <!-- Ingles -->
+
+
+  <url>
+    <loc>https://joingroups.pro/clans/clash-royale-clans</loc>
+    <lastmod>2025-07-04</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://joingroups.pro/clans/clash-of-clans-clans</loc>
+    <lastmod>2025-07-04</lastmod>
+    <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
 
