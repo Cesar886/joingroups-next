@@ -352,9 +352,9 @@ export default function ClashRoyaleClient({ initialData }) {
                 </>
               ) : (
                 <>
-                  <Title order={3} mb="xs">
-                    {t('Clanes de Clash Royale Activos')}
-                  </Title>
+                  <h1 order={3} mb="xs">
+                    {t('Clanes de Clash Royale ⚔️ | Únete, Busca o Recluta Jugadores')}
+                  </h1>
                   <Text size="sm" color="dimmed" mb="xs">
                     {t('desktop1')} <strong>{t('desktop2')}</strong>? {t('desktop3')}{' '}
                     <a
