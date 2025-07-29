@@ -166,9 +166,8 @@ export default function Header() {
                     key={country.value}
                     leftSection={country.emoji}
                     onClick={() => {
-                      const currentPath = window.location.pathname + window.location.search;
                       i18n.changeLanguage(country.lang);
-                      window.location.href = `https://${country.value}.joingroups.pro${currentPath}`;
+                      window.location.href = `https://${country.value}.joingroups.pro`;
                     }}
                   >
                     {country.label}
