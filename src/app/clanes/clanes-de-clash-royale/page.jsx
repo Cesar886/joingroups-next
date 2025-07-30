@@ -7,15 +7,15 @@ import Head from 'next/head'; // Asegúrate de importar esto si no usas app rout
 
 export const metadata = {
   title: 'Clanes de Clash Royale ⚔️ | Únete, Busca o Recluta Jugadores',
-  description: 'Explora la lista más actualizada de clanes activos de Clash Royale en 2025. Filtra por trofeos, encuentra tu clan ideal o publica el tuyo gratis para atraer nuevos miembros.',
+  description: 'Explora lo mejores clanes de Clash Royale en 2025. Filtra por trofeos, encuentra tu clan ideal o publica el tuyo gratis para atraer nuevos miembros.',
   keywords: 'clanes Clash Royale, unirse a clan Clash Royale, reclutar jugadores, publicar clan gratis, guerra de clanes, clanes activos 2025, mejores clanes Clash Royale, clanes en español',
   robots: 'index, follow',
   alternates: {
     canonical: 'https://joingroups.pro/clanes/clanes-de-clash-royale',
   },
   openGraph: {
-    title: '⚔️ Clanes de Clash Royale Activos 2025 | Encuentra o Publica el Tuyo',
-    description: 'Descubre clanes activos de Clash Royale y encuentra el mejor para ti. ¿Eres líder? Publica tu clan gratis y consigue jugadores activos fácilmente.',
+    title: '⚔️ Clanes de Clash Royale | Encuentra o Publica el Tuyo',
+    description: 'Descubre clanes de Clash Royale y encuentra el mejor para ti. ¿Eres líder? Publica tu clan gratis y consigue jugadores activos fácilmente.',
     url: 'https://joingroups.pro/clanes/clanes-de-clash-royale',
     siteName: 'Clanes de Clash Royale',
     images: [
@@ -30,8 +30,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Clanes de Clash Royale Activos en 2025 | Publica o Únete Gratis',
-    description: 'Busca clanes activos de Clash Royale o publica el tuyo gratis. Ideal para jugadores y líderes que quieren avanzar en guerra de clanes.',
+    title: 'Clanes de Clash Royale | Publica o Únete Gratis',
+    description: 'Busca clanes de Clash Royale o publica el tuyo gratis. Ideal para jugadores y líderes que quieren avanzar en guerra de clanes.',
     images: ['https://joingroups.pro/clashRoyaleFondo1.png'],
   },
 };
