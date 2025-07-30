@@ -24,6 +24,7 @@
     "@mantine/notifications": "^8.2.1",
     "@mantine/nprogress": "^8.2.1",
     "@mantine/spotlight": "^8.2.1",
+    "@mantine/styles": "^6.0.22",
     "@mantine/tiptap": "^8.2.1",
     "@tabler/icons-react": "^3.34.1",
     "@tiptap/extension-link": "^3.0.7",
@@ -41,7 +42,8 @@
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
     "react-i18next": "^15.6.0",
-    "recharts": "^3.1.0"
+    "recharts": "^3.1.0",
+    "sanitize-html": "^2.17.0"
   },
   "devDependencies": {
     "postcss": "^8.5.6",

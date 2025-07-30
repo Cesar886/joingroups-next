@@ -4,7 +4,7 @@
   <!-- Página principal -->
   <url>
     <loc>https://joingroups.pro/</loc>
-    <lastmod>2025-07-04</lastmod>
+    <lastmod>2025-07-30</lastmod>
     <priority>1.0</priority>
     <changefreq>daily</changefreq>
   </url>
@@ -52,16 +52,16 @@
     <changefreq>monthly</changefreq>
   </url>
 
-  <!-- clans -->
+  <!-- clanes -->
   <url>
-    <loc>https://joingroups.pro/clans</loc>
+    <loc>https://joingroups.pro/clanes</loc>
     <lastmod>2025-07-04</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
 
   <url>
-    <loc>https://joingroups.pro/clans/publish-clan</loc>
+    <loc>https://joingroups.pro/clanes/publicar-clan</loc>
     <lastmod>2025-07-04</lastmod>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
@@ -75,13 +75,34 @@
   </url>
 
   <url>
-    <loc>https://joingroups.pro/clans/clanes-de-clash-of-clans</loc>
+    <loc>https://joingroups.pro/clanes/clanes-de-clash-of-clans</loc>
     <lastmod>2025-07-04</lastmod>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
   </url>
 
   <!-- Ingles -->
+
+  <url>
+    <loc>https://joingroups.pro/clans</loc>
+    <lastmod>2025-07-04</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://joingroups.pro/clans/clanes-de-clash-of-clans/blacknigthmare</loc>
+    <lastmod>2025-07-04</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://joingroups.pro/clans/publish-clan</loc>
+    <lastmod>2025-07-04</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
 
 
   <url>
@@ -312,6 +333,49 @@
     <changefreq>weekly</changefreq>
   </url>
   <!-- ... simplemente reemplaza "telegram" por "whatsapp" en todos los anteriores -->
+
+  <!-- Blogs -->
+  <url><loc>https://joingroups.pro/blog/guia-mejores-clanes-de-clash-royale-2025</loc></url>
+  <url><loc>https://joingroups.pro/blog/como-elegir-clan-perfecto-clash-royale</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-de-clash-royale-por-nivel</loc></url>
+  <url><loc>https://joingroups.pro/blog/ventajas-de-unirse-a-un-clan</loc></url>
+  <url><loc>https://joingroups.pro/blog/top-clanes-populares-clash-royale-julio-2025</loc></url>
+  <url><loc>https://joingroups.pro/blog/como-publicar-clan-en-joingroups</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-cofres-legendarios-rapido</loc></url>
+  <url><loc>https://joingroups.pro/blog/errores-al-elegir-un-clan-clash-royale</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-clash-royale-mexico-2025</loc></url>
+  <url><loc>https://joingroups.pro/blog/mejores-clanes-guerras-de-clanes</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-para-donaciones-rapidas</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-para-subir-de-arena</loc></url>
+  <url><loc>https://joingroups.pro/blog/mejores-clanes-segun-tu-edad</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-de-clash-of-clans-2025</loc></url>
+  <url><loc>https://joingroups.pro/blog/como-hacer-crecer-tu-clan-rapido</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-amistosos-para-chatear</loc></url>
+  <url><loc>https://joingroups.pro/blog/guia-para-novatos-clanes</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-competitivos-torneos</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-con-discord-o-telegram</loc></url>
+  <url><loc>https://joingroups.pro/blog/como-crear-clan-exitoso-clash-royale</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-nuevos-clash-royale</loc></url>
+  <url><loc>https://joingroups.pro/blog/como-evitar-clanes-toxicos</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-top-por-regiones</loc></url>
+  <url><loc>https://joingroups.pro/blog/requisitos-para-un-buen-clan</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-en-vivo-actualizados-hoy</loc></url>
+  <url><loc>https://joingroups.pro/blog/como-cambiarte-de-clan-sin-perder-progreso</loc></url>
+  <url><loc>https://joingroups.pro/blog/ranking-de-clanes-joingroups</loc></url>
+  <url><loc>https://joingroups.pro/blog/como-reportar-un-clan-inactivo</loc></url>
+  <url><loc>https://joingroups.pro/blog/nombres-originales-para-tu-clan</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-para-familias</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-para-fines-de-semana</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-clash-royale-solo-adultos</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-con-premios-reales</loc></url>
+  <url><loc>https://joingroups.pro/blog/cuantos-integrantes-debe-tener-un-clan</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-amistosos-para-menores</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-top-de-hispanoamerica</loc></url>
+  <url><loc>https://joingroups.pro/blog/como-salir-de-un-clan-en-clash-royale</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-de-clash-royale-para-padres</loc></url>
+  <url><loc>https://joingroups.pro/blog/cuando-es-mejor-cambiar-de-clan</loc></url>
+  <url><loc>https://joingroups.pro/blog/clanes-de-clash-royale-solo-para-pros</loc></url>
+  <url><loc>https://joingroups.pro/blog/eventos-especiales-de-clanes</loc></url>
 
 
 </urlset>

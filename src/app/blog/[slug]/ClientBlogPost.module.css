@@ -1,0 +1,14 @@
+.content {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #333;
+}
+
+.content a {
+  color: #1e88e5;
+  text-decoration: underline;
+}
+
+.content a:hover {
+  text-decoration: none;
+}
