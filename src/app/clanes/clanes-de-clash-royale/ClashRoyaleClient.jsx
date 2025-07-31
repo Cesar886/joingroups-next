@@ -356,22 +356,10 @@ export default function ClashRoyaleClient({ initialData }) {
                     {t('Clanes de Clash Royale ⚔️ | Únete, Busca o Recluta Jugadores')}
                   </h1>
                   <Text size="sm" color="dimmed" mb="xs">
-                    {t('desktop1')} <strong>{t('desktop2')}</strong>? {t('desktop3')}{' '}
-                    <a
-                      href="https://www.joingroups.pro/clanes/clanes-de-clash-royale"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: '#228be6', textDecoration: 'underline' }}
-                    >
-                      JoinGroups
-                    </a>{' '}
-                    {t('desktop4')} <br />
-                    {t('desktop5')} <strong>{t('desktop6')}</strong>, {t('desktop7')}, o incluso{' '}
-                    <strong>{t('desktop8')}</strong> {t('desktop9')} <br />
-                    {t('desktop10')} <strong>{t('desktop11')}</strong>{' '}
-                    <strong>{t('desktop12')}</strong> <br />
-                    {t('desktop13')} <strong>{t('desktop14')}</strong>, <strong>{t('desktop15')}</strong> y{' '}
-                    <strong>{t('desktop16')}</strong>.
+                    {t('¡Bienvenido a JoinGroups, tu destino definitivo para todo lo relacionado con los clanes de Clash Royale!')} {t('Si estás buscando')} <strong>{t('unirte a un clan de Clash Royale')}</strong> {t('que se adapte perfectamente a tu estilo de juego, o si eres un líder de clan que necesita')} <strong>{t('reclutar jugadores activos')}</strong> {t('para dominar la arena, has llegado al lugar indicado.')} {t('En nuestra plataforma, te facilitamos la búsqueda de los')} <strong>{t('mejores clanes de Clash Royale')}</strong> {t('para 2025, filtrados por trofeos, idioma y nivel de actividad, incluyendo una amplia selección de')} <strong>{t('clanes en español')}</strong>.
+                    <br />
+                    {t('Aquí no solo encontrarás un')} <strong>{t('clan activo')}</strong> {t('para tus batallas y')} <strong>{t('guerras de clanes')}</strong>, {t('sino que también te ofrecemos guías completas sobre cómo encontrar el clan ideal, cómo')} <strong>{t('publicar tu clan gratis')}</strong> {t('para atraer nuevos miembros, y todo lo que necesitas saber para destacar en el competitivo mundo de Clash Royale.')} <br />
+                    {t('¡Prepárate para llevar tu juego al siguiente nivel con el clan perfecto!')}
                   </Text>
                 </>
               )}
@@ -549,20 +537,20 @@ export default function ClashRoyaleClient({ initialData }) {
                 p="md"
                 style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
               >
-              <h2 size="md" fw={600} mb="sm">
-                {t('clashRoyale.intro')} <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>!
+            <h2 size="md" fw={600} mb="sm">
+                {t('¿Buscas los mejores clanes de Clash Royale para unirte o reclutar? ¡Tu comunidad te espera en ')} <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>!
               </h2>
 
               <Text size="sm" color="dimmed" mb="xs">
-                {t('clashRoyale.faq1')} <br />
-                {t('clashRoyale.faq2')} <Link href="/clanes/publicar-clan" style={{ color: '#228be6', textDecoration: 'underline' }}>{t('clashRoyale.linkSearch')}</Link> <br />
-                {t('clashRoyale.faq3')} <br />
-                {t('clashRoyale.faq4')} <br />
-                {t('clashRoyale.faq5')} <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>{t('clashRoyale.linkCreate')}</Link>.
+                {t('clashRoyale.faq1')} {t('Los clanes son el corazón de Clash Royale, la comunidad perfecta para competir, donar cartas y obtener recompensas exclusivas.')} <br />
+                {t('clashRoyale.faq2')} {t('Encuentra tu clan ideal de Clash Royale utilizando nuestro avanzado buscador de clanes, filtrado por trofeos, actividad y más.')} <Link href="/clanes/publicar-clan" style={{ color: '#228be6', textDecoration: 'underline' }}>{t('clashRoyale.linkSearch')}</Link> <br />
+                {t('clashRoyale.faq3')} {t('Descubre los clanes de Clash Royale más activos y mejor rankeados, y conoce a los líderes que los llevan a la victoria.')} <br />
+                {t('clashRoyale.faq4')} {t('Además, aprende cómo encontrar tu antiguo clan de Clash Royale o quién es el top 1 global para inspirarte.')} <br />
+                {t('clashRoyale.faq5')} {t('Si eres líder, te enseñamos cómo crear y publicar tu clan de Clash Royale gratis para atraer a jugadores comprometidos.')} <Link href="/instrucciones-crear-grupo-telegram" style={{ color: '#228be6', textDecoration: 'underline' }}>{t('clashRoyale.linkCreate')}</Link>.
               </Text>
 
               <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
-                {t('clashRoyale.cta')} <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>.
+                {t('clashRoyale.cta')} {t('Miles de jugadores y líderes ya confían en JoinGroups para encontrar y gestionar sus clanes de Clash Royale. ¡Únete a la comunidad y mejora tu experiencia de juego hoy mismo en')} <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale" target="_blank" rel="noopener noreferrer" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</a>.
               </Text>
               </Paper>
             </>
