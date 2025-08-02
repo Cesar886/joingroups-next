@@ -238,7 +238,7 @@ export default function GroupDetailClanes() {
                 color="blue"
                 variant="light"
                 radius="xl"
-                onClick={open}
+                onClick={membersHandlers.open}
                 style={{
                   height: rem(26),
                   width: 'auto',
