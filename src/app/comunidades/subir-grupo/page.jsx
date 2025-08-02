@@ -209,9 +209,8 @@ export default function Form() {
       });
 
       form.reset();
-      const subdomain = form.values.city || 'www';
       const categoriaSlug = slugify(form.values.categories[0] || 'general');
-      window.location.href = `https://${subdomain}.joingroups.pro/comunidades/grupos-de-${redSocial.toLowerCase()}/${categoriaSlug}/${slug}`;
+      window.location.href = `https://joingroups.pro/comunidades/grupos-de-${redSocial.toLowerCase()}/${categoriaSlug}/${slug}`;
 
 
       // 👇 Traducción automática post-envío
