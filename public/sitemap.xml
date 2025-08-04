@@ -84,21 +84,21 @@
   <!-- Ingles -->
 
   <url>
-    <loc>https://joingroups.pro/clans</loc>
+    <loc>https://en.joingroups.pro/clans</loc>
     <lastmod>2025-07-04</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
 
   <url>
-    <loc>https://joingroups.pro/clans/clanes-de-clash-of-clans/blacknigthmare</loc>
+    <loc>https://en.joingroups.pro/clans/clanes-de-clash-of-clans/blacknigthmare</loc>
     <lastmod>2025-07-04</lastmod>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
   </url>
 
   <url>
-    <loc>https://joingroups.pro/clans/publish-clan</loc>
+    <loc>https://en.joingroups.pro/clans/publish-clan</loc>
     <lastmod>2025-07-04</lastmod>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
@@ -106,14 +106,14 @@
 
 
   <url>
-    <loc>https://joingroups.pro/clans/clash-royale-clans</loc>
+    <loc>https://en.joingroups.pro/clans/clash-royale-clans</loc>
     <lastmod>2025-07-04</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
 
   <url>
-    <loc>https://joingroups.pro/clans/clash-of-clans-clans</loc>
+    <loc>https://en.joingroups.pro/clans/clash-of-clans-clans</loc>
     <lastmod>2025-07-04</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>

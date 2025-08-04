@@ -97,6 +97,60 @@ export default async function ClashRoyalePage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </Head>
+
+      {/* ✅ FAQPage debe ir fuera del <Head> para que Google lo lea */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: '¿Cómo me uno a un clan de Clash Royale?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'En JoinGroups puedes filtrar clanes por nivel, país o actividad. Luego haz clic en el enlace de invitación para unirte directamente.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: '¿Es gratis publicar mi clan?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Sí, publicar tu clan en JoinGroups es completamente gratis. Solo necesitas completar el formulario y validar tu enlace.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: '¿Qué requisitos debe cumplir mi clan?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'No hay requisitos estrictos, pero los clanes exitosos suelen tener miembros activos, donar cartas y participar en guerras de clanes.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: '¿Puedo buscar clanes por idioma o país?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Sí. Puedes usar los filtros para buscar clanes por idioma, país, nivel o categoría.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: '¿Cómo puedo destacar mi clan?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Después de publicarlo, puedes contactar al equipo de JoinGroups por WhatsApp para opciones de promoción y aparecer arriba en la lista.',
+                },
+              },
+            ],
+          }),
+        }}
+      />
+
       <ClashRoyaleClient initialData={sorted} />
     </>
   );
