@@ -8,7 +8,7 @@ export default function FloatingButton() {
         bottom: '20px',
         left:   '20px',
         zIndex: 1000,
-        padding: '0.25rem .45rem',
+        padding: '0.25rem .50rem',
         borderRadius: '0.375rem',
         background: '#228be6',
         color: '#0E4C84',
