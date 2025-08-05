@@ -10,17 +10,16 @@ import { db } from '@/firebase/firebase';
 import { useParams } from 'next/navigation';
 import {
   Box, Button, Center, Container, Divider,
-  Group, Paper, Stack, Text, Title, Card, Badge, Image, SimpleGrid, rem, Grid,   Modal,
+  Group, Paper, Stack, Text, Title, Card, Badge, rem, Grid,   Modal,
   ScrollArea, Tooltip,
   Table, useMantineTheme, Avatar,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { useDisclosure } from '@mantine/hooks'; // Hook for modal state management
+import { useDisclosure } from '@mantine/hooks'; 
 import slugify from '@/lib/slugify';
 import { useTranslation } from 'react-i18next';
-import classes from '@/app/styles/DetailsClans.module.css'; // Your existing CSS module
+import classes from '@/app/styles/DetailsClans.module.css'; 
 
-// Import all the icons you'll use directly in this file
 import {
   IconTrophy, IconGift, IconShield, IconMapPin, IconTarget, IconCornerLeftDown,
   IconBrandDiscord,
@@ -40,7 +39,7 @@ export default function GroupDetailClanes() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [clan, setClan] = useState(null);
-  const [clanData, setClanData] = useState(null); // Can keep this if needed for other parts of 'result'
+  const [clanData, setClanData] = useState(null); 
   const [openMembers, membersHandlers] = useDisclosure(false);
   const [openReport, reportHandlers] = useDisclosure(false);
   const [sent, setSent] = useState(false);
@@ -111,12 +110,6 @@ export default function GroupDetailClanes() {
   const [globalRank, setGlobalRank] = useState(null);
   const [localRank, setLocalRank] = useState(null);
 
-
-
-
-
-
-
   useEffect(() => {
     const fetchClan = async () => {
       const rawTag = group?.tag;
@@ -131,7 +124,7 @@ export default function GroupDetailClanes() {
       try {
         const response = await fetch(`${API_URL}/api/clash?tag=${tag}&type=full`);
         const result = await response.json();
-        setClan(result.info); // Assuming result.info contains the detailed clan data
+        setClan(result.info);
         setClanData(result);
         setGlobalRank(result.globalRank ?? null);
         setLocalRank(result.localRank ?? null);
@@ -148,12 +141,10 @@ export default function GroupDetailClanes() {
   const formatLastSeen = (isoDateString) => {
     if (!isoDateString) return 'N/A';
     try {
-      // The given format is 'YYYYMMDDTHHMMSS.000Z'
-      // Convert to a more standard ISO format for Date object
       const year = isoDateString.substring(0, 4);
       const month = isoDateString.substring(4, 6);
       const day = isoDateString.substring(6, 8);
-      const time = isoDateString.substring(9, 17); // HHMMSS
+      const time = isoDateString.substring(9, 17); 
 
       const formattedDateString = `${year}-${month}-${day}T${time.substring(0,2)}:${time.substring(2,4)}:${time.substring(4,6)}.000Z`;
 
@@ -162,15 +153,12 @@ export default function GroupDetailClanes() {
         console.error("Invalid date string:", isoDateString);
         return 'Fecha Inválida';
       }
-      return date.toLocaleString(); // Adjust to your desired locale and format
+      return date.toLocaleString(); 
     } catch (error) {
       console.error("Error formatting date:", error);
       return 'Error de Fecha';
     }
   };
-
-
-  const baseLang = i18n.language.split('-')[0];
 
   /* -------------- render -------------- */
   if (loading) return <Center><Text>{t('Cargando grupo...')}</Text></Center>;
@@ -200,7 +188,6 @@ export default function GroupDetailClanes() {
             justifyContent: 'center',
           }}
         >
-          {/* Contenedor para elevar el contenido sobre la imagen de fondo */}
           <Box
             p="2rem"
             style={{
@@ -208,7 +195,6 @@ export default function GroupDetailClanes() {
               zIndex: 1,
             }}
           >
-            {/* Aquí va todo tu contenido: título, descripción, badges, etc. */}
           <Text
             fw={700}
             fz="2rem"
@@ -264,15 +250,18 @@ export default function GroupDetailClanes() {
 
               {/* 2. Insignia: Este segundo elemento se alineará al extremo derecho */}
               {clan?.members && (
-                <Badge color="blue" variant="light" style={{ height: rem(28), fontSize: rem(12), borderRadius: rem(10) }}>
+                <Badge 
+                  style={{ 
+                    backgroundColor: '#EAF4FF',  
+                    color: '#002C58',          
+                    fontSize: '0.875rem',
+                  }}>
                   {clan.members}/50 {t('Miembros')}
                 </Badge>
               )}
             </Group>
 
-              {/* Sección Inferior: Estadísticas de Trofeos (sin cambios) */}
               <Group justify="space-around" wrap="nowrap" mt="xs">
-                {/* Columna: Trofeos Requeridos */}
                 <Stack gap={rem(4)} align="center">
                   <Text fz="xl" fw={800}>
                     {clan?.requiredTrophies ?? '—'}
@@ -289,7 +278,6 @@ export default function GroupDetailClanes() {
                   </Group>
                 </Stack>
 
-                {/* Columna: Trofeos de Guerra */}
                 <Stack gap={rem(4)} align="center">
                   <Text fz="xl" fw={800}>
                     {clan?.clanWarTrophies ?? '—'}
@@ -308,11 +296,9 @@ export default function GroupDetailClanes() {
               </Group>
             </Stack>
 
-            {/* Estadísticas Clave (as badges) */}
             {clan && (
               <Box mt="md" w="100%">
                 <Grid gutter="xs">
-                  {/* Puntaje del Clan */}
                   <Grid.Col span={{ base: 6, xs: 3 }}>
                     <Group gap="xs" align="center">
                       <Text fz="xs" c="gray.7">
@@ -320,8 +306,8 @@ export default function GroupDetailClanes() {
                       </Text>
                         <Badge
                           style={{
-                          backgroundColor: '#EAF4FF',  // azul muy claro
-                          color: '#002C58',            // texto
+                          backgroundColor: '#EAF4FF', 
+                          color: '#002C58',           
                           fontWeight: 700
                         }}
                         >
@@ -516,10 +502,9 @@ export default function GroupDetailClanes() {
               rel="noopener noreferrer"
               fullWidth
               size="md"
-              radius="xl"
               fw={700}
               fz="sm"
-              style={{ textTransform: 'uppercase', letterSpacing: 1, color: '#FFFFFF', backgroundColor: '#0E4C84' }}
+              style={{ textTransform: 'uppercase', letterSpacing: 1, color: '#FFFFFF', backgroundColor: '#0E4C84', borderRadius: rem(10), }}
               disabled={!group.link}
             >
               {group.link

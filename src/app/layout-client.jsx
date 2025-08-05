@@ -2,6 +2,8 @@
 
 import { MantineProvider } from '@mantine/core';
 import { HelmetProvider } from 'react-helmet-async';
+import FloatingButton from '@/components/FloatingButton'
+
 
 
 export default function RootLayoutClient({ children }) {
@@ -16,6 +18,7 @@ export default function RootLayoutClient({ children }) {
         }}
       >
         {children}
+        <FloatingButton />
       </MantineProvider>
     </HelmetProvider>
   );

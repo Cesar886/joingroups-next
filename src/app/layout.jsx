@@ -5,7 +5,8 @@ import '@/app/styles/globals.css';
 import RootLayoutClient from './layout-client';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import ClientOnly from '@/components/ClientOnly'; // asegúrate de usar la ruta correcta
+import ClientOnly from '@/components/ClientOnly';
+
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
