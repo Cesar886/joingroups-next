@@ -8,7 +8,7 @@ export default function FloatingButton() {
         bottom: '20px',
         left:   '20px',
         zIndex: 1000,
-        padding: 'auto',
+        padding: '0.25rem .45rem',
         borderRadius: '0.375rem',
         background: '#228be6',
         color: '#0E4C84',
@@ -17,7 +17,7 @@ export default function FloatingButton() {
         cursor: 'pointer',
       }}
     >
-      ← Back
+      ← Volver	
     </button>
   )
 }
