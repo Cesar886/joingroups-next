@@ -1,5 +1,12 @@
+.clanPageBg {
+  min-height: 100vh;
+  width: 100vw;
+  background: #0A1828;
+  position: relative;
+  overflow-x: hidden;
+}
 .card {
-  background: #fefefe;
+  background: #AACBEB;
   border-radius: 1.5rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
@@ -8,6 +15,7 @@
   margin-right: auto; /* Center the card */
   padding-left: 1.5rem; /* Reduced horizontal padding on PC */
   padding-right: 1.5rem; /* Reduced horizontal padding on PC */
+  gap: 0px;
 }
 
 .statItem {
@@ -38,9 +46,9 @@
 }
 
 .statBadge {
-  background-color: #eff6ff;
+  /* background-color: #eff6ff; */
   border-radius: 999px;
-  padding: 0px 12px;
+  padding: 5px 10px;
   display: flex; /* Keep flex to center content, but default direction is row */
   /* flex-direction: column; <--- REMOVE THIS */
   align-items: center; /* Vertically align items in the badge (icon and text) */
@@ -87,6 +95,52 @@
   .card .mantine-Group-root[justify="space-around"] {
     flex-direction: column; /* Stack trophy stats on very small screens */
     align-items: center;
-    gap: 1rem;
+    gap: 0rem;
+  }
+}
+
+.goldEffect {
+  position: relative;
+  display: inline-block;
+  font-weight: bold;
+  font-size: inherit;
+  color: #FFD700; /* dorado sólido */
+  overflow: hidden;
+}
+
+
+.goldEffect::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Gradiente más suave y horizontal */
+  background: linear-gradient(
+    100deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.3) 30%,
+    rgba(255,255,255,1) 55%,
+    rgba(255,255,255,0.3) 80%,
+    rgba(255,255,255,0) 100%
+  );
+  background-size: 350% 100%;
+  background-repeat: no-repeat;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: shineText 5s cubic-bezier(0.4,0,0.2,1) infinite;
+  pointer-events: none;
+  filter: blur(0.2px);
+}
+
+@keyframes shineText {
+  0% {
+    background-position: 120% 0%;
+  }
+  100% {
+    background-position: -120% 0%;
   }
 }
