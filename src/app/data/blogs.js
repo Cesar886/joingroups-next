@@ -172,7 +172,7 @@ export const blogs = [
         <h2>Top clanes destacados de julio 2025</h2>
         <p>Estos son algunos de los clanes que han destacado este mes:</p>
         <ol>
-        <li><strong>BLACK NIGHTMARE</strong> - 50/50 miembros, muy activos en guerras</li>
+        <li><strong>BLACK NIGHTMARE</strong> - 48/50 miembros, muy activos en guerras</li>
         <li><strong>LEGIÓN MX</strong> - Enfocados en jugadores mexicanos con alto nivel</li>
         <li><strong>CLAN ÉPICO</strong> - Reputación por ayudar a novatos y tener ambiente amigable</li>
         <li><strong>ROYAL GODS</strong> - Participación constante en torneos</li>
