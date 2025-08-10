@@ -1,0 +1,61 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "JoinGroups Communities API", "version": "1.0.0" },
+  "servers": [{ "url": "https://www.joingroups.pro" }],
+  "paths": {
+    "/api/communities": {
+      "get": {
+        "operationId": "listCommunities",
+        "summary": "Lista comunidades por tipo",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tipo",
+            "required": true,
+            "schema": { "type": "string", "enum": ["telegram","whatsapp","discord","facebook","clash-royale"] },
+            "description": "Tipo de comunidad"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": { "type": "string", "enum": ["nuevos","top","recientes"] },
+            "description": "Orden de resultados"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": { "type": "integer", "default": 6, "minimum": 1, "maximum": 50 },
+            "description": "Máximo de resultados"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["name","url","category"],
+                    "properties": {
+                      "name": { "type": "string" },
+                      "url": { "type": "string", "format": "uri" },
+                      "category": { "type": "string" },
+                      "language": { "type": "string" },
+                      "members": { "type": "integer" },
+                      "description": { "type": "string" },
+                      "createdAt": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
