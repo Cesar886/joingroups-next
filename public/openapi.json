@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": { "title": "JoinGroups Communities API", "version": "1.0.0" },
-  "servers": [{ "url": "https://www.joingroups.pro" }],
+  "servers": [{ "url": "https://joingroups.pro" }],
   "paths": {
     "/api/communities": {
       "get": {
@@ -51,6 +51,42 @@
                     }
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/clash": {
+      "get": {
+        "operationId": "getClashClan",
+        "summary": "Obtiene información de un clan de Clash Royale",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tag",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Tag del clan (sin #, ejemplo: 2PPVJQ)"
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["info", "members", "war", "warlog", "riverrace", "riverracelog", "full"],
+              "default": "info"
+            },
+            "description": "Tipo de información a consultar"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object" }
               }
             }
           }
