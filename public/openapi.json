@@ -57,28 +57,17 @@
         }
       }
     },
-    "/api/clash": {
+    "/api/clash/clanes": {
       "get": {
-        "operationId": "getClashClan",
-        "summary": "Obtiene información de un clan de Clash Royale",
+        "operationId": "listClashRoyaleClans",
+        "summary": "Lista todos los clanes de Clash Royale almacenados",
         "parameters": [
           {
             "in": "query",
-            "name": "tag",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Tag del clan (sin #, ejemplo: 2PPVJQ)"
-          },
-          {
-            "in": "query",
-            "name": "type",
+            "name": "limit",
             "required": false,
-            "schema": {
-              "type": "string",
-              "enum": ["info", "members", "war", "warlog", "riverrace", "riverracelog", "full"],
-              "default": "info"
-            },
-            "description": "Tipo de información a consultar"
+            "schema": { "type": "integer", "default": 20, "minimum": 1, "maximum": 50 },
+            "description": "Máximo de resultados a devolver"
           }
         ],
         "responses": {
@@ -86,7 +75,33 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": { "type": "object" }
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "count": { "type": "integer" },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string" },
+                          "acceptTerms": { "type": "boolean" },
+                          "link": { "type": "string", "format": "uri" },
+                          "city": { "type": "string" },
+                          "destacado": { "type": "boolean" },
+                          "slug": { "type": "string" },
+                          "categories": { "type": "string" },
+                          "name": { "type": "string" },
+                          "tag": { "type": "string" },
+                          "tipo": { "type": "string" },
+                          "description": { "type": "object" },
+                          "createdAt": { "type": ["string", "null"] }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
