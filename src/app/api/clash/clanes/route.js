@@ -19,7 +19,7 @@ export async function GET(request) {
       delete data.emailRepeat;
       delete data.visitas;
       let createdAt = null;
-      if (data.createdAt instanceof Date) {
+      if (data.createdAt instanceof Date) { 
         createdAt = data.createdAt.toISOString();
       } else if (data.createdAt && typeof data.createdAt.toDate === 'function') {
         createdAt = data.createdAt.toDate().toISOString();
@@ -28,6 +28,18 @@ export async function GET(request) {
       }
       return { id: d.id, ...data, createdAt };
     });
+    if (!items || items.length === 0) {
+      return NextResponse.json({
+        ok: true,
+        count: 1,
+        items: [{
+          name: "BLACKNIGTHMARE",
+          link: "https://link.clashroyale.com/invite/clan/es?tag=GJ9PJRV9&token=ynhmx83g&platform=android",
+          country: "México",
+          description: "Este es un clan competitivo en guerra de clanes"
+        }]
+      });
+    }
     return new NextResponse(
       JSON.stringify({ ok: true, count: items.length, items }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
