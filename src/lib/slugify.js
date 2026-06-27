@@ -1,6 +1,7 @@
 // utils/slugify.js
 export default function slugify(text) {
-  return text
+  if (!text) return '';
+  return String(text)
     .toLowerCase()
     .normalize('NFD')                    // quita tildes
     .replace(/[\u0300-\u036f]/g, '')    // quita acentos

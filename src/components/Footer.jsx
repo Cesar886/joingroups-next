@@ -1,17 +1,6 @@
 "use client";
 
-import {
-  IconBrandInstagram,
-} from '@tabler/icons-react';
-import {
-  ActionIcon,
-  Container,
-  Group,
-  Text,
-  Stack,
-  Flex,
-  Image,
-} from '@mantine/core';
+import { IconBrandInstagram } from '@tabler/icons-react';
 import classes from '@/app/styles/Footer.module.css';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
@@ -20,15 +9,12 @@ import { useTranslation } from 'react-i18next';
 
 export default function Footer() {
   const { t, i18n } = useTranslation();
-  
+
   const data = [
     {
       title: t('Sobre Nosotros'),
       links: [
-        {
-          label: t('Contáctanos por WhatsApp'),
-          link: 'https://wa.me/528261308623?text=Hola,%20quiero%20más%20información',
-        },
+        { label: t('Contáctanos por WhatsApp'), link: 'https://wa.me/528261308623?text=Hola,%20quiero%20más%20información' },
         { label: t('Términos y condiciones'), link: '/terminos' },
         { label: t('Política de privacidad'), link: '/privacidad' },
         { label: t('Acerca de JoinGroup'), link: '/acerca' },
@@ -42,75 +28,85 @@ export default function Footer() {
       ],
     },
   ];
-  
+
   return (
     <footer className={classes.footer}>
-      <Container fluid px="md" className={classes.inner}>
-        <Flex justify="space-between" direction={{ base: 'column', sm: 'row' }} gap="xl">
-          <Stack spacing="xs" className={classes.logoWrapper}>
-            <Image src="/JoinGroups.png" alt="Logo de JoinGroup" className={classes.logo}/>
-            <Text size="sm" c="dimmed" className={classes.description} ta={{ base: 'center', sm: 'left' }}>
-            <Link
-              href={i18n.language === 'es' ? 'https://joingroups.pro' : 'https://joingroups.pro'}
-              style={{ color: 'inherit', textDecoration: 'none', fontWeight: 400 }}
-            >
-              JoinGroups
-            </Link>
-              {t(' es tu herramienta para administrar, automatizar y organizar grupos de Telegram de forma eficiente.')}
-            </Text>
-          </Stack>
+      <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 24px' }}>
 
-          <Flex wrap="wrap" gap="xl" justify={{ base: 'center', sm: 'flex-end' }}>
+        {/* Main Footer Content */}
+        <div className={classes.inner}>
+          {/* Logo + Description */}
+          <div className={`${classes.logoWrapper}`} style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            <img
+              src="/JoinGroups.png"
+              alt="Logo de JoinGroup"
+              className={classes.logo}
+            />
+            <p className={classes.description}>
+              <Link
+                href={i18n.language === 'es' ? 'https://joingroups.pro' : 'https://joingroups.pro'}
+                style={{ color: '#E5E7EB', textDecoration: 'none', fontWeight: 500 }}
+              >
+                JoinGroups
+              </Link>
+              {t(' es tu herramienta para administrar, automatizar y organizar grupos de Telegram de forma eficiente.')}
+            </p>
+          </div>
+
+          {/* Links */}
+          <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             {data.map((group) => (
               <div key={group.title}>
-                <Text className={classes.title}>{group.title}</Text>
-                <Stack spacing={4}>
+                <div className={classes.title}>{group.title}</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                   {group.links.map((link) => {
                     const isExternal = link.link.startsWith('http') || link.link.startsWith('mailto');
                     return isExternal ? (
-                      <Text
+                      <a
                         key={link.label}
-                        className={classes.link}
-                        component="a"
                         href={link.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                      >
-                        {link.label}
-                      </Text>
-                    ) : (
-                      <Text
-                        key={link.label}
                         className={classes.link}
-                        component={Link}
-                        href={link.link}
                       >
                         {link.label}
-                      </Text>
+                      </a>
+                    ) : (
+                      <Link
+                        key={link.label}
+                        href={link.link}
+                        className={classes.link}
+                      >
+                        {link.label}
+                      </Link>
                     );
                   })}
-                </Stack>
+                </div>
               </div>
             ))}
-          </Flex>
-        </Flex>
-      </Container>
+          </div>
+        </div>
 
-      <Container fluid px="md" className={classes.afterFooter} mt="xl">
-        <Flex justify="space-between" align="center" direction={{ base: 'column', sm: 'row' }} gap="sm">
-          <Text c="dimmed" size="sm">
+        {/* After Footer */}
+        <div className={classes.afterFooter}>
+          <span style={{ color: '#6B7280', fontSize: '13px' }}>
             © {new Date().getFullYear()} joingroups.pro. {t('Todos los derechos reservados.')}
-          </Text>
+          </span>
 
-          <Group gap={8} className={classes.social} wrap="nowrap">
-            <a href="https://www.instagram.com/daniel110a/" target="_blank" rel="noopener noreferrer">
-              <ActionIcon size="lg" color="gray" variant="subtle">
-                <IconBrandInstagram size={18} stroke={1.5} />
-              </ActionIcon>
+          <div className={classes.social}>
+            <a
+              href="https://www.instagram.com/daniel110a/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.socialIcon}
+              aria-label="Instagram"
+            >
+              <IconBrandInstagram size={16} stroke={1.5} />
             </a>
-          </Group>
-        </Flex>
-      </Container>
+          </div>
+        </div>
+
+      </div>
     </footer>
   );
 }
