@@ -1,136 +1,526 @@
+/* ──────────────────────────────────────────
+   CLANES — Premium Minimalist
+   ────────────────────────────────────────── */
 
-
-/* NUEVO CSS MEJORADO */
-
-.hero-banner {
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('/banner-clanes.jpg') center/cover no-repeat;
-  color: white;
-  padding: 60px 20px;
-  text-align: center;
-  border-radius: 16px;
-  margin-bottom: 32px;
+.pageBg {
+  min-height: 100vh;
+  background: #FAFAFA;
+  padding: 2.5rem 1rem 6rem;
 }
 
-.hero-banner h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 12px;
+.wrapper {
+  max-width: 720px;
+  margin: 0 auto;
 }
 
-.hero-banner p {
-  font-size: 1.1rem;
-  color: #f1f1f1;
+.hero {
+  margin-bottom: 2rem;
 }
 
-.clan-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  background: #fff;
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid #e0e0e0;
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #BBBBBB;
+  margin-bottom: 0.75rem;
 }
 
-.clan-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+.eyebrowDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4F46E5;
 }
 
-.clan-badge {
-  font-size: 0.75rem;
-  padding: 2px 6px;
-  border-radius: 6px;
-  font-weight: 600;
-  background-color: #edf2ff;
-  color: #3b5bdb;
-  margin-right: 6px;
+.pageTitle {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1.05;
+  color: #0F0F14;
+  margin: 0 0 0.4rem;
 }
 
-.collection-carousel {
+.pageSub {
+  font-size: 13.5px;
+  color: #6B7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.gameRow {
   display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 12px;
-  margin-bottom: 24px;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
 }
 
-.collection-carousel > div {
-  flex: 0 0 auto;
-  scroll-snap-align: center;
-  min-width: 180px;
-  background-color: white;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.rating-stars {
-  color: gold;
-  font-size: 0.95rem;
-  margin-top: 4px;
-}
-
-.tooltip-preview {
-  position: absolute;
-  top: -100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 8px 12px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  white-space: nowrap;
-  display: none;
-  z-index: 100;
-}
-
-.card-container:hover .tooltip-preview {
-  display: block;
-}
-
-.language-switcher {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  z-index: 9999;
-}
-
-.sticky-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #1971c2;
-  color: white;
-  border: none;
-  border-radius: 100px;
-  padding: 12px 20px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+.gameBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 99px;
+  border: 1.5px solid #EBEBEB;
+  background: #F7F7F7;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #6B7280;
   cursor: pointer;
-  z-index: 1000;
-  transition: background 0.3s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  font-family: inherit;
 }
 
-.sticky-button:hover {
-  background: #1864ab;
+.gameBtn:hover {
+  border-color: #D4D4D4;
+  background: #F0F0F0;
+  color: #374151;
+  transform: translateY(-1px);
 }
 
-.floating-publish-button {
-  font-weight: bold;
+.gameBtnActive {
+  background: #0F0F14;
+  border-color: #0F0F14;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(15,15,20,0.18);
+}
+
+.gameIcon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.controlsBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.25rem;
+}
+
+.searchBox {
+  flex: 1;
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #C4C4C4;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 14px 10px 36px;
+  border-radius: 12px;
+  border: 1.5px solid #EBEBEB;
+  background: #FFFFFF;
+  color: #111;
+  font-size: 13.5px;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.searchInput:focus {
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+}
+
+.searchInput::placeholder {
+  color: #C4C4C4;
+}
+
+.promoBanner {
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.04),
+    0 2px 12px rgba(0,0,0,0.05);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.promoBannerIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: #EEF2FF;
+  color: #4F46E5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.promoBannerBody strong {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0F0F14;
+  margin-bottom: 3px;
+  letter-spacing: 0;
+}
+
+.promoBannerBody p {
+  font-size: 12.5px;
+  color: #6B7280;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.promoAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: 12px;
+  background: #0F0F14;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.promoAction:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.clanCard {
+  background: #FFFFFF;
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.04),
+    0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  overflow: hidden;
+}
+
+.clanCard:hover {
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.07),
+    0 4px 16px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.clanCardTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px 10px;
+}
+
+.clanAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.avatarRoyale {
+  background: #FEF2F2;
+}
+
+.avatarCoc {
+  background: #FEF3C7;
+}
+
+.clanAvatar img {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.clanInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.clanName {
   font-size: 14px;
-  padding: 6px 12px;
+  font-weight: 800;
+  color: #0F0F14;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Posiciones posibles */
-.top-left {
-  top: 60px;
-  left: 20px;
+.clanMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+  flex-wrap: wrap;
 }
 
-.bottom-right {
-  bottom: 20px;
-  right: 20px;
+.highlightBadge,
+.gameLabel {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 99px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  padding: 2px 7px;
+}
+
+.highlightBadge {
+  background: #FEF9C3;
+  border: 1px solid #FDE047;
+  color: #854D0E;
+}
+
+.gameLabel {
+  background: #EEF2FF;
+  border: 1px solid #C7D2FE;
+  color: #4338CA;
+}
+
+.metaText {
+  font-size: 11px;
+  color: #9CA3AF;
+  font-weight: 600;
+}
+
+.chevron {
+  color: #D4D4D4;
+  flex-shrink: 0;
+}
+
+.clanDesc {
+  padding: 0 16px 12px;
+  font-size: 12.5px;
+  color: #6B7280;
+  line-height: 1.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.clanStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid #F5F5F5;
+  background: #FAFAFA;
+}
+
+.statCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 9px 6px;
+  border-right: 1px solid #F0F0F0;
+  gap: 2px;
+  min-width: 0;
+}
+
+.statCell:last-child {
+  border-right: none;
+}
+
+.statVal {
+  max-width: 100%;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0F0F14;
+  letter-spacing: 0;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statLbl {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #C4C4C4;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #C4C4C4;
+  font-size: 13px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.pageBtn {
+  padding: 7px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #EBEBEB;
+  background: #FFFFFF;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.pageBtn:hover:not(:disabled) {
+  border-color: #D4D4D4;
+  background: #F5F5F5;
+}
+
+.pageBtn:disabled {
+  color: #D4D4D4;
+  border-color: #F0F0F0;
+  background: #FAFAFA;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 12.5px;
+  color: #9CA3AF;
+  font-weight: 600;
+}
+
+.footerCta {
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.04),
+    0 2px 12px rgba(0,0,0,0.05);
+}
+
+.footerCtaTitle {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0F0F14;
+  letter-spacing: 0;
+  margin: 0 0 6px;
+}
+
+.footerCtaText {
+  font-size: 12.5px;
+  color: #6B7280;
+  line-height: 1.65;
+  margin: 0 0 1rem;
+}
+
+.footerCtaText a {
+  color: #4F46E5;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.footerCtaText a:hover {
+  text-decoration: underline;
+}
+
+.publishBtn,
+.floatingBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 12px;
+  background: #0F0F14;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.publishBtn {
+  padding: 10px 18px;
+  margin-top: 0.5rem;
+}
+
+.floatingBtn {
+  position: fixed;
+  z-index: 1000;
+  padding: 11px 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+
+.publishBtn:hover,
+.floatingBtn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 560px) {
+  .pageBg {
+    padding: 1.75rem 1rem 5rem;
+  }
+
+  .pageTitle {
+    font-size: 26px;
+  }
+
+  .promoBanner {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .promoAction {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+
+  .clanCard,
+  .promoBanner,
+  .footerCta {
+    border-radius: 14px;
+  }
+
+  .floatingBtn {
+    right: 16px !important;
+    left: auto !important;
+    bottom: 18px !important;
+    top: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gameBtn,
+  .promoAction,
+  .clanCard,
+  .pageBtn,
+  .publishBtn,
+  .floatingBtn {
+    transition: none;
+  }
 }

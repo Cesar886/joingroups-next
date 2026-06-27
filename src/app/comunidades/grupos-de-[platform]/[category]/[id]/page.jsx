@@ -76,37 +76,104 @@ const MOBILE_GROUP_AD = {
   params: {},
 };
 
+const NARROW_GROUP_AD = {
+  key: 'bba2fc9cd763aa2397062a347d6d3a5e',
+  format: 'iframe',
+  height: 600,
+  width: 160,
+  params: {},
+};
+
+const MIN_HORIZONTAL_AD_SCALE = 0.8;
+
 const getAdScriptSrc = (key) => `https://landslidegraphsystems.com/${key}/invoke.js`;
 
-function GroupAdSlot() {
+const getBestAdConfig = (availableWidth, isMobile) => {
+  if (!isMobile) return DESKTOP_GROUP_AD;
+  return availableWidth < MOBILE_GROUP_AD.width * MIN_HORIZONTAL_AD_SCALE
+    ? NARROW_GROUP_AD
+    : MOBILE_GROUP_AD;
+};
+
+const buildAdSrcDoc = (config) => `<!doctype html>
+<html>
+  <head>
+    <base target="_blank" />
+    <style>
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <script>window.atOptions = ${JSON.stringify(config)};<\/script>
+    <script src="${getAdScriptSrc(config.key)}"><\/script>
+  </body>
+</html>`;
+
+function GroupAdSlot({ slotId }) {
   const mountRef = useRef(null);
+  const [adState, setAdState] = useState(null);
 
   useEffect(() => {
-    const mount = mountRef.current;
-    if (!mount || typeof window === 'undefined') return undefined;
+    const mobileQuery = window.matchMedia('(max-width: 720px)');
 
-    const adConfig = window.matchMedia('(max-width: 720px)').matches
-      ? MOBILE_GROUP_AD
-      : DESKTOP_GROUP_AD;
+    const syncAdSize = () => {
+      const isMobile = mobileQuery.matches;
+      const fallbackWidth = isMobile ? MOBILE_GROUP_AD.width : DESKTOP_GROUP_AD.width;
+      const availableWidth = mountRef.current?.clientWidth || fallbackWidth;
+      const config = getBestAdConfig(availableWidth, isMobile);
+      const scale = Math.min(1, availableWidth / config.width);
 
-    mount.innerHTML = '';
-    window.atOptions = { ...adConfig };
+      setAdState({ config, scale });
+    };
 
-    const script = document.createElement('script');
-    script.src = getAdScriptSrc(adConfig.key);
-    script.async = true;
-    script.dataset.groupAd = adConfig.key;
-    mount.appendChild(script);
+    syncAdSize();
+    mobileQuery.addEventListener('change', syncAdSize);
+    window.addEventListener('resize', syncAdSize);
+
+    let resizeObserver;
+    if ('ResizeObserver' in window && mountRef.current) {
+      resizeObserver = new ResizeObserver(syncAdSize);
+      resizeObserver.observe(mountRef.current);
+    }
 
     return () => {
-      script.remove();
-      mount.innerHTML = '';
+      mobileQuery.removeEventListener('change', syncAdSize);
+      window.removeEventListener('resize', syncAdSize);
+      resizeObserver?.disconnect();
     };
   }, []);
 
+  const config = adState?.config;
+  const scale = adState?.scale || 1;
+  const frameHeight = config ? Math.ceil(config.height * scale) : DESKTOP_GROUP_AD.height;
+
   return (
-    <div className={classes.adFrame}>
-      <div ref={mountRef} className={classes.adMount} />
+    <div className={classes.adFrame} style={{ '--ad-frame-height': `${frameHeight}px` }}>
+      <div ref={mountRef} className={classes.adMount}>
+        {config && (
+          <iframe
+            className={classes.adIframe}
+            title={`Publicidad ${slotId}`}
+            srcDoc={buildAdSrcDoc(config)}
+            scrolling="no"
+            style={{
+              width: config.width,
+              height: config.height,
+              transform: `scale(${scale})`,
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -273,25 +340,13 @@ export default function GroupDetail() {
         <section className={classes.card}>
           <div className={classes.sectionLabel}>{t('Descripción:')}</div>
           <p className={classes.desc}>{description}</p>
-
-          <div className={classes.sep} />
-
-          <div className={classes.categoryList}>
-            {categoryList.length > 0 ? (
-              categoryList.map((cat) => (
-                <span className={classes.catBadge} key={cat}>{cat}</span>
-              ))
-            ) : (
-              <span className={classes.catBadge}>{t('Sin categoría')}</span>
-            )}
-          </div>
         </section>
 
         <section className={classes.adSection} aria-label={t('Publicidad')}>
           <div className={classes.adLabel}>{t('Publicidad')}</div>
           <div className={classes.adStack}>
-            <GroupAdSlot />
-            <GroupAdSlot />
+            <GroupAdSlot slotId="1" />
+            <GroupAdSlot slotId="2" />
           </div>
         </section>
 
