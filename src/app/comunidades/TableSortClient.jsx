@@ -1,41 +1,12 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
+
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import {
-  IconChevronDown,
-  IconChevronUp,
-  IconSearch,
-  IconSelector,
-} from '@tabler/icons-react';
-import {
-  Box,
-  ActionIcon,
-  Center,
-  Group,
-  Paper,
-  ScrollArea,
-  Badge,
-  Table,
-  Text,
-  TextInput,
-  Button,
-  UnstyledButton,
-  Menu,
-  Title,
-  Container,
-  rem,
-} from '@mantine/core';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '@/firebase/firebase';
-import { useMediaQuery } from '@mantine/hooks';
+import { IconChevronRight, IconEye, IconPlus, IconSearch, IconUsers } from '@tabler/icons-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import slugify from '@/lib/slugify';
 import styles from '@/app/styles/TableSort.module.css';
-
-import { useTranslation } from 'react-i18next';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-
-
-
 
 const countryMap = {
   mx: '🇲🇽',
@@ -111,684 +82,435 @@ const countries = [
   { value: 'au', label: 'Australia', emoji: '🇦🇺', lang: 'en' },
 ];
 
+const platformConfig = {
+  telegram: {
+    label: 'Telegram',
+    icon: '/telegramicons.png',
+    iconClass: styles.telegramIcon,
+    avatarClass: styles.telegramAvatar,
+    chipClass: styles.telegramChip,
+  },
+  whatsapp: {
+    label: 'WhatsApp',
+    icon: '/wapp.webp',
+    iconClass: styles.whatsappIcon,
+    avatarClass: styles.whatsappAvatar,
+    chipClass: styles.whatsappChip,
+  },
+};
 
-function Th({ children, reversed, sorted, onSort }) {
-  const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
-  
-  return (
-    <Table.Th>
-      <UnstyledButton onClick={onSort} style={{ width: '100%' }}>
-        <Group justify="space-between">
-          <Text fw={600} size="xl" lh={1.2}>{children}</Text>
-          <Center>
-            <Icon size={16} stroke={1.5} />
-          </Center>
-        </Group>
-      </UnstyledButton>
-    </Table.Th>
-  );
+function getPlatform(row) {
+  return row?.tipo?.trim?.().toLowerCase() === 'telegram' ? 'telegram' : 'whatsapp';
 }
 
+function getCategories(row) {
+  if (Array.isArray(row?.categories)) return row.categories.filter(Boolean);
+  if (typeof row?.categories === 'string' && row.categories.trim()) return [row.categories.trim()];
+  return [];
+}
 
-export default function TableSortClient({ serverData }) {
-  const [data, setData] = useState(serverData || []);
-  const [sortedData, setSortedData] = useState(serverData || []);
+function getDescription(row, i18n) {
+  const baseLang = i18n.language?.split('-')[0] || 'es';
+  if (typeof row?.description === 'object' && row.description !== null) {
+    return row.description[baseLang] || row.description[i18n.language] || row.description.es || '';
+  }
+  return row?.description || '';
+}
+
+function getCreatedTime(row) {
+  const createdAt = row?.createdAt;
+  if (!createdAt) return 0;
+  if (typeof createdAt === 'string') return new Date(createdAt).getTime() || 0;
+  if (createdAt?.seconds) return createdAt.seconds * 1000;
+  if (createdAt?.toDate) return createdAt.toDate().getTime();
+  return 0;
+}
+
+function formatCount(value) {
+  const number = Number(value || 0);
+  if (number >= 1000) return `${(number / 1000).toFixed(number >= 10000 ? 0 : 1)}k`;
+  return String(number);
+}
+
+export default function TableSortClient({ serverData = [] }) {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
-  const [hostname, setHostname] = useState('');
-  const searchParams = useSearchParams(); 
-  const [search, setSearch] = useState('');
-  // const [sortBy, setSortBy] = useState(null);
-  // const [reverseSortDirection, setReverseSortDirection] = useState(false);
-  const isMobile = useMediaQuery('(max-width: 768px)');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [collections, setCollections] = useState([]);
-  const [selectedCollections, setSelectedCollections] = useState([]);  // ✅ único estado
-
-
+  const searchParams = useSearchParams();
   const orden = searchParams.get('orden');
+  const catsParam = searchParams.get('cats') || '';
+
+  const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hostname, setHostname] = useState('');
+
+  const selectedCategories = useMemo(
+    () => catsParam.split(',').map((cat) => cat.trim()).filter(Boolean),
+    [catsParam]
+  );
+
+  const allGroups = useMemo(() => (Array.isArray(serverData) ? serverData : []), [serverData]);
+
+  const categories = useMemo(() => {
+    const counts = new Map();
+    allGroups.forEach((group) => {
+      getCategories(group).forEach((category) => {
+        counts.set(category, (counts.get(category) || 0) + 1);
+      });
+    });
+
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([name, count]) => ({ name, count }));
+  }, [allGroups]);
+
+  const stats = useMemo(() => {
+    const telegram = allGroups.filter((group) => getPlatform(group) === 'telegram').length;
+    const whatsapp = allGroups.filter((group) => getPlatform(group) === 'whatsapp').length;
+
+    return [
+      { label: 'Comunidades', value: allGroups.length },
+      { label: 'Telegram', value: telegram },
+      { label: 'WhatsApp', value: whatsapp },
+    ];
+  }, [allGroups]);
+
+  const filteredGroups = useMemo(() => {
+    const query = search.toLowerCase().trim();
+    const selected = selectedCategories.map((category) => category.toLowerCase());
+
+    let groups = [...allGroups];
+
+    if (orden === 'top' || orden === 'vistos') {
+      groups.sort((a, b) => (b.visitas || 0) - (a.visitas || 0));
+    } else if (orden === 'nuevos') {
+      groups.sort((a, b) => getCreatedTime(b) - getCreatedTime(a));
+    }
+
+    return groups.filter((group) => {
+      const groupCategories = getCategories(group);
+      const description = getDescription(group, i18n);
+      const searchable = [
+        group.name,
+        group.content18,
+        group.tipo,
+        description,
+        ...groupCategories,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      const matchesSearch = !query || searchable.includes(query);
+      const matchesCategory =
+        selected.length === 0 ||
+        groupCategories.some((category) => selected.includes(category.toLowerCase()));
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [allGroups, i18n, orden, search, selectedCategories]);
+
   useEffect(() => {
-    const host = window.location.hostname;
-    setHostname(host);
+    setHostname(window.location.hostname);
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [catsParam, orden, search]);
+
+  const groupsPerPage = 12;
+  const totalPages = Math.max(1, Math.ceil(filteredGroups.length / groupsPerPage));
+  const indexOfLastGroup = currentPage * groupsPerPage;
+  const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
+  const currentGroups = filteredGroups.slice(indexOfFirstGroup, indexOfLastGroup);
+
   const subdomain = hostname.includes('.') && hostname.split('.')[0] !== 'www'
     ? hostname.split('.')[0]
     : 'mx';
 
-  
-  const [buttonPosition, setButtonPosition] = useState('top-left');
-  const positionRef = useRef('top-left');
+  const activeCountry = countries.find((country) => country.value === subdomain) || countries[0];
 
-  const toggleCollection = (collection) => {
-    setSelectedCollections((prev) =>
-      prev.includes(collection) ? [] : [collection]
-    );
+  const updateQuery = (callback) => {
+    const params = new URLSearchParams(searchParams.toString());
+    callback(params);
+    const query = params.toString();
+    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
   };
 
-
-  useEffect(() => {
-    setSortedData(
-      sortData(data, { search, collectionFilter: selectedCollections })
-    );
-    setCurrentPage(1);               // regresa a página 1 si cambian filtros
-  }, [data, search, selectedCollections]);
-
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    if (selectedCollections.length) {
-      params.set('cats', selectedCollections.join(','));
-    } else {
-      params.delete('cats');
-    }
-     // eslint‑disable‑next‑line react‑hooks/exhaustive‑deps
-  }, [selectedCollections]);   // ✅ sin ‘location’ y sin duplicar el hook
-
-
-
-  function filterData(data, search, collectionFilter = []) {
-    const query = search.toLowerCase().trim();
-
-    return data.filter((item) => {
-      const matchesSearch =
-        item.name?.toLowerCase().includes(query) ||
-        item.content18?.toLowerCase().includes(query) ||
-        item.categories?.some(cat => cat.toLowerCase().includes(query));
-
-
-      const matchesCollection = collectionFilter.length
-        ? item.categories?.some((cat) =>
-            collectionFilter.some((filtro) =>
-              cat.toLowerCase().includes(filtro.toLowerCase())
-            )
-          )
-        : true;
-
-      return matchesSearch && matchesCollection;
+  const setSort = (value) => {
+    updateQuery((params) => {
+      if (value) params.set('orden', value);
+      else params.delete('orden');
     });
-  }
+  };
 
+  const toggleCategory = (category) => {
+    updateQuery((params) => {
+      const current = params.get('cats')?.split(',').filter(Boolean) || [];
+      const exists = current.includes(category);
+      const next = exists ? current.filter((item) => item !== category) : [...current, category];
 
-  function sortData(data, { search, collectionFilter }) {
-    // (solo filtrado; si luego quieres ordenar, agrega la lógica aquí)
-    return filterData(data, search, collectionFilter);
-  }
-
-
-  useEffect(() => {
-    const fetchCollections = async () => {
-      const snapshot = await getDocs(collection(db, 'colections'));
-      const docs = snapshot.docs.map(doc => doc.data());
-      const allCollections = docs.flatMap(doc =>
-        Array.isArray(doc.colections) ? doc.colections : []
-      );
-      setCollections([...new Set(allCollections)]);
-    };
-
-    fetchCollections(); // ✅ ahora sí dentro del useEffect
-  }, []);
-
-
-
-
-  useEffect(() => {
-    // const orden = searchParams.get('orden');
-    const cats = searchParams.get('cats')?.split(',') || [];
-
-    setSelectedCollections(cats);
-  }, [searchParams]);
-
-  useEffect(() => {
-    const orden = searchParams.get('orden');
-
-    let ordenados = [...data];
-
-    if (orden === 'top' || orden === 'vistos') {
-      ordenados.sort((a, b) => b.visitas - a.visitas);
-    } else if (orden === 'nuevos') {
-      ordenados.sort((a, b) => {
-        const dateA = a.createdAt?.toDate?.() ?? new Date(0);
-        const dateB = b.createdAt?.toDate?.() ?? new Date(0);
-        return dateB - dateA;
-      });
-    }
-
-    const final = sortData(ordenados, {
-      search,
-      collectionFilter: selectedCollections,
+      if (next.length) params.set('cats', next.join(','));
+      else params.delete('cats');
     });
-
-    setSortedData(final);
-  }, [data, search, selectedCollections, searchParams]);
-
-
-
-  
-  useEffect(() => {
-    const positions = ['top-left', 'bottom-right', 'top-right', 'bottom-left'];
-
-    const changePosition = () => {
-      let next;
-      do {
-        next = positions[Math.floor(Math.random() * positions.length)];
-      } while (next === positionRef.current); // evitar repetir la misma
-
-      setButtonPosition(next);
-      positionRef.current = next;
-    };
-
-    const interval = setInterval(changePosition, 10000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const floatingStyle = (position) => {
-    const common = {
-      position: 'fixed',
-      zIndex: 1000,
-      animation: 'pulse 1.5s infinite',
-    };
-
-    switch (position) {
-      case 'top-left':
-        return { ...common, top: '60px', left: '20px' };
-      case 'bottom-right':
-        return { ...common, bottom: '20px', right: '20px' };
-      case 'top-right':
-        return { ...common, top: '60px', right: '20px' };
-      case 'bottom-left':
-        return { ...common, bottom: '20px', left: '20px' };
-      default:
-        return common;
-    }
   };
 
-  const handleSearchChange = (event) => {
-    setSearch(event.currentTarget.value);
+  const clearCategories = () => {
+    updateQuery((params) => params.delete('cats'));
   };
 
-  const groupsPerPage = 12;
-  const indexOfLastGroup = currentPage * groupsPerPage;
-  const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
-  const currentGroups = sortedData.slice(indexOfFirstGroup, indexOfLastGroup);
+  const handleCountryChange = (event) => {
+    const country = countries.find((item) => item.value === event.target.value);
+    if (!country) return;
 
-  // 1️⃣  Calcula el idioma base una sola vez:
-  const baseLang = i18n.language?.split('-')[0] || 'es';
-  
-
-  // …
-
-  const rows = currentGroups.map((row, idx) => {
-    const slug = row.slug || slugify(row.name);
-
-    // 2️⃣  Elige la descripción correcta para este row:
-    const descriptionText =
-      typeof row.description === 'object'
-        ? row.description[baseLang]           // intento 1: "en"
-          || row.description[i18n.language]   // intento 2: "en-US"
-          || row.description['es']            // intento 3: español por defecto
-        : row.description;
-        
-    const isTelegram = row.tipo?.trim().toLowerCase() === 'telegram';
-    const iconSrc = isTelegram ? '/telegramicons.png' : '/wapp.webp';
-
-
-    return (
-      <Paper
-        withBorder
-        radius="md"
-        shadow="xs"
-        mb="sm"
-        key={`${row.id}-${slug}-${idx}`}
-        onClick={() => {
-          const categoria = row.categories?.[0] || 'otros';
-          router.push(`/comunidades/grupos-de-${row.tipo}/${slugify(categoria)}/${slug}`);
-        }}
-      >
-        <Table horizontalSpacing="md" withRowBorders={false}>
-          <Table.Tbody>
-            <Table.Tr>
-              <Table.Td colSpan={3}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          {row.city && (
-            <Text size="sm" >
-              {countryMap[row.city] || row.city}
-            </Text>
-          )}
-          <Text 
-            fw={700}
-            style={{
-              marginLeft: '8px',
-            }}
-          >{row.name}</Text>
-          <img
-            src={iconSrc}
-            alt={row.name}
-            style={{
-              width: isTelegram ? '24px' : '39px',
-              height: isTelegram ? '24px' : '39px',
-              borderRadius: '4px',
-              objectFit: 'cover',
-              marginLeft: 'auto',
-              marginRight: isTelegram ? '9px' : '0px',
-              marginTop: isTelegram ? '5px' : '0px',
-            }}
-          />
-        </div>
-      </Table.Td>
-            </Table.Tr>
-            <Table.Tr>
-              <Table.Td width="33%">
-                <Text>{t(row.categories)}</Text>
-                <Text size="xs" c="dimmed">{t('Categoría')}</Text>
-              </Table.Td>
-              <Table.Td width="33%">
-                <Text>
-                  {row.content18 === 'Sí'
-                    ? '18+'
-                    : isMobile
-                      ? t('Público')
-                      : t('Apto para todo público')}
-                </Text>
-                <Text size="xs" c="dimmed">{t('Contenido')}</Text>
-              </Table.Td>
-              <Table.Td width="33%">
-                <Text>{row.visitas}</Text>
-                <Text size="xs" c="dimmed">{t('Vistas')}</Text>
-              </Table.Td>
-            </Table.Tr>
-          </Table.Tbody>
-        </Table>
-      <Box p="sm" style={{ borderTop: '1px solid #eee', paddingTop: 10 }}>
-        <Text
-          lineClamp={1}
-          style={{
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          {descriptionText}
-        </Text>
-      </Box>
-      </Paper>
-    );
-  });
-
-  const collectionsExist = Array.isArray(collections) && collections.length > 0;
+    const currentPath = window.location.pathname + window.location.search;
+    i18n.changeLanguage(country.lang);
+    window.location.href = `https://${country.value}.joingroups.pro${currentPath}`;
+  };
 
   return (
-    <>
-      <Container size="lg" px="md">
-        <ScrollArea>
-          <TextInput
-            placeholder={t('Buscar por nombre, categoría o contenido...')}
-            mb="md"
-            mt="md"
-            leftSection={<IconSearch size={16} stroke={1.5} />}
-            value={search}
-            onChange={handleSearchChange}
+    <div className={styles.pageBg}>
+      <div className={styles.wrapper}>
+        <section className={styles.hero}>
+          <div className={styles.heroTop}>
+            <div className={styles.heroCopy}>
+              <div className={styles.eyebrow}>
+                <span className={styles.eyebrowDot} />
+                Directorio de grupos
+              </div>
+              <h1 className={styles.pageTitle}>Comunidades</h1>
+              <p className={styles.pageSub}>
+                Explora grupos activos de Telegram y WhatsApp por tema, país y popularidad.
+              </p>
+            </div>
+
+            <label className={styles.countryControl}>
+              <span>{activeCountry.emoji}</span>
+              <select value={activeCountry.value} onChange={handleCountryChange} aria-label="Cambiar país">
+                {countries.map((country) => (
+                  <option key={country.value} value={country.value}>
+                    {country.emoji} {country.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className={styles.heroStats}>
+            {stats.map((stat) => (
+              <div className={styles.statCard} key={stat.label}>
+                <strong>{formatCount(stat.value)}</strong>
+                <span>{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <div className={styles.platformRow}>
+          <button type="button" className={`${styles.platformBtn} ${styles.platformBtnActive}`}>
+            <IconUsers size={15} />
+            Todos
+          </button>
+          <button
+            type="button"
+            className={styles.platformBtn}
+            onClick={() => router.push('/comunidades/grupos-de-telegram')}
+          >
+            <img src="/telegramicons.png" alt="Telegram" className={styles.platformIcon} />
+            Telegram
+          </button>
+          <button
+            type="button"
+            className={styles.platformBtn}
+            onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
+          >
+            <img src="/wapp.webp" alt="WhatsApp" className={`${styles.platformIcon} ${styles.platformIconWhatsapp}`} />
+            WhatsApp
+          </button>
+        </div>
+
+        <div className={styles.controlsBar}>
+          <div className={styles.searchBox}>
+            <IconSearch size={15} className={styles.searchIcon} />
+            <input
+              className={styles.searchInput}
+              placeholder={t('Buscar por nombre, categoría o contenido...')}
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
             />
+          </div>
+        </div>
 
-            <>
-              <Group gap='xs' mb="md" justify="center">
-                <Button
-                  variant="light"
-                  size="xs"
-                  radius="md"
-                  onClick={() => router.push('/comunidades/grupos-de-telegram')}
-                  leftSection={
-                    <img
-                      src="/telegramicons.png"
-                      alt="Telegram"
-                      style={{ width: 16, height: 16 }}
-                    />
-                  }
+        <div className={styles.sortRow}>
+          {[
+            { label: 'Destacados', value: null },
+            { label: 'Top vistos', value: 'top' },
+            { label: 'Nuevos', value: 'nuevos' },
+          ].map((item) => (
+            <button
+              type="button"
+              key={item.label}
+              className={`${styles.sortPill} ${orden === item.value ? styles.sortPillActive : ''}`}
+              onClick={() => setSort(item.value)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {categories.length > 0 && (
+          <div className={styles.categoryRow} aria-label="Categorías">
+            <button
+              type="button"
+              className={`${styles.categoryPill} ${selectedCategories.length === 0 ? styles.categoryPillActive : ''}`}
+              onClick={clearCategories}
+            >
+              Todas
+            </button>
+            {categories.map((category) => {
+              const selected = selectedCategories.includes(category.name);
+              return (
+                <button
+                  type="button"
+                  key={category.name}
+                  className={`${styles.categoryPill} ${selected ? styles.categoryPillActive : ''}`}
+                  onClick={() => toggleCategory(category.name)}
                 >
-                  {t('Telegram')}
-                </Button>
+                  {category.name}
+                  <span>{category.count}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
 
-                <Button
-                  variant="light"
-                  size="xs"
-                  radius="md"
-                  onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
-                  leftSection={
-                    <img
-                      src="/wapp.webp"
-                      alt="Whatsapp"
-                      style={{ width: 29, height: 29 }}
-                      />
+        <div className={styles.promoBanner}>
+          <div className={styles.promoBannerIconGroup}>
+            <span className={`${styles.promoBannerIcon} ${styles.telegramAvatar}`}>
+              <img src="/telegramicons.png" alt="Telegram" />
+            </span>
+            <span className={`${styles.promoBannerIcon} ${styles.whatsappAvatar}`}>
+              <img src="/wapp.webp" alt="WhatsApp" />
+            </span>
+          </div>
+          <div className={styles.promoBannerBody}>
+            <strong>¿Tienes un grupo activo?</strong>
+            <p>Publícalo gratis y deja que nuevos miembros lo encuentren desde el directorio.</p>
+          </div>
+          <Link href="/comunidades/subir-grupo" className={styles.promoAction}>
+            Publicar gratis
+          </Link>
+        </div>
+
+        {currentGroups.length > 0 ? (
+          <div className={styles.groupsList}>
+            {currentGroups.map((row, index) => {
+              const platform = getPlatform(row);
+              const config = platformConfig[platform];
+              const categoriesList = getCategories(row);
+              const mainCategory = categoriesList[0] || 'otros';
+              const slug = row.slug || slugify(row.name || 'grupo');
+              const description = getDescription(row, i18n);
+              const route = `/comunidades/grupos-de-${platform}/${slugify(mainCategory)}/${slug}`;
+
+              return (
+                <article
+                  key={`${row.id || slug}-${index}`}
+                  className={styles.groupCard}
+                  role="link"
+                  tabIndex={0}
+                  onClick={() => router.push(route)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      router.push(route);
                     }
-                >
-                  {t('Whatsapp')}
-                </Button>
-                <Group mt="md" mb="md">
-                  <Button
-                    onClick={() => {
-                      const params = new URLSearchParams(location.search);
-                      const currentOrden = params.get('orden');
-                      if (currentOrden === 'top') {
-                        params.delete('orden'); // quitar si ya estaba activo
-                      } else {
-                        params.set('orden', 'top');
-                      }
-                      const search = params.toString();
-                      router.push(`?${search}`);
-                    }}
-                    variant={orden === 'top' ? 'filled' : 'light'}
-                  >
-                    Top
-                  </Button>
-
-                  <Button
-                    onClick={() => {
-                      const params = new URLSearchParams(location.search);
-                      const currentOrden = params.get('orden');
-                      if (currentOrden === 'nuevos') {
-                        params.delete('orden');
-                      } else {
-                        params.set('orden', 'nuevos');
-                      }
-                      const search = params.toString();
-                      router.push(`?${search}`);                  
-                    }}
-                    variant={orden === 'nuevos' ? 'filled' : 'light'}
-                  >
-                    Nuevos
-                  </Button>
-
-                  <Button
-                    onClick={() => {
-                      const params = new URLSearchParams(location.search);
-                      params.delete('orden'); // quitar orden para mostrar "destacados"
-                      const search = params.toString();
-                      router.push(`?${search}`);
-                    }}
-                    variant={!orden ? 'filled' : 'light'}
-                  >
-                    Destacados
-                  </Button>
-                </Group>
-
-
-                <Box
-                  style={{
-                    display: 'flex',
-                    overflowX: 'auto',
-                    gap: '10px',
-                    padding: '10px 0',
-                    WebkitOverflowScrolling: 'touch',
                   }}
                 >
-                  {collectionsExist &&
-                    collections.map((cat, i) => {
-                      const selected = selectedCollections.includes(cat);
-                      return (
-                        <Badge
-                          key={i}
-                          variant={selected ? 'filled' : 'light'}
-                          color="violet"
-                          size="lg"
-                          radius="xl"
-                          onClick={() => toggleCollection(cat)}
-                          style={{
-                            padding: '10px 16px',
-                            fontSize: '14px',
-                            fontWeight: 600,
-                            backgroundColor: selected ? '#5e2ca5' : '#f3e8ff',
-                            color: selected ? '#ffffff' : '#4a0080',
-                            whiteSpace: 'nowrap',
-                            flexShrink: 0,
-                            cursor: 'pointer',
-                          }}
-                        >
-                          {cat}
-                        </Badge>
-                      );
-                    })}
-                </Box>
-              </Group>
+                  <div className={styles.groupCardTop}>
+                    <div className={`${styles.groupAvatar} ${config.avatarClass}`}>
+                      <img src={config.icon} alt={config.label} className={config.iconClass} />
+                    </div>
+                    <div className={styles.groupInfo}>
+                      <div className={styles.groupName}>{row.name || 'Grupo sin nombre'}</div>
+                      <div className={styles.groupMeta}>
+                        <span className={`${styles.platformChip} ${config.chipClass}`}>{config.label}</span>
+                        {row.city && countryMap[row.city] && <span className={styles.groupFlag}>{countryMap[row.city]}</span>}
+                        {row.destacado && <span className={styles.featuredBadge}>Destacado</span>}
+                        {row.content18 === 'Sí' && <span className={styles.badge18}>18+</span>}
+                      </div>
+                    </div>
+                    <IconChevronRight size={16} className={styles.chevron} />
+                  </div>
 
-              <Paper
-                withBorder
-                radius="md"
-                shadow="xs"
-                mt="xl"
-                p="md"
-                style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
-              >
-              {isMobile ? (
-                <>
-                <Title order={4} mb="xs">
-                  {t('Grupos de Telegram Activos 2025')}
-                </Title>
-                <Text size="sm" color="dimmed" mb="xs">
-                  {t('Únete a los')} <strong>{t('mejores grupos de Telegram')}</strong> {t('o publica el tuyo gratis y consigue nuevos miembros al instante.')}
-                </Text>
-                </>
-              ) : (
-                <>
-                  <Title order={3} mb="sm">
-                    {t('Grupos de Telegram Activos 2025')}
-                  </Title>
+                  {description && <div className={styles.groupDesc}>{description}</div>}
 
-                  <Text size="sm" color="dimmed" mb="xs">
-                    {t('¿Tienes un grupo o canal de Telegram o WhatsApp y no sabes cómo conseguir más miembros?')} <strong>{t('En JoinGroups puedes publicar tu grupo gratis')}</strong>, {t('la mejor web para encontrar comunidades activas.')}{' '}
-                    {t('Explora nuestro buscador y descubre los ')}<strong>{t('Mejores Grupos de Telegram ')}</strong>{t('WhatsApp organizados por temática, intereses y nombre.')}{' '}
-                    {t('Aqui encontraras las mejores ')}<strong>{t('Comunidades de Telegram ')}</strong>{t('recibe consejos útiles para aumentar tu comunidad y aprende cómo hacer crecer tu grupo con nuestras guías.')}{' '}
-                    <strong>{t('JoinGroups encuentras Grpos de Telegram Activos.')}</strong>
-                  </Text>
-                </>
-              )}
+                  <div className={styles.groupFooter}>
+                    <span className={styles.groupCategory}>{mainCategory}</span>
+                    <span className={styles.groupViews}>
+                      <IconEye size={11} />
+                      {row.visitas ?? 0}
+                    </span>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <div className={styles.emptyState}>
+            <strong>No se encontraron comunidades</strong>
+            <span>Prueba con otra búsqueda o elimina algún filtro de categoría.</span>
+          </div>
+        )}
 
-              </Paper>
+        {filteredGroups.length > groupsPerPage && (
+          <div className={styles.pagination}>
+            <button
+              type="button"
+              className={styles.pageBtn}
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+            >
+              Inicio
+            </button>
+            <button
+              type="button"
+              className={styles.pageBtn}
+              onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              ← {t('Anterior')}
+            </button>
+            <span className={styles.pageInfo}>{currentPage} / {totalPages}</span>
+            <button
+              type="button"
+              className={styles.pageBtn}
+              onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
+              disabled={currentPage >= totalPages}
+            >
+              {t('Siguiente')} →
+            </button>
+          </div>
+        )}
 
-              {rows}
+        <section className={styles.footerCta}>
+          <div>
+            <p className={styles.footerCtaTitle}>Haz crecer tu comunidad</p>
+            <p className={styles.footerCtaText}>
+              Publica tu grupo o canal en <Link href="/">JoinGroups</Link> y permite que más personas lo encuentren por temática, red social y país.
+            </p>
+          </div>
+          <div className={styles.footerActions}>
+            <Link href="/comunidades/subir-grupo" className={styles.primaryCta}>Publicar grupo</Link>
+            <Link href="/clanes/clanes-de-clash-royale" className={styles.secondaryCta}>Ver clanes</Link>
+          </div>
+        </section>
+      </div>
 
-              <Group mt="xl" justify="center" gap="xs">
-                <Button
-                  variant="light"
-                  size="xs"
-                  radius="md"
-                  onClick={() => setCurrentPage(1)}
-                  disabled={currentPage === 1}
-                >
-                  {t('Inicio (paginación)')}
-                </Button>
-                <Button
-                  variant="subtle"
-                  size="xs"
-                  radius="md"
-                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                >
-                  ← {t('Anterior')}
-                </Button>
-                <Text size="sm" fw={500} mt={4}>
-                  {t('Página')} <strong>{currentPage}</strong>
-                </Text>
-                <Button
-                  variant="subtle"
-                  size="xs"
-                  radius="md"
-                  onClick={() =>
-                    setCurrentPage((prev) =>
-                      indexOfLastGroup < sortedData.length ? prev + 1 : prev
-                    )
-                  }
-                  disabled={indexOfLastGroup >= sortedData.length}
-                >
-                  {t('Siguiente')} →
-                </Button>
-              </Group>
-
-              <Box
-                onPointerDownCapture={(e) => e.stopPropagation()}
-                onWheel={(e) => e.stopPropagation()}
-              >
-                <Menu shadow="md" width={200} withinPortal position="bottom-end">
-                  <Menu.Target>
-                    <ActionIcon
-                      size="lg"
-                      radius="xl"
-                      variant="subtle"
-                      style={{
-                        fontSize: rem(24),
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                      }}
-                    >
-                      <span style={{
-                        fontSize: '16px',
-                        display: 'inline-block',
-                        lineHeight: '1',
-                        borderRadius: '2px',
-                        overflow: 'hidden',
-                        width: '20px',
-                        height: '14px',
-                      }}>
-                        {countries.find((c) => c.value === subdomain)?.emoji ?? '🇲🇽'}
-                      </span>
-                      <span style={{ fontSize: '0.75rem', transform: 'translateY(1px)' }}>▼</span>
-                    </ActionIcon>
-        
-                  </Menu.Target>
-        
-                  <Menu.Dropdown
-                    style={{
-                      maxHeight: rem(300),
-                      overflowY: 'auto',
-                    }}
-                    onWheel={(e) => e.stopPropagation()}
-                  >
-                    {countries.map((country) => (
-                      <Menu.Item
-                        key={country.value}
-                        leftSection={
-                          <span style={{
-                            fontSize: '16px',
-                            display: 'inline-block',
-                            lineHeight: '1',
-                            borderRadius: '2px',
-                            overflow: 'hidden',
-                            width: '20px',
-                            height: '14px',
-                          }}>
-                            {country.emoji}
-                          </span>
-                        }
-                        onClick={() => {
-                          const currentPath = window.location.pathname + window.location.search;
-                          i18n.changeLanguage(country.lang);
-                          window.location.href = `https://${country.value}.joingroups.pro${currentPath}`;
-                        }}
-                      >
-                        {country.label}
-                      </Menu.Item>
-                    ))}
-                  </Menu.Dropdown>
-        
-                </Menu>
-              </Box>
-
-              {rows.length === 0 && (
-                <Box ta="center" mt="xl">
-                  <Text fw={500} c="dimmed" mb="sm">
-                    {t('No se encontraron resultados para esta categoría.')}
-                  </Text>
-                  <img
-                    src="https://joingroups.pro/meme-Pica.png"
-                    alt="Nada, No hay, No existe"
-                    style={{ width: '160px', opacity: 0.5 }}
-                    />
-                </Box>
-              )}
-              
-              <Paper
-                withBorder
-                radius="md"
-                shadow="xs"
-                mt="xl"
-                p="md"
-                style={{ backgroundColor: '#f9f9f9', marginBottom: '20px', paddingBottom: '10px' }}
-                >
-              <Text size="md" fw={600} mb="sm">
-                {t('Como Hacer Crecer tu Grupo de Telegram, Guia definitiva')}
-              </Text>
-
-              <Text size="sm" color="dimmed" mb="xs">
-                {t('Publica tu Grupo o Canal de Telegram gratis en')} <Link href="/" style={{ color: '#228be6', textDecoration: 'underline' }}>JoinGroups</Link>, {t('la mejor web para conectar con comunidades activas y encontrar nuevos miembros.')}{' '}
-                {t('Explora los mejores grupos por nombre, temática o red social como Facebook o YouTube, y descubre consejos útiles para crecer.')}{' '}
-                {t('¿Aún no sabes cómo crear un grupo? Aprende paso a paso desde nuestro buscador de comunidades.')}{' '}
-                {typeof i18n.language !== 'undefined' && (
-                <Link
-                  href={i18n.language === 'es' ? '/comunidades/como-crear-grupo-telegram' : '/comunidades/how-to-create-telegram-group'}
-                  style={{ color: '#228be6', textDecoration: 'underline' }}
-                >
-                  {t('Haz clic aquí y aprende cómo crear tu grupo de Telegram')}
-                </Link>
-
-                )}
-
-              </Text>
-
-
-
-              <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
-                {t('Grupos de Telegram Activos 2025, Grupos de Telegram, Grupos de WhatsApp, Comunidades de Telegram, Publicar Grupo Telegram, Unirse a Grupos Telegram, Buscar Miembros Telegram, Conocer Personas Telegram')}
-              </Text>
-              </Paper>
-              
-              <Button
-                radius="md" 
-                component={Link}
-                href="/clanes/clanes-de-clash-royale"
-                variant="light"
-                color="blue"
-                size="lg"
-              >
-                Ver clanes de Clash Royale
-              </Button>
-            </>
-          {/* Botón flotante con cambio de posición */}
-          <Button
-            component={Link}
-            href="/comunidades/subir-grupo"
-            color="red"
-            size="sm"
-            variant='filled'
-            radius="xl"
-            className={styles['floating-publish-button']}
-            style={{
-              ...floatingStyle(buttonPosition),
-            }}
-          >
-            Publica tu grupo AHORA !!
-          </Button>
-        </ScrollArea>
-      </Container>
-    </>
-
+      <Link href="/comunidades/subir-grupo" className={styles.floatingPublishButton} aria-label="Publicar grupo">
+        <IconPlus size={18} />
+        <span>Publicar</span>
+      </Link>
+    </div>
   );
-}
-
-export async function getServerSideProps() {
-  const snapshot = await getDocs(collection(db, 'groups'));
-  const groups = snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data(),
-    createdAt: doc.data().createdAt?.toDate?.().toISOString() || null,
-  }));
-
-  const destacados = groups.filter(g => g.destacado);
-  const normales = groups.filter(g => !g.destacado);
-  const ordenados = [...destacados, ...normales];
-
-  return {
-    props: {
-      serverData: ordenados, // ⬅️ Este nombre debe coincidir con la prop que usas en el componente
-    },
-  };
 }
