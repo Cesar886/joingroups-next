@@ -1,23 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   collection, query, where, getDocs,
   limit, runTransaction, updateDoc
 } from 'firebase/firestore';
-import { db } from '@/firebase/firebase';
-import {
-  Box, Button, Center, Container, Divider,
-  Group, Paper, Stack, Text, Title, Badge,
-  Modal,
-} from '@mantine/core';
+import { Modal } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import slugify from '@/lib/slugify';     // ⬅️ el mismo helper que usas en TableSort
-import { useTranslation } from 'react-i18next';
 import { useDisclosure } from '@mantine/hooks';
-import Head from 'next/head';
-
-import { useRouter, useSearchParams, usePathname, useParams } from 'next/navigation';
+import {
+  IconAlertTriangle,
+  IconBrandTelegram,
+  IconBrandWhatsapp,
+  IconExternalLink,
+  IconEye,
+} from '@tabler/icons-react';
+import { useParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
+import { db } from '@/firebase/firebase';
+import slugify from '@/lib/slugify';
+import classes from '@/app/styles/GroupDetail.module.css';
 
 const countryMap = {
   mx: '🇲🇽',
@@ -56,12 +58,67 @@ const countryMap = {
   au: '🇦🇺',
 };
 
+const asText = (value) => Array.isArray(value) ? value[0] : value;
+
+const DESKTOP_GROUP_AD = {
+  key: '13ffd663b16098ca0ab4303c93202549',
+  format: 'iframe',
+  height: 90,
+  width: 728,
+  params: {},
+};
+
+const MOBILE_GROUP_AD = {
+  key: 'fc0b1b6a0a12b2d01753d9df1328a017',
+  format: 'iframe',
+  height: 60,
+  width: 468,
+  params: {},
+};
+
+const getAdScriptSrc = (key) => `https://landslidegraphsystems.com/${key}/invoke.js`;
+
+function GroupAdSlot() {
+  const mountRef = useRef(null);
+
+  useEffect(() => {
+    const mount = mountRef.current;
+    if (!mount || typeof window === 'undefined') return undefined;
+
+    const adConfig = window.matchMedia('(max-width: 720px)').matches
+      ? MOBILE_GROUP_AD
+      : DESKTOP_GROUP_AD;
+
+    mount.innerHTML = '';
+    window.atOptions = { ...adConfig };
+
+    const script = document.createElement('script');
+    script.src = getAdScriptSrc(adConfig.key);
+    script.async = true;
+    script.dataset.groupAd = adConfig.key;
+    mount.appendChild(script);
+
+    return () => {
+      script.remove();
+      mount.innerHTML = '';
+    };
+  }, []);
+
+  return (
+    <div className={classes.adFrame}>
+      <div ref={mountRef} className={classes.adMount} />
+    </div>
+  );
+}
 
 export default function GroupDetail() {
   const { t, i18n } = useTranslation();
-  const { id, tipo } = useParams();                // id === slug recibido en la URL
-  const [group, setGroup]   = useState(null);
-  const [loading, setLoading]   = useState(true);
+  const params = useParams();
+  const id = asText(params?.id);
+  const platform = asText(params?.platform);
+  const category = asText(params?.category);
+  const [group, setGroup] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
   const [reportText, setReportText] = useState('');
@@ -69,12 +126,13 @@ export default function GroupDetail() {
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
+    if (!id) return;
+
     const fetchGroup = async () => {
       try {
         setLoading(true);
         setNotFound(false);
 
-        // 1️⃣  Intenta encontrar por slug
         const q = query(
           collection(db, 'groups'),
           where('slug', '==', id),
@@ -82,9 +140,8 @@ export default function GroupDetail() {
         );
         let snap = await getDocs(q);
 
-        // 2️⃣  Si no hay slug en esos docs viejos, busca por nombre “slugificado”
         if (snap.empty) {
-          const allQ = query(collection(db, 'groups'), limit(1000)); // o por páginas
+          const allQ = query(collection(db, 'groups'), limit(1000));
           const allSnap = await getDocs(allQ);
           snap = allSnap.docs.filter(d => slugify(d.data().name) === id);
         } else {
@@ -97,17 +154,14 @@ export default function GroupDetail() {
         }
 
         const docSnap = snap[0];
-        const docRef  = docSnap.ref;
-        const data    = docSnap.data();
+        const docRef = docSnap.ref;
+        const data = docSnap.data();
 
-
-        // 3️⃣  Si el documento no traía slug, lo actualizamos aquí mismo
         if (!data.slug) {
           await updateDoc(docRef, { slug: slugify(data.name) });
         }
 
-        /* -------------------  visitas ------------------- */
-        const visitKey   = `visitado-${id}`;
+        const visitKey = `visitado-${id}`;
         const yaVisitado = sessionStorage.getItem(visitKey);
 
         if (!yaVisitado) {
@@ -118,8 +172,8 @@ export default function GroupDetail() {
           });
           sessionStorage.setItem(visitKey, 'true');
         }
-        setGroup({ id: docSnap.id, ...data, slug: data.slug || slugify(data.name) });
 
+        setGroup({ id: docSnap.id, ...data, slug: data.slug || slugify(data.name) });
       } catch (err) {
         console.error(err);
         setNotFound(true);
@@ -131,182 +185,210 @@ export default function GroupDetail() {
     fetchGroup();
   }, [id]);
 
+  if (loading) return <div className={classes.loadingState}>{t('Cargando...')}</div>;
+  if (notFound || !group) return <div className={classes.loadingState}>{t('Grupo no encontrado.')}</div>;
+
   const baseLang = i18n.language.split('-')[0];
+  const platformSlug = (platform || group?.tipo || 'telegram').toLowerCase().replace('grupos-de-', '');
+  const isWhatsapp = platformSlug === 'whatsapp';
+  const platformName = isWhatsapp ? 'WhatsApp' : 'Telegram';
+  const platformKey = isWhatsapp ? 'Whatsapp' : 'Telegram';
+  const platformIcon = isWhatsapp ? <IconBrandWhatsapp size={26} /> : <IconBrandTelegram size={26} />;
+  const categoryList = Array.isArray(group.categories) && group.categories.length > 0
+    ? group.categories
+    : category
+      ? [category]
+      : [];
+  const description = group.description && typeof group.description === 'object'
+    ? group.description[baseLang] || group.description.es || group.description.en || t('Sin descripción')
+    : group.description || t('Sin descripción');
 
-  const isChromeMobile =
-    /Chrome/.test(navigator.userAgent) &&
-    /Android/.test(navigator.userAgent) &&
-    !/OPR|Edge/.test(navigator.userAgent);
+  const openGroupLink = () => {
+    if (!group.link) return;
 
-  /* -------------- render -------------- */
-  if (loading)   return <Center><Text>{t('Cargando...')}</Text></Center>;
-  if (notFound || !group)
-    return <Center><Text>{t('Grupo no encontrado.')}</Text></Center>;
+    const isChromeMobile =
+      typeof navigator !== 'undefined' &&
+      /Chrome/.test(navigator.userAgent) &&
+      /Android/.test(navigator.userAgent) &&
+      !/OPR|Edge/.test(navigator.userAgent);
+
+    if (isChromeMobile) {
+      window.location.replace(group.link);
+      return;
+    }
+
+    const a = document.createElement('a');
+    a.href = group.link;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.click();
+  };
 
   return (
-    <Container size="sm" py="xl">
-      <Paper withBorder shadow="sm" radius="md" p="lg">
-        <Stack spacing="md">
-          
-          <Title order={2}>{group.name}</Title>
+    <main className={classes.pageBg}>
+      <div className={classes.wrapper}>
+        <section className={classes.hero}>
+          <div className={classes.heroBorder} />
+          <div className={classes.heroBody}>
+            <div className={`${classes.heroIcon} ${isWhatsapp ? classes.heroIconWhatsapp : classes.heroIconTelegram}`}>
+              {platformIcon}
+            </div>
 
-          <Group justify="space-between" align="center" w="100%">
-            <Text size="sm" c="dimmed">
-              {t('El clan tiene')} <strong>{group.visitas || 0} {t('visitas')}</strong>
-            </Text>
+            <div className={classes.heroText}>
+              <h1 className={classes.groupName}>{group.name}</h1>
+              <div className={classes.heroBadges}>
+                <span className={`${classes.platformBadge} ${isWhatsapp ? classes.platformWhatsapp : classes.platformTelegram}`}>
+                  {platformName}
+                </span>
+                {categoryList.slice(0, 2).map((cat) => (
+                  <span className={classes.catBadge} key={cat}>{cat}</span>
+                ))}
+                {group.content18 && (
+                  <span className={`${classes.catBadge} ${classes.badge18}`}>+18</span>
+                )}
+                {group.city && (
+                  <span className={`${classes.catBadge} ${classes.flagBadge}`} title={group.city}>
+                    {countryMap[group.city] || group.city}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
 
-            {group.city && (
-              <Text size="xl" style={{ fontSize: '1.5rem' }}>
-                {countryMap[group.city] || group.city}
-              </Text>
-            )}
-          </Group>
+          <div className={classes.statsStrip}>
+            <div className={classes.statCell}>
+              <span className={classes.statVal}>
+                <IconEye size={17} />
+                {group.visitas || 0}
+              </span>
+              <span className={classes.statLbl}>{t('Vistas')}</span>
+            </div>
+            <div className={classes.statCell}>
+              <span className={classes.statVal}>{categoryList.length || 1}</span>
+              <span className={classes.statLbl}>{t('Categorías')}</span>
+            </div>
+          </div>
+        </section>
 
-          <Divider/>
+        <section className={classes.card}>
+          <div className={classes.sectionLabel}>{t('Descripción:')}</div>
+          <p className={classes.desc}>{description}</p>
 
-          <Box>
-            <Text fw={600} mb={4}>{t('Descripción:')}</Text>
-          <Text>
-            {typeof group.description === 'object'
-              ? group.description[baseLang] || group.description.es || group.description.en || t('Sin descripción')
-              : group.description || t('Sin descripción')}
-          </Text>
+          <div className={classes.sep} />
 
-          </Box>
-
-          <Group gap="sm" mt="md">
-            {Array.isArray(group.categories) && group.categories.length > 0 ? (
-              group.categories.map((cat, i) => (
-                <Badge key={i} variant="light" color="violet" size="lg" radius="md">
-                  {cat}
-                </Badge>
+          <div className={classes.categoryList}>
+            {categoryList.length > 0 ? (
+              categoryList.map((cat) => (
+                <span className={classes.catBadge} key={cat}>{cat}</span>
               ))
             ) : (
-              <Badge variant="light" color="gray" size="lg">
-                {t('Sin categoría')}
-              </Badge>
+              <span className={classes.catBadge}>{t('Sin categoría')}</span>
             )}
-          </Group>
+          </div>
+        </section>
 
+        <section className={classes.adSection} aria-label={t('Publicidad')}>
+          <div className={classes.adLabel}>{t('Publicidad')}</div>
+          <div className={classes.adStack}>
+            <GroupAdSlot />
+            <GroupAdSlot />
+          </div>
+        </section>
 
-
-          <Box mt="md" bg="#f9f9f9" p="md" radius="md" style={{ borderLeft: '4px solid rgb(33, 85, 255)' }}>
-            <Text size="sm" c="dimmed">
-              {t('Recuerda: evita compartir información personal en')} <strong>{group.name}</strong>. {t('Nunca se sabe quién puede estar leyendo. Mantengamos')} <strong>{group.name}</strong> {t('como un espacio seguro y agradable para todos.')}
-            </Text>
-          </Box>
-
-          <Group justify="space-between" mt="md">
-            <Button
-              variant="light"
-              color="red"
-              size="xs"
-              onClick={open}
-            >
-              {t('Reportar Enlace roto')}
-            </Button>
-          </Group>
-
-          <Divider my="sm" />
-
-          <Button
-            fullWidth
-            variant="filled"
-            color="blue"
+        <section className={classes.actionPanel}>
+          <button
+            type="button"
+            className={`${classes.joinBtn} ${!group.link ? classes.joinBtnDisabled : ''}`}
             disabled={!group.link}
-            onClick={() => {
-              if (isChromeMobile) {
-                window.location.replace(group.link);
-              } else {
-                const a = document.createElement('a');
-                a.href = group.link;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                a.click();
-              }
-            }}
+            onClick={openGroupLink}
           >
-            {group.link
-              ? t(`${(tipo || group?.tipo || 'telegram')[0].toUpperCase() + (tipo || group?.tipo || 'telegram').slice(1)} - ACCEDER AL GRUPO`)
-              : t('Enlace no disponible')}
+            <IconExternalLink size={17} />
+            {group.link ? t(`${platformKey} - ACCEDER AL GRUPO`) : t('Enlace no disponible')}
+          </button>
 
-          </Button>
-          <Modal centered opened={opened} onClose={() => {
+          <button type="button" className={classes.reportBtn} onClick={open}>
+            <IconAlertTriangle size={12} />
+            {t('Reportar Enlace roto')}
+          </button>
+        </section>
+
+        <Modal
+          centered
+          opened={opened}
+          onClose={() => {
             close();
             setReportText('');
             setSent(false);
-          }} title={t('Reportar Enlace roto')}>
-            <Stack>
-              {!sent ? (
-                <>
-                  <Text size="sm">{t('Describe brevemente el problema (mín. 10 y máx. 200 caracteres):')}</Text>
-                  <textarea
-                    maxLength={200}
-                    value={reportText}
-                    onChange={(e) => setReportText(e.target.value)}
-                    placeholder={t('Ej. El enlace lleva a un grupo equivocado o ya no existe.')}
-                    style={{ width: '100%', minHeight: 100, padding: 8, borderRadius: 4, borderColor: '#ccc' }}
-                  />
-                  <Text size="xs" c="dimmed">
-                    {reportText.length} / 200
-                    {reportText.length > 0 && reportText.length < 10 && ` – ${t('Demasiado corto')}`}
-                  </Text>
+          }}
+          title={<span className={classes.modalTitle}>{t('Reportar Enlace roto')}</span>}
+          styles={{
+            content: { borderRadius: 18, border: '1px solid #F0F0F0', boxShadow: '0 20px 60px rgba(0,0,0,0.12)' },
+            header: { borderBottom: '1px solid #F5F5F5', padding: '1.15rem 1.35rem' },
+          }}
+        >
+          {!sent ? (
+            <div className={classes.reportForm}>
+              <p className={classes.modalHelp}>
+                {t('Describe brevemente el problema (mín. 10 y máx. 200 caracteres):')}
+              </p>
+              <textarea
+                className={classes.reportTextarea}
+                maxLength={200}
+                value={reportText}
+                onChange={(e) => setReportText(e.target.value)}
+                placeholder={t('Ej. El enlace lleva a un grupo equivocado o ya no existe.')}
+              />
+              <div className={classes.reportCharCount}>
+                {reportText.length} / 200
+                {reportText.length > 0 && reportText.length < 10 && ` - ${t('Demasiado corto')}`}
+              </div>
 
-                  <Group justify="flex-end">
-                    <Button
-                      size="sm"
-                      color="gray"
-                      variant="outline"
-                      onClick={() => {
-                        close();
-                        setReportText('');
-                        setSent(false);
-                      }}
-                    >
-                      {t('Cancelar')}
-                    </Button>
-                    <Button
-                      size="sm"
-                      color="red"
-                      loading={sending}
-                      disabled={reportText.trim().length < 10}
-                      onClick={async () => {
-                        setSending(true);
-                        await sendTelegramMessage('Enlace roto', reportText.trim());
-                        setSending(false);
-                        setReportText('');
-                        setSent(true);
-                      }}
-                    >
-                      {t('Enviar reporte')}
-                    </Button>
-                  </Group>
-                </>
-              ) : (
-                <Center>
-                  <Text ta="center" fw={600} size="lg">
-                    {t('¡Se ha enviado el mensaje y, sera revisado pronto ¡Gracias por tu ayuda!')}
-                  </Text>
-                </Center>
-              )}
-            </Stack>
-          </Modal>
-        </Stack>
-      </Paper>
-    </Container>
+              <div className={classes.reportActions}>
+                <button
+                  type="button"
+                  className={classes.cancelBtn}
+                  onClick={() => {
+                    close();
+                    setReportText('');
+                    setSent(false);
+                  }}
+                >
+                  {t('Cancelar')}
+                </button>
+                <button
+                  type="button"
+                  className={classes.submitReportBtn}
+                  disabled={reportText.trim().length < 10 || sending}
+                  onClick={async () => {
+                    setSending(true);
+                    await sendTelegramMessage('Enlace roto', reportText.trim());
+                    setSending(false);
+                    setReportText('');
+                    setSent(true);
+                  }}
+                >
+                  {sending ? t('Enviando...') : t('Enviar reporte')}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className={classes.reportSuccess}>
+              {t('¡Se ha enviado el mensaje y, sera revisado pronto ¡Gracias por tu ayuda!')}
+            </div>
+          )}
+        </Modal>
+      </div>
+    </main>
   );
 
-  /* ------------------ helpers ------------------ */
   async function sendTelegramMessage(tipo, mensaje = '') {
     const chatId = -1002622285468;
-    const token  = "7551745963:AAFiTkb9UehxZMXNINihI8wSdlTMjaM6Lfk";
-
-    const url = window.location.href;
+    const token = "7551745963:AAFiTkb9UehxZMXNINihI8wSdlTMjaM6Lfk";
 
     const text = `🚨 *Nuevo reporte: ${tipo}*\n` +
-                `Grupo: ${group?.name}\n` +
-                `URL: ${url}\n` +
-                `📝 Descripción: ${mensaje || 'Sin descripción'}`;
+      `Grupo: ${group?.name}\n` +
+      `URL: ${window.location.href}\n` +
+      `📝 Descripción: ${mensaje || 'Sin descripción'}`;
 
     try {
       const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
