@@ -65,26 +65,74 @@
 }
 
 .ledBorder {
-  border-radius: 10px;
+  border-radius: 12px;
+  flex-shrink: 0;
 }
 
 .ledBorder a {
-  background: linear-gradient(135deg, #4F46E5, #7C3AED);
+  background: #0F0F14;
   color: #fff !important;
-  padding: 0.4rem 1rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 600;
+  padding: 0.5rem 1.1rem;
+  border-radius: 10px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   display: inline-flex;
   align-items: center;
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+  gap: 6px;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.18),
+    0 4px 12px rgba(0,0,0,0.12);
+  transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* shimmer sweep */
+.ledBorder a::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255,255,255,0.12) 50%,
+    transparent 70%
+  );
+  background-size: 300% 100%;
+  animation: btnShimmer 3s ease-in-out infinite;
+}
+
+/* pulse dot */
+.ledBorder a::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ADE80;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0 rgba(74,222,128,0.5);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes btnShimmer {
+  0%   { background-position: 150% 0%; }
+  100% { background-position: -150% 0%; }
+}
+
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); }
+  50%       { box-shadow: 0 0 0 4px rgba(74,222,128,0); }
 }
 
 .ledBorder a:hover {
-  opacity: 0.9;
+  opacity: 0.88;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.22),
+    0 8px 20px rgba(0,0,0,0.16);
 }
 
 @media (max-width: 768px) {

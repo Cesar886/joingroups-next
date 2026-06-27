@@ -12,7 +12,6 @@ import {
 } from '@mantine/core';
 import classes from '@/app/styles/Header.module.css';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -65,14 +64,9 @@ export default function Header() {
     );
 
     return link.highlight ? (
-      <motion.div
-        key={link.link}
-        animate={link.highlight ? { scale: [1, 1.05, 1] } : false}
-        transition={link.highlight ? { duration: 1.5, repeat: Infinity } : undefined}
-        className={link.highlight ? classes.ledBorder : undefined}
-      >
+      <div key={link.link} className={classes.ledBorder}>
         {navLink}
-      </motion.div>
+      </div>
     ) : (
       navLink
     );

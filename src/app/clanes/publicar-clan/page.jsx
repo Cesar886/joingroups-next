@@ -1,26 +1,10 @@
 'use client';
 
 import HCaptcha from '@hcaptcha/react-hcaptcha';
-import {
-  TextInput,
-  Textarea,
-  Select,
-  Checkbox,
-  Button,
-  Container,
-  Text,
-  Title,
-  Stack,
-  Modal,
-} from '@mantine/core';
+import { Modal } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import {
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-  updateDoc,
+  collection, addDoc, updateDoc,
 } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import { useRef, useState } from 'react';
@@ -28,87 +12,67 @@ import slugify from '@/lib/slugify';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
 import Head from 'next/head';
+import { useRouter } from 'next/navigation';
+import {
+  IconShield, IconLink, IconMail, IconAlignLeft,
+  IconCheck, IconX, IconSend, IconMessageCircle,
+} from '@tabler/icons-react';
+import classes from '@/app/styles/PublicarClan.module.css';
 
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 const API_URL = '';
-
 
 export default function ClanesGroupForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { t, i18n } = useTranslation();
   const router = useRouter();
-  const baseLang = i18n.language.split('-')[0]; // "en-US" → "en"
+  const baseLang = i18n.language.split('-')[0];
   const [game, setGame] = useState('Clash Royale');
 
-  /* ─────────────────── Expresiones regulares ─────────────────── */
-  const clashRoyaleClanRegex =
-    /^https:\/\/link\.clashroyale\.com\/invite\/clan\//i;
-  const clashOfClansClanRegex =
-    /^https:\/\/link\.clashofclans\.com\/.+tag=/i;
+  const clashRoyaleClanRegex = /^https:\/\/link\.clashroyale\.com\/invite\/clan\//i;
+  const clashOfClansClanRegex = /^https:\/\/link\.clashofclans\.com\/.+tag=/i;
 
-  /* ───────────────────────── useForm ─────────────────────────── */
   const form = useForm({
-  initialValues: {
-    name: '',
-    link: '',
-    email: '',
-    emailRepeat: '',
-    descriptionEs: '',
-    descriptionEn: '',
-    categories: '',
-    content18: '',
-    acceptTerms: false,
-  },
+    initialValues: {
+      name: '',
+      link: '',
+      email: '',
+      emailRepeat: '',
+      descriptionEs: '',
+      descriptionEn: '',
+      categories: '',
+      content18: '',
+      acceptTerms: false,
+    },
     validate: {
-      email: (v) =>
-        /^\S+@\S+\.\S+$/.test(v) ? null : t('Email inválido'),
-      emailRepeat: (v, vals) =>
-        v === vals.email ? null : t('Los emails no coinciden'),
-      acceptTerms: (v) =>
-        v ? null : t('Debes aceptar los términos'),
-
+      email: (v) => /^\S+@\S+\.\S+$/.test(v) ? null : t('Email inválido'),
+      emailRepeat: (v, vals) => v === vals.email ? null : t('Los emails no coinciden'),
+      acceptTerms: (v) => v ? null : t('Debes aceptar los términos'),
       descriptionEs: (v, values) => {
         const lenEs = v.trim().length;
         const lenEn = values.descriptionEn.trim().length;
-        return (lenEs >= 20 && lenEs <= 320) ||
-          (lenEn >= 20 && lenEn <= 320)
-          ? null
-          : t(
-              'Debes escribir una descripción en español o en inglés (20–320 caracteres)'
-            );
+        return (lenEs >= 20 && lenEs <= 320) || (lenEn >= 20 && lenEn <= 320)
+          ? null : t('Debes escribir una descripción en español o en inglés (20–320 caracteres)');
       },
       descriptionEn: (v, values) => {
         const lenEn = v.trim().length;
         const lenEs = values.descriptionEs.trim().length;
-        return (lenEn >= 20 && lenEn <= 320) ||
-          (lenEs >= 20 && lenEs <= 320)
-          ? null
-          : t(
-              'You must write a description in English or Spanish (20–320 characters)'
-            );
+        return (lenEn >= 20 && lenEn <= 320) || (lenEs >= 20 && lenEs <= 320)
+          ? null : t('You must write a description in English or Spanish (20–320 characters)');
       },
-      categories: (v) =>
-        v && v.length > 0 ? null : t('Debes seleccionar una categoría'),
-
+      categories: (v) => v && v.length > 0 ? null : t('Debes seleccionar una categoría'),
       link: (v) => {
         const val = v.trim();
         if (game === 'Clash Royale' && !clashRoyaleClanRegex.test(val))
-          return t(
-            'El enlace de invitación de Clash Royale no es válido'
-          );
+          return t('El enlace de invitación de Clash Royale no es válido');
         if (game === 'Clash of Clans' && !clashOfClansClanRegex.test(val))
-          return t(
-            'El enlace de invitación de Clash of Clans no es válido'
-          );
+          return t('El enlace de invitación de Clash of Clans no es válido');
         return null;
       },
     },
   });
 
-  /* ───────────────────────── Captcha ─────────────────────────── */
   const captchaRef = useRef(null);
   const [modalOpen, setModalOpen] = useState(false);
-
   const DEEPL_PROXY_URL = 'https://daniel-rdz.tech/translate';
 
   async function translateText(text, source, target) {
@@ -121,12 +85,9 @@ export default function ClanesGroupForm() {
       if (!res.ok) return '';
       const data = await res.json();
       return data.translated;
-    } catch {
-      return '';
-    }
+    } catch { return ''; }
   }
 
-  /* ───────────── Auto‑traducción con debounce ───────────────── */
   const useDebouncedCallback = (callback, delay = 800) => {
     const timeout = useRef(null);
     return (...args) => {
@@ -137,383 +98,343 @@ export default function ClanesGroupForm() {
 
   const debouncedTranslate = useDebouncedCallback(async () => {
     const { descriptionEs, descriptionEn } = form.values;
-    if (
-      baseLang === 'es' &&
-      descriptionEs.trim().length >= 20 &&
-      !descriptionEn.trim()
-    ) {
-      const translated = await translateText(descriptionEs, 'ES', 'EN');
-      form.setFieldValue('descriptionEn', translated);
+    if (baseLang === 'es' && descriptionEs.trim().length >= 20 && !descriptionEn.trim()) {
+      form.setFieldValue('descriptionEn', await translateText(descriptionEs, 'ES', 'EN'));
     }
-    if (
-      baseLang === 'en' &&
-      descriptionEn.trim().length >= 20 &&
-      !descriptionEs.trim()
-    ) {
-      const translated = await translateText(descriptionEn, 'EN', 'ES');
-      form.setFieldValue('descriptionEs', translated);
+    if (baseLang === 'en' && descriptionEn.trim().length >= 20 && !descriptionEs.trim()) {
+      form.setFieldValue('descriptionEs', await translateText(descriptionEn, 'EN', 'ES'));
     }
   }, 900);
 
-  
-  
-const handleVerify = async (token) => {
-  if (!token) {
-    console.warn('⚠️ No se recibió token de hCaptcha');
-    return;
-  }
-
-  setModalOpen(false);
-  setIsLoading(true);
-
-  try {
-    // 🧠 Extraer tag desde el link
-    const rawLink = form.values.link.trim();
-
-    let tag = '';
-
-    if (game.toLowerCase() === 'clash royale') {
+  const handleVerify = async (token) => {
+    if (!token) return;
+    setModalOpen(false);
+    setIsLoading(true);
+    try {
+      const rawLink = form.values.link.trim();
       const url = new URL(rawLink);
-      const params = new URLSearchParams(url.search);
-      tag = params.get('tag') || '';
-    } else if (game.toLowerCase() === 'clash of clans') {
-      const url = new URL(rawLink);
-      const params = new URLSearchParams(url.search);
-      tag = params.get('tag') || '';
-    } else {
-      console.warn('⚠️ Juego no reconocido:', game);
-    }
-
-    if (!tag) {
-      console.error('❌ No se pudo extraer el tag del enlace');
-      showNotification({
-        title: t('Error al extraer tag'),
-        message: t('No se pudo extraer el tag del enlace'),
-        color: 'red',
+      let tag = new URLSearchParams(url.search).get('tag') || '';
+      if (!tag) {
+        showNotification({ title: t('Error al extraer tag'), message: t('No se pudo extraer el tag del enlace'), color: 'red' });
+        return;
+      }
+      tag = tag.replace(/^%23/, '').replace(/^#/, '').toUpperCase();
+      const encodedTag = encodeURIComponent(`#${tag}`);
+      const res = await fetch(`${API_URL}/api/clash?tag=${encodedTag}&type=full`);
+      const data = await res.json();
+      const clanName = data?.info?.name?.trim() || data?.name?.trim() || '';
+      if (!clanName) {
+        showNotification({ title: t('Error al obtener clan'), message: t('No se pudo obtener el nombre del clan.'), color: 'red' });
+        return;
+      }
+      const slug = slugify(clanName);
+      const { descriptionEs, descriptionEn, ...plainValues } = form.values;
+      const docRef = await addDoc(collection(db, 'clanes'), {
+        ...plainValues,
+        juego: game.toLowerCase().replace(/\s+/g, '-'),
+        tag: `%23${tag}`,
+        name: clanName,
+        slug,
+        link: rawLink,
+        description: { es: descriptionEs.trim(), en: descriptionEn.trim() },
+        destacado: false,
+        visitas: 0,
+        createdAt: new Date(),
+        tipo: game.toLowerCase().replace(/\s+/g, '-'),
+        translationPending: !descriptionEs.trim() || !descriptionEn.trim(),
       });
-      return;
+      showNotification({ title: t('¡Éxito!'), message: t('Clan publicado correctamente'), color: 'green' });
+      if (!descriptionEs.trim() || !descriptionEn.trim()) {
+        const text = descriptionEs.trim() || descriptionEn.trim();
+        const source = descriptionEs.trim() ? 'ES' : 'EN';
+        const target = descriptionEs.trim() ? 'EN' : 'ES';
+        let attempts = 0;
+        const intervalId = setInterval(async () => {
+          attempts++;
+          try {
+            const translated = await translateText(text, source, target);
+            if (translated && translated.length >= 20) {
+              await updateDoc(docRef, { [`description.${target.toLowerCase()}`]: translated, translationPending: false });
+              clearInterval(intervalId);
+            }
+          } catch (e) { console.warn(e); }
+          if (attempts > 60) clearInterval(intervalId);
+        }, 5000);
+      }
+      form.reset();
+      router.push(`/clanes/clanes-de-${game.toLowerCase().replace(/\s+/g, '-')}/${slug}`);
+    } catch (error) {
+      console.error(error);
+      showNotification({ title: t('Error'), message: t('No se pudo guardar.'), color: 'red' });
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    tag = tag.replace(/^%23/, '').replace(/^#/, '').toUpperCase();
-    const encodedTag = encodeURIComponent(`#${tag}`);
+  const isLinkValid =
+    (game === 'Clash Royale' && clashRoyaleClanRegex.test(form.values.link.trim())) ||
+    (game === 'Clash of Clans' && clashOfClansClanRegex.test(form.values.link.trim()));
 
-    const url = `${API_URL}/api/clash?tag=${encodedTag}&type=full`;
+  const descLen = baseLang === 'es' ? form.values.descriptionEs.length : form.values.descriptionEn.length;
 
-    const res = await fetch(url);
-    const data = await res.json();
-
-
-    const clanName = data?.info?.name?.trim() || data?.name?.trim() || '';
-    if (!clanName) {
-      console.warn('❌ No se obtuvo el nombre del clan desde la API');
-      showNotification({
-        title: t('Error al obtener clan'),
-        message: t('No se pudo obtener el nombre del clan.'),
-        color: 'red',
-      });
-      return;
-    }
-
-
-    const slug = slugify(clanName);
-
-    const { descriptionEs, descriptionEn, ...plainValues } = form.values;
-
-    const inviteLink = rawLink; // 🔄 O reemplaza si tienes otro link final
-
-    const docRef = await addDoc(collection(db, 'clanes'), {
-      ...plainValues,
-      juego: game.toLowerCase().replace(/\s+/g, '-'),
-      tag: `%23${tag}`, // ← con #
-      name: clanName,
-      slug,
-      link: inviteLink,
-      description: {
-        es: descriptionEs.trim(),
-        en: descriptionEn.trim(),
-      },
-      destacado: false,
-      visitas: 0,
-      createdAt: new Date(),
-      tipo: game.toLowerCase().replace(/\s+/g, '-'),
-      translationPending: !descriptionEs.trim() || !descriptionEn.trim(),
-    });
-
-
-    showNotification({
-      title: t('¡Éxito!'),
-      message: t('Clan publicado correctamente'),
-      color: 'green',
-    });
-
-    // 🈯 Traducción automática si falta
-    if (!descriptionEs.trim() || !descriptionEn.trim()) {
-      const text = descriptionEs.trim() || descriptionEn.trim();
-      const source = descriptionEs.trim() ? 'ES' : 'EN';
-      const target = descriptionEs.trim() ? 'EN' : 'ES';
-
-
-      let attempts = 0;
-      const intervalId = setInterval(async () => {
-        attempts += 1;
-
-        try {
-          const translated = await translateText(text, source, target);
-
-          if (translated && translated.length >= 20) {
-            await updateDoc(docRef, {
-              [`description.${target.toLowerCase()}`]: translated,
-              translationPending: false,
-            });
-            clearInterval(intervalId);
-          }
-        } catch (e) {
-          console.warn('⚠️ Error durante la traducción automática:', e);
-        }
-
-        if (attempts > 60) {
-          console.warn('🚫 Se alcanzó el máximo de intentos de traducción.');
-          clearInterval(intervalId);
-        }
-      }, 5000);
-    }
-
-    form.reset();
-    router.push(`/clanes/clanes-de-${game.toLowerCase().replace(/\s+/g, '-')}/${slug}`);
-  } catch (error) {
-    console.error('🔥 Error en handleVerify:', error);
-    showNotification({
-      title: t('Error'),
-      message: t('No se pudo guardar.'),
-      color: 'red',
-    });
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-
-
-
-  /* ───────────────────────── Render ──────────────────────────── */
   return (
     <>
       <Head>
         <title>{`Publicar Clan de ${game} | Gratis en JoinGroups 2025`}</title>
-        <meta
-          name="description"
-          content={`Envía tu clan de ${game} para ser listado en nuestro directorio verificado.`}
-        />
-        <link
-          rel="canonical"
-          href="https://joingroups.pro/clanes/publicar-clan"
-        />
+        <meta name="description" content={`Envía tu clan de ${game} para ser listado en nuestro directorio verificado.`} />
+        <link rel="canonical" href="https://joingroups.pro/clanes/publicar-clan" />
       </Head>
 
-      <Container size="lg" px="md">      
-        <Stack spacing="sm" mb="md">
-          <Title order={2}>
-            {t('Publica tu Clan')}
-          </Title>
+      <div className={classes.pageBg}>
+        <div className={classes.wrapper}>
 
-          <Button
-            variant="outline"
-            color="blue"
-            component="a"
+          {/* Header */}
+          <div className={classes.header}>
+            <div className={classes.eyebrow}>
+              <span className={classes.eyebrowDot} />
+              Directorio verificado
+            </div>
+            <h1 className={classes.pageTitle}>{t('Publica tu Clan')}</h1>
+            <p className={classes.pageSub}>
+              Tu clan aparecerá en el directorio público de JoinGroups en minutos.
+            </p>
+          </div>
+
+          {/* Suggestion banner */}
+          <a
             href="https://wa.me/5212284935831?text=Hola%2C%20me%20gustaría%20sugerir%20un%20nuevo%20juego%20para%20los%20clanes%20en%20JoinGroups"
             target="_blank"
             rel="noopener noreferrer"
-            fullWidth
+            className={classes.suggestionBanner}
           >
-            {t('¿Quieres que agreguemos otro juego? Comunícate con nosotros')}
-          </Button>
-        </Stack>
+            <div className={classes.suggestionIcon}>
+              <IconMessageCircle size={17} />
+            </div>
+            <div className={classes.suggestionText}>
+              <strong>¿Quieres otro juego?</strong>
+              Comunícate con nosotros para sugerirlo
+            </div>
+          </a>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!form.validate().hasErrors) setModalOpen(true);
-          }}
-        >
-          <Stack>
-            {/* Juego */}
-            <Select
-              label="Juego"
-              placeholder="Selecciona un juego"
-              data={['Clash Royale', 'Clash of Clans']}
-              value={game}
-              onChange={setGame}
-              allowDeselect={false}
-            />
-
-            <TextInput
-              label={t('Enlace de invitación')}
-              placeholder={
-                game === 'Clash Royale'
-                  ? 'https://link.clashroyale.com/invite/clan/...'
-                  : 'https://link.clashofclans.com/en?...tag=YOURTAG'
-              }
-              required
-              {...form.getInputProps('link')}
-            />
-
-            {/* Feedback visual del link */}
-            {form.values.link && (
-              <Text
-                size="xs"
-                c={
-                  (game === 'Clash Royale' &&
-                    clashRoyaleClanRegex.test(
-                      form.values.link.trim()
-                    )) ||
-                  (game === 'Clash of Clans' &&
-                    clashOfClansClanRegex.test(
-                      form.values.link.trim()
-                    ))
-                    ? 'green'
-                    : 'red'
-                }
-              >
-                {game === 'Clash Royale' &&
-                  clashRoyaleClanRegex.test(
-                    form.values.link.trim()
-                  ) &&
-                  t('Enlace válido de clan (Clash Royale)')}
-                {game === 'Clash of Clans' &&
-                  clashOfClansClanRegex.test(
-                    form.values.link.trim()
-                  ) &&
-                  t('Enlace válido de clan (Clash of Clans)')}
-                {!(
-                  (game === 'Clash Royale' &&
-                    clashRoyaleClanRegex.test(
-                      form.values.link.trim()
-                    )) ||
-                  (game === 'Clash of Clans' &&
-                    clashOfClansClanRegex.test(
-                      form.values.link.trim()
-                    ))
-                ) && t('Enlace no válido de clan')}
-              </Text>
-            )}
-
-            {/* Feedback visual del tag */}
-            {form.values.tag && (
-              <Text
-                size="xs"
-                c={/^#[A-Z0-9]{5,}$/.test(form.values.tag.trim()) ? 'green' : 'red'}
-              >
-                {/^#[A-Z0-9]{5,}$/.test(form.values.tag.trim())
-                  ? t('Tag válido')
-                  : t('Formato incorrecto. Ejemplo: #ABC123')}
-              </Text>
-            )}
-
-            {/* Email */}
-            <TextInput
-              label={t('Tu e‑mail')}
-              placeholder="email@email.com"
-              required
-              {...form.getInputProps('email')}
-            />
-            <TextInput
-              label={t('Repite tu e‑mail')}
-              required
-              {...form.getInputProps('emailRepeat')}
-            />
-
-            {/* Descripción ES / EN */}
-            <Textarea
-              label="Descripción (Español)"
-              placeholder="⌨ Máximo 320 caracteres"
-              required={baseLang === 'es'}
-              autosize
-              minRows={3}
-              style={{
-                display: baseLang === 'es' ? 'block' : 'none',
+          {/* Form card */}
+          <div className={classes.card}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!form.validate().hasErrors) setModalOpen(true);
               }}
-              value={form.values.descriptionEs}
-              onChange={(e) => {
-                form.setFieldValue(
-                  'descriptionEs',
-                  e.currentTarget.value
-                );
-                debouncedTranslate();
-              }}
-              error={form.errors.descriptionEs}
-            />
-
-            <Textarea
-              label="Description (English)"
-              placeholder="⌨ Maximum 320 characters"
-              required={baseLang === 'en'}
-              autosize
-              minRows={3}
-              style={{
-                display: baseLang === 'en' ? 'block' : 'none',
-              }}
-              value={form.values.descriptionEn}
-              onChange={(e) => {
-                form.setFieldValue(
-                  'descriptionEn',
-                  e.currentTarget.value
-                );
-                debouncedTranslate();
-              }}
-              error={form.errors.descriptionEn}
-            />
-
-            {/* Categorías */}
-            <Select
-              label={t('Categorías')}
-              placeholder={t('Selecciona una categoría')}
-              {...form.getInputProps('categories')}
-              data={[
-                'Competitivo',
-                'Casual',
-                'Guerras de clanes',
-                'Farming',
-                'Esports',
-              ]}
-            />
-
-            {/* Términos */}
-            <Checkbox
-              label={t(
-                'He leído y acepto las condiciones de uso y la privacidad'
-              )}
-              required
-              {...form.getInputProps('acceptTerms', {
-                type: 'checkbox',
-              })}
-            />
-
-            {/* Botón */}
-            <Button
-              type="submit"
-              mt="md"
-              loading={isLoading}
-              loaderProps={{ type: 'dots' }}
             >
-              {t('Publicar')}
-            </Button>
-          </Stack>
-        </form>
+              {/* Game selector */}
+              <div className={classes.sectionLabel}>Juego</div>
+              <div className={classes.gameSelector}>
+                {['Clash Royale', 'Clash of Clans'].map(g => (
+                  <button
+                    key={g}
+                    type="button"
+                    className={`${classes.gameBtn} ${game === g ? classes.gameBtnActive : ''}`}
+                    onClick={() => setGame(g)}
+                  >
+                    <IconShield size={14} />
+                    {g}
+                  </button>
+                ))}
+              </div>
 
-        <Modal
-          opened={modalOpen}
-          onClose={() => setModalOpen(false)}
-          title={t('Verifica que no eres un bot')}
-          centered
-        >
-          <HCaptcha
-            sitekey="71f4e852-9d22-4418-aef6-7c1c0a7c5b54"
-            onVerify={handleVerify}
-            ref={captchaRef}
-          />
-        </Modal>
-      </Container>
+              <div className={classes.sep} />
 
+              {/* Invite link */}
+              <div className={classes.sectionLabel}>Enlace de invitación</div>
+              <div className={classes.fieldGroup}>
+                <div className={classes.field}>
+                  <label className={classes.label}>
+                    <IconLink size={10} style={{ display: 'inline', marginRight: 4 }} />
+                    Link del clan<span className={classes.required}>*</span>
+                  </label>
+                  <input
+                    className={`${classes.input} ${form.errors.link ? classes.inputError : ''}`}
+                    placeholder={
+                      game === 'Clash Royale'
+                        ? 'https://link.clashroyale.com/invite/clan/...'
+                        : 'https://link.clashofclans.com/en?...tag=YOURTAG'
+                    }
+                    value={form.values.link}
+                    onChange={e => form.setFieldValue('link', e.target.value)}
+                  />
+                  {form.values.link && (
+                    <span className={`${classes.linkFeedback} ${isLinkValid ? classes.linkValid : classes.linkInvalid}`}>
+                      {isLinkValid
+                        ? <><IconCheck size={12} /> Enlace válido de {game}</>
+                        : <><IconX size={12} /> Enlace no válido</>}
+                    </span>
+                  )}
+                  {form.errors.link && <span className={classes.errorMsg}><IconX size={11} />{form.errors.link}</span>}
+                </div>
+              </div>
+
+              <div className={classes.sep} />
+
+              {/* Email */}
+              <div className={classes.sectionLabel}>Contacto</div>
+              <div className={classes.fieldGroup}>
+                <div className={classes.fieldRow}>
+                  <div className={classes.field}>
+                    <label className={classes.label}>
+                      <IconMail size={10} style={{ display: 'inline', marginRight: 4 }} />
+                      Tu e‑mail<span className={classes.required}>*</span>
+                    </label>
+                    <input
+                      type="email"
+                      className={`${classes.input} ${form.errors.email ? classes.inputError : ''}`}
+                      placeholder="email@email.com"
+                      value={form.values.email}
+                      onChange={e => form.setFieldValue('email', e.target.value)}
+                    />
+                    {form.errors.email && <span className={classes.errorMsg}><IconX size={11} />{form.errors.email}</span>}
+                  </div>
+                  <div className={classes.field}>
+                    <label className={classes.label}>
+                      Confirmar email<span className={classes.required}>*</span>
+                    </label>
+                    <input
+                      type="email"
+                      className={`${classes.input} ${form.errors.emailRepeat ? classes.inputError : ''}`}
+                      placeholder="email@email.com"
+                      value={form.values.emailRepeat}
+                      onChange={e => form.setFieldValue('emailRepeat', e.target.value)}
+                    />
+                    {form.errors.emailRepeat && <span className={classes.errorMsg}><IconX size={11} />{form.errors.emailRepeat}</span>}
+                  </div>
+                </div>
+              </div>
+
+              <div className={classes.sep} />
+
+              {/* Description */}
+              <div className={classes.sectionLabel}>Descripción</div>
+              <div className={classes.fieldGroup}>
+                {baseLang === 'es' ? (
+                  <div className={classes.field}>
+                    <label className={classes.label}>
+                      <IconAlignLeft size={10} style={{ display: 'inline', marginRight: 4 }} />
+                      Descripción (Español)<span className={classes.required}>*</span>
+                    </label>
+                    <textarea
+                      className={`${classes.input} ${classes.textarea} ${form.errors.descriptionEs ? classes.inputError : ''}`}
+                      placeholder="Describe tu clan: tipo de juego, requisitos, ambiente... (20–320 caracteres)"
+                      maxLength={320}
+                      value={form.values.descriptionEs}
+                      onChange={e => { form.setFieldValue('descriptionEs', e.target.value); debouncedTranslate(); }}
+                    />
+                    <span className={`${classes.charCount} ${descLen >= 20 ? classes.charCountOk : descLen > 0 ? classes.charCountWarn : ''}`}>
+                      {descLen}/320{descLen > 0 && descLen < 20 ? ' · mínimo 20' : ''}
+                    </span>
+                    {form.errors.descriptionEs && <span className={classes.errorMsg}><IconX size={11} />{form.errors.descriptionEs}</span>}
+                  </div>
+                ) : (
+                  <div className={classes.field}>
+                    <label className={classes.label}>
+                      <IconAlignLeft size={10} style={{ display: 'inline', marginRight: 4 }} />
+                      Description (English)<span className={classes.required}>*</span>
+                    </label>
+                    <textarea
+                      className={`${classes.input} ${classes.textarea} ${form.errors.descriptionEn ? classes.inputError : ''}`}
+                      placeholder="Describe your clan: game type, requirements, atmosphere... (20–320 characters)"
+                      maxLength={320}
+                      value={form.values.descriptionEn}
+                      onChange={e => { form.setFieldValue('descriptionEn', e.target.value); debouncedTranslate(); }}
+                    />
+                    <span className={`${classes.charCount} ${descLen >= 20 ? classes.charCountOk : descLen > 0 ? classes.charCountWarn : ''}`}>
+                      {descLen}/320{descLen > 0 && descLen < 20 ? ' · min 20' : ''}
+                    </span>
+                    {form.errors.descriptionEn && <span className={classes.errorMsg}><IconX size={11} />{form.errors.descriptionEn}</span>}
+                  </div>
+                )}
+              </div>
+
+              <div className={classes.sep} />
+
+              {/* Category */}
+              <div className={classes.sectionLabel}>Categoría</div>
+              <div className={classes.categoryGrid}>
+                {[
+                  { value: 'Competitivo',       icon: '⚔️' },
+                  { value: 'Casual',             icon: '🎮' },
+                  { value: 'Guerras de clanes',  icon: '🏰' },
+                  { value: 'Farming',            icon: '🌾' },
+                  { value: 'Esports',            icon: '🏆' },
+                ].map(({ value, icon }) => (
+                  <button
+                    key={value}
+                    type="button"
+                    className={`${classes.categoryChip} ${form.values.categories === value ? classes.categoryChipActive : ''}`}
+                    onClick={() => form.setFieldValue('categories', form.values.categories === value ? '' : value)}
+                  >
+                    <span className={classes.chipIcon}>{icon}</span>
+                    {value}
+                  </button>
+                ))}
+              </div>
+              {form.errors.categories && (
+                <span className={classes.errorMsg} style={{ marginTop: 6 }}>
+                  <IconX size={11} />{form.errors.categories}
+                </span>
+              )}
+
+              <div className={classes.sep} />
+
+              {/* Terms */}
+              <label className={classes.checkRow}>
+                <input
+                  type="checkbox"
+                  className={classes.checkBox}
+                  checked={form.values.acceptTerms}
+                  onChange={e => form.setFieldValue('acceptTerms', e.target.checked)}
+                />
+                <span className={classes.checkLabel}>
+                  {t('He leído y acepto las')}{' '}
+                  <a href="/privacidad" target="_blank" rel="noopener noreferrer">
+                    condiciones de uso y la privacidad
+                  </a>
+                </span>
+              </label>
+              {form.errors.acceptTerms && (
+                <span className={classes.errorMsg} style={{ marginTop: 4 }}>
+                  <IconX size={11} />{form.errors.acceptTerms}
+                </span>
+              )}
+
+              {/* Submit */}
+              <button
+                type="submit"
+                className={classes.submitBtn}
+                disabled={isLoading}
+              >
+                {isLoading
+                  ? <><span className={classes.spinner} /> Publicando...</>
+                  : <><IconSend size={14} /> Publicar clan</>}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Captcha modal */}
+      <Modal
+        opened={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={<span style={{ fontWeight: 800, fontSize: 15, color: '#0F0F14', letterSpacing: '-0.02em' }}>{t('Verifica que no eres un bot')}</span>}
+        centered
+        styles={{
+          content: { background: '#fff', borderRadius: 20, border: '1px solid #F0F0F0', boxShadow: '0 20px 60px rgba(0,0,0,0.12)' },
+          header: { background: '#fff', borderBottom: '1px solid #F5F5F5', borderRadius: '20px 20px 0 0', padding: '1.25rem 1.5rem' },
+        }}
+      >
+        <HCaptcha
+          sitekey="71f4e852-9d22-4418-aef6-7c1c0a7c5b54"
+          onVerify={handleVerify}
+          ref={captchaRef}
+        />
+      </Modal>
     </>
   );
 }

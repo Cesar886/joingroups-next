@@ -1,5 +1,5 @@
 /* ──────────────────────────────────────────
-   CLANES DE CLASH ROYALE — Premium Minimalist
+   CLANES DE CLASH OF CLANS — Premium Minimalist
    ────────────────────────────────────────── */
 
 .pageBg {
@@ -32,7 +32,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #EF4444;
+  background: #D97706;
 }
 
 .pageTitle {
@@ -130,8 +130,8 @@
 }
 
 .searchInput:focus {
-  border-color: #EF4444;
-  box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+  border-color: #D97706;
+  box-shadow: 0 0 0 3px rgba(217,119,6,0.1);
 }
 
 .searchInput::placeholder { color: #D4D4D4; }
@@ -154,7 +154,7 @@
   width: 38px;
   height: 38px;
   border-radius: 12px;
-  background: #FEF2F2;
+  background: #FEF3C7;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -209,7 +209,7 @@
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: #FEF2F2;
+  background: #FEF3C7;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -243,17 +243,9 @@
   flex-wrap: wrap;
 }
 
-.clanMetaDot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #E0E0E0;
-}
-
 .highlightBadge {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
   background: #FEF9C3;
   border: 1px solid #FDE047;
   color: #854D0E;
@@ -362,67 +354,6 @@
   font-weight: 500;
 }
 
-/* ── FAQ accordion ── */
-.faqSection {
-  margin-top: 2.5rem;
-}
-
-.faqTitle {
-  font-size: 14px;
-  font-weight: 800;
-  color: #0F0F14;
-  letter-spacing: -0.02em;
-  margin: 0 0 1rem;
-}
-
-.faqItem {
-  background: #FFFFFF;
-  border-radius: 14px;
-  border: 1px solid #F0F0F0;
-  margin-bottom: 8px;
-  overflow: hidden;
-  transition: box-shadow 0.15s ease;
-}
-
-.faqItem:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-
-.faqQuestion {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
-  background: none;
-  border: none;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: #0F0F14;
-  text-align: left;
-  cursor: pointer;
-  font-family: inherit;
-  gap: 12px;
-}
-
-.faqQuestion:hover { background: #FAFAFA; }
-
-.faqChevron {
-  color: #C4C4C4;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-
-.faqChevronOpen { transform: rotate(180deg); }
-
-.faqAnswer {
-  padding: 0 16px 14px;
-  font-size: 13px;
-  color: #888;
-  line-height: 1.7;
-}
-
-.faqAnswer a { color: #4F46E5; font-weight: 600; text-decoration: none; }
-.faqAnswer a:hover { text-decoration: underline; }
-
 /* ── Footer CTA ── */
 .footerCta {
   background: #FFFFFF;
@@ -449,46 +380,35 @@
   margin: 0 0 1rem;
 }
 
-.footerCtaText a { color: #EF4444; font-weight: 600; text-decoration: none; }
+.footerCtaText a { color: #D97706; font-weight: 600; text-decoration: none; }
 .footerCtaText a:hover { text-decoration: underline; }
 
-/* ── Floating publish button ── */
-.floatingBtn {
-  position: fixed;
-  z-index: 1000;
+.publishBtn {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 11px 18px;
-  border-radius: 99px;
-  background: #EF4444;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: #0F0F14;
   color: #FFFFFF;
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  box-shadow: 0 4px 16px rgba(239,68,68,0.35), 0 2px 6px rgba(0,0,0,0.12);
-  animation: floatPulse 2s ease-in-out infinite;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  margin-top: 0.5rem;
 }
 
-.floatingBtn:hover { opacity: 0.9; }
-
-@keyframes floatPulse {
-  0%, 100% { box-shadow: 0 4px 16px rgba(239,68,68,0.35), 0 2px 6px rgba(0,0,0,0.12); }
-  50%       { box-shadow: 0 6px 24px rgba(239,68,68,0.5),  0 3px 10px rgba(0,0,0,0.15); }
+.publishBtn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
 }
 
 /* ── Responsive ── */
 @media (max-width: 480px) {
   .clanCard { border-radius: 14px; }
   .promoBanner { flex-direction: column; gap: 10px; }
-  .clanStats { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .clanCard, .gameBtn, .pageBtn { transition: none; }
-  .floatingBtn { animation: none; }
 }
