@@ -1,4 +1,6 @@
-const VPS_URL = 'http://157.230.188.120:7890';
+const VPS_URL = process.env.VPS_API_URL || 'http://157.230.188.120:7890';
+
+const ALLOWED_TYPES = new Set(['info', 'members', 'war', 'warlog', 'riverrace', 'riverracelog', 'full']);
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -12,9 +14,16 @@ export async function GET(request) {
     });
   }
 
+  if (!ALLOWED_TYPES.has(type)) {
+    return new Response(JSON.stringify({ error: 'Invalid type' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   try {
     const res = await fetch(
-      `${VPS_URL}/api/clash?tag=${encodeURIComponent(tag)}&type=${type}`,
+      `${VPS_URL}/api/clash?tag=${encodeURIComponent(tag)}&type=${encodeURIComponent(type)}`,
       { headers: { Accept: 'application/json' } }
     );
 
