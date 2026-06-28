@@ -245,7 +245,7 @@ export default function HomeClient({ serverData }) {
             {isMobile
               ? 'Únete a comunidades en Telegram, WhatsApp y juegos populares.'
               : <>
-                  En <strong style={{ color: '#374151' }}>JoinGroups.pro</strong> puedes unirte fácilmente a comunidades
+                  En <strong style={{ color: '#374151' }}>JoinGroups.lat</strong> puedes unirte fácilmente a comunidades
                   populares en <strong style={{ color: '#374151' }}>Telegram</strong>, <strong style={{ color: '#374151' }}>WhatsApp</strong> y
                   juegos como <strong style={{ color: '#374151' }}>Clash Royale</strong>. Explora grupos por temas, idiomas y más.
                 </>
@@ -471,7 +471,7 @@ export default function HomeClient({ serverData }) {
                   onClick={() => {
                     const currentPath = window.location.pathname + window.location.search;
                     i18n.changeLanguage(country.lang);
-                    window.location.href = `https://${country.value}.joingroups.pro${currentPath}`;
+                    window.location.href = `https://${country.value}.joingroups.lat${currentPath}`;
                   }}
                 >
                   {country.label}
