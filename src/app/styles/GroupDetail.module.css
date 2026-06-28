@@ -641,14 +641,204 @@
 }
 
 @media (max-width: 480px) {
+  .pageBg {
+    padding: 0.85rem 0.7rem 1rem;
+  }
+  .wrapper {
+    gap: 10px;
+  }
   .hero, .card, .actionPanel, .adSection { border-radius: 16px; }
-  .heroBody { padding: 1.25rem 1.25rem 1.25rem; }
-  .groupName { font-size: 18px; }
-  .profileHeader { flex-direction: column; }
-  .profileTitle { font-size: 20px; }
+  .heroBody { padding: 1.05rem 0.95rem 0.9rem; gap: 11px; }
+  .heroIcon {
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+  }
+  .heroIcon img,
+  .heroIcon svg {
+    width: 24px;
+    height: 24px;
+  }
+  .groupName { font-size: 18px; margin-bottom: 7px; }
+  .heroBadges { gap: 5px; }
+  .heroIntro { margin-top: 8px; font-size: 13px; line-height: 1.45; }
+  .platformBadge,
+  .catBadge {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+  .flagBadge { font-size: 15px; }
+  .statsStrip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .statCell {
+    padding: 0.72rem 0.55rem;
+    min-height: 60px;
+    gap: 2px;
+  }
+  .statVal {
+    font-size: 14px;
+    gap: 4px;
+    min-height: 16px;
+  }
+  .statVal svg {
+    width: 13px;
+    height: 13px;
+  }
+  .statValSafe, .statValAdult {
+    font-size: 12px;
+  }
+  .statLbl {
+    font-size: 8px;
+    letter-spacing: 0.03em;
+  }
+  .card {
+    padding: 0.95rem;
+  }
+  .profileHeader {
+    flex-direction: column;
+    padding: 0.95rem 0.95rem 0;
+    gap: 6px;
+  }
+  .profileEyebrow {
+    margin-bottom: 3px;
+    font-size: 9px;
+  }
+  .profileTitle { font-size: 17px; }
+  .contentPill {
+    padding: 6px 9px;
+    font-size: 10px;
+  }
+  .profileDesc {
+    margin: 10px 0.95rem 0;
+    padding: 10px 11px;
+    font-size: 12.5px;
+    line-height: 1.55;
+    border-left-width: 2px;
+  }
+  .detailGrid {
+    margin-top: 10px;
+  }
+  .detailItem {
+    padding: 10px 0.85rem;
+    gap: 8px;
+    grid-template-columns: 32px minmax(0, 1fr);
+  }
+  .detailIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+  .detailIcon svg {
+    width: 15px;
+    height: 15px;
+  }
+  .detailLabel {
+    font-size: 8px;
+    letter-spacing: 0.03em;
+  }
+  .detailItem strong {
+    font-size: 12.5px;
+    line-height: 1.25;
+  }
+  .adSection {
+    padding: 8px 10px 10px;
+    gap: 4px;
+  }
+  .adStack {
+    gap: 6px;
+  }
+  .adLabel {
+    font-size: 8px;
+  }
+  .adFrame,
+  .adMount {
+    --ad-frame-height: 60px;
+    height: 60px;
+    min-height: 60px;
+  }
+  .adIframe {
+    transform-origin: center top;
+  }
+  .actionPanel {
+    gap: 8px;
+    padding: 10px;
+  }
+  .joinBtn {
+    padding: 13px 16px;
+    font-size: 13px;
+    border-radius: 14px;
+  }
+  .reportBtn {
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 12px;
+    font-size: 10.5px;
+  }
   .contentPill { align-self: flex-start; }
 }
 
+@media (max-width: 360px) {
+  .pageBg {
+    padding-inline: 0.45rem;
+  }
+  .wrapper {
+    gap: 8px;
+  }
+  .heroBody {
+    padding: 0.95rem 0.85rem 0.8rem;
+    gap: 9px;
+  }
+  .heroIcon {
+    width: 40px;
+    height: 40px;
+  }
+  .groupName { font-size: 16px; }
+  .heroIntro { font-size: 12px; }
+  .statCell {
+    min-height: 54px;
+    padding: 0.5rem 0.3rem;
+  }
+  .statVal {
+    font-size: 12px;
+  }
+  .statLbl {
+    font-size: 7px;
+  }
+  .card {
+    padding: 0.82rem;
+  }
+  .profileHeader {
+    padding: 0.82rem 0.82rem 0;
+  }
+  .profileTitle { font-size: 15px; }
+  .profileDesc {
+    margin: 8px 0.82rem 0;
+    padding: 8px 9px;
+    font-size: 11.5px;
+  }
+  .detailItem {
+    padding: 8px 0.72rem;
+    grid-template-columns: 30px minmax(0, 1fr);
+  }
+  .detailIcon {
+    width: 30px;
+    height: 30px;
+  }
+  .detailIcon svg {
+    width: 14px;
+    height: 14px;
+  }
+  .detailItem strong {
+    font-size: 11.5px;
+  }
+  .adFrame,
+  .adMount {
+    --ad-frame-height: 60px;
+    height: 60px;
+    min-height: 60px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .joinBtn, .reportBtn { transition: none; }
 }

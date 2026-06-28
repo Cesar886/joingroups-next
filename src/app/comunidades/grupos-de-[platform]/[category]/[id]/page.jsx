@@ -131,23 +131,13 @@ const MOBILE_GROUP_AD = {
   params: {},
 };
 
-const NARROW_GROUP_AD = {
-  key: 'bba2fc9cd763aa2397062a347d6d3a5e',
-  format: 'iframe',
-  height: 600,
-  width: 160,
-  params: {},
-};
-
 const MIN_HORIZONTAL_AD_SCALE = 0.8;
 
 const getAdScriptSrc = (key) => `https://landslidegraphsystems.com/${key}/invoke.js`;
 
 const getBestAdConfig = (availableWidth, isMobile) => {
   if (!isMobile) return DESKTOP_GROUP_AD;
-  return availableWidth < MOBILE_GROUP_AD.width * MIN_HORIZONTAL_AD_SCALE
-    ? NARROW_GROUP_AD
-    : MOBILE_GROUP_AD;
+  return MOBILE_GROUP_AD;
 };
 
 const buildAdSrcDoc = (config) => `<!doctype html>
@@ -210,7 +200,7 @@ function GroupAdSlot({ slotId }) {
 
   const config = adState?.config;
   const scale = adState?.scale || 1;
-  const frameHeight = config ? Math.ceil(config.height * scale) : DESKTOP_GROUP_AD.height;
+  const frameHeight = config ? Math.max(48, Math.ceil(config.height * scale)) : DESKTOP_GROUP_AD.height;
 
   return (
     <div className={classes.adFrame} style={{ '--ad-frame-height': `${frameHeight}px` }}>
