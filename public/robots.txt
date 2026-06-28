@@ -14,4 +14,4 @@ Disallow: /assets/
 Disallow: /static/
 
 # Apunta a tu sitemap
-Sitemap: https://joingroups.pro/sitemap.xml
+Sitemap: https://joingroups.lat/sitemap.xml

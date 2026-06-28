@@ -8,20 +8,20 @@ export const metadata = {
   keywords: 'grupos de Telegram, grupos de WhatsApp, clanes de videojuegos, comunidades activas, clash royale, clash of clans, grupos por país',
   robots: 'index, follow',
   alternates: {
-    canonical: 'https://joingroups.pro',
+    canonical: 'https://joingroups.lat',
     languages: {
-      'es-ES': 'https://es.joingroups.pro',
-      'en-US': 'https://en.joingroups.pro',
+      'es-ES': 'https://es.joingroups.lat',
+      'en-US': 'https://en.joingroups.lat',
     },
   },
   openGraph: {
-    title: 'Grupos de Telegram, WhatsApp y Clanes - JoinGroups.pro',
+    title: 'Grupos de Telegram, WhatsApp y Clanes - joingroups.lat',
     description: 'Un catálogo completo de comunidades activas. Filtra y únete fácil por país y categoría.',
-    url: 'https://joingroups.pro/',
-    siteName: 'JoinGroups.pro',
+    url: 'https://joingroups.lat/',
+    siteName: 'joingroups.lat',
     images: [
       {
-        url: 'https://joingroups.pro/opengraph-image.png',
+        url: 'https://joingroups.lat/opengraph-image.png',
         width: 1200,
         height: 630,
         alt: 'Grupos y clanes activos de Telegram, WhatsApp y videojuegos',
@@ -31,9 +31,9 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Únete a Grupos de Telegram, WhatsApp y Clanes | JoinGroups.pro',
+    title: 'Únete a Grupos de Telegram, WhatsApp y Clanes | joingroups.lat',
     description: 'Explora comunidades activas por categoría y país. Publica o descubre grupos fácilmente.',
-    images: ['https://joingroups.pro/opengraph-image.png'],
+    images: ['https://joingroups.lat/opengraph-image.png'],
   },
     other: {
     'yandex-verification': '6a0e37aeb6ffa1fa',

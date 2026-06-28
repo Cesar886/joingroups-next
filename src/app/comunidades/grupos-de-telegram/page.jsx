@@ -84,14 +84,14 @@ export default function Telegram() {
   return (
     <>
       <Head>
-        <title>Grupos de Telegram Activos por Categoría [2025] - JoinGroups.pro</title>
+        <title>Grupos de Telegram Activos por Categoría [2025] - joingroups.lat</title>
         <meta name="description" content="Encuentra y únete a los mejores grupos de Telegram en español. Listas actualizadas de enlaces de invitación a comunidades activas y canales." />
-        <link rel="canonical" href="https://joingroups.pro/grupos-de-telegram" />
-        <meta property="og:title" content="Únete a los Mejores Grupos de Telegram | JoinGroups.pro" />
+        <link rel="canonical" href="https://joingroups.lat/grupos-de-telegram" />
+        <meta property="og:title" content="Únete a los Mejores Grupos de Telegram | joingroups.lat" />
         <meta property="og:description" content="Explora miles de grupos de Telegram activos, organizados por temas como amistad, juegos, noticias y más." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://joingroups.pro/grupos-de-telegram" />
-        <meta property="og:image" content="https://joingroups.pro/JoinGroup.png" />
+        <meta property="og:url" content="https://joingroups.lat/grupos-de-telegram" />
+        <meta property="og:image" content="https://joingroups.lat/JoinGroup.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="keywords" content="grupos de telegram, enlaces de telegram, unirse a grupo telegram, canales de telegram, telegram grupos español" />
         <meta name="robots" content="index, follow" />

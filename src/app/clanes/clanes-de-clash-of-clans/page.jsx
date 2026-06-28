@@ -63,12 +63,12 @@ export default function ClashOfClans() {
       <Head>
         <title>Clanes de Clash of Clans Activos [2025] | Únete o Publica tu clan</title>
         <meta name="description" content="Encuentra los mejores clanes de Clash of Clans activos en 2025. Busca por nivel y únete, o publica tu clan GRATIS para reclutar nuevos miembros." />
-        <link rel="canonical" href="https://joingroups.pro/clanes/clanes-de-clash-of-clans" />
+        <link rel="canonical" href="https://joingroups.lat/clanes/clanes-de-clash-of-clans" />
         <meta property="og:title" content="Clanes de Clash of Clans | Únete o Publica tu Clan Gratis" />
         <meta property="og:description" content="La mejor lista de clanes de CoC. Filtra por tu nivel y encuentra tu comunidad ideal." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://joingroups.pro/clanes/clanes-de-clash-of-clans" />
-        <meta property="og:image" content="https://joingroups.pro/clashOfClansFondo.png" />
+        <meta property="og:url" content="https://joingroups.lat/clanes/clanes-de-clash-of-clans" />
+        <meta property="og:image" content="https://joingroups.lat/clashOfClansFondo.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="keywords" content="clanes clash of clans, clanes activos, reclutar miembros coc, unirse a clan, buscar clan clash of clans" />
         <meta name="robots" content="index, follow" />

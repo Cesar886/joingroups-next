@@ -263,7 +263,7 @@ export default function ClashRoyaleClient({ initialData }) {
           <p className={classes.footerCtaTitle}>¿Buscas los mejores clanes de Clash Royale?</p>
           <p className={classes.footerCtaText}>
             Miles de jugadores y líderes ya confían en{' '}
-            <a href="https://www.joingroups.pro/clanes/clanes-de-clash-royale">JoinGroups</a>{' '}
+            <a href="https://www.joingroups.lat/clanes/clanes-de-clash-royale">JoinGroups</a>{' '}
             para encontrar y gestionar sus clanes. Si eres líder, puedes{' '}
             <Link href="/clanes/publicar-clan" style={{ color: '#EF4444', fontWeight: 600, textDecoration: 'none' }}>
               publicar tu clan gratis

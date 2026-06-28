@@ -1398,20 +1398,20 @@ export const blogs = [
         <li>Aprendes estrategias, <strong>decks</strong> y consejos para subir de arena.</li>
         </ul>
 
-        <p>En <a href="https://joingroups.pro/clanes/clanes-de-clash-royale">Joingroups</a> puedes ver una lista de <strong>clanes Clash Royale</strong> ordenada por actividad reciente. Incluso puedes <a href="https://joingroups.pro/clanes/publicar-clan">publicar tu propio clan</a> si eres líder y quieres atraer nuevos miembros activos.</p>
+        <p>En <a href="https://joingroups.lat/clanes/clanes-de-clash-royale">Joingroups</a> puedes ver una lista de <strong>clanes Clash Royale</strong> ordenada por actividad reciente. Incluso puedes <a href="https://joingroups.lat/clanes/publicar-clan">publicar tu propio clan</a> si eres líder y quieres atraer nuevos miembros activos.</p>
 
         <h2>Top de clanes activos recomendados</h2>
-        <p>Consulta nuestro <a href="https://joingroups.pro/clanes">buscador de clanes</a> para ver los <strong>clanes activos más populares en español</strong>, filtrados por nivel, tipo de jugadores, frecuencia de juego, y más.</p>
+        <p>Consulta nuestro <a href="https://joingroups.lat/clanes">buscador de clanes</a> para ver los <strong>clanes activos más populares en español</strong>, filtrados por nivel, tipo de jugadores, frecuencia de juego, y más.</p>
 
-        <p>¿Tienes un clan activo y quieres crecer más rápido? Asegúrate de añadirlo a nuestro <a href="https://joingroups.pro/clanes/publicar-clan">directorio de clanes</a> y destacarte entre los mejores.</p>
+        <p>¿Tienes un clan activo y quieres crecer más rápido? Asegúrate de añadirlo a nuestro <a href="https://joingroups.lat/clanes/publicar-clan">directorio de clanes</a> y destacarte entre los mejores.</p>
 
         <h2>Consejo para nuevos jugadores</h2>
-        <p>Si eres nuevo o estás buscando un clan para mejorar tu juego, te recomendamos buscar clanes en <a href="https://joingroups.pro/clanes/clanes-de-clash-royale">Joingroups</a> que indiquen claramente su frecuencia de conexión, cantidad de <strong>miembros activos</strong> y enfoque (casual, competitivo, solo adultos, etc.).</p>
+        <p>Si eres nuevo o estás buscando un clan para mejorar tu juego, te recomendamos buscar clanes en <a href="https://joingroups.lat/clanes/clanes-de-clash-royale">Joingroups</a> que indiquen claramente su frecuencia de conexión, cantidad de <strong>miembros activos</strong> y enfoque (casual, competitivo, solo adultos, etc.).</p>
 
         <h2>¿Y qué pasa si no encuentras uno?</h2>
-        <p>También puedes buscar clanes en otras regiones como <a href="https://joingroups.pro/clanes/clanes-de-clash-of-clans">Hispanoamérica</a> o crear uno tú mismo con reglas que promuevan la actividad diaria.</p>
+        <p>También puedes buscar clanes en otras regiones como <a href="https://joingroups.lat/clanes/clanes-de-clash-of-clans">Hispanoamérica</a> o crear uno tú mismo con reglas que promuevan la actividad diaria.</p>
 
-        <p>En resumen, un clan activo es ideal para <strong>disfrutar Clash Royale</strong> en comunidad, subir de arena, ganar recompensas y aprender de otros jugadores. Encuentra o crea el tuyo en <a href="https://joingroups.pro/clanes">Joingroups</a> y mejora tu experiencia en el juego en 2025.</p>
+        <p>En resumen, un clan activo es ideal para <strong>disfrutar Clash Royale</strong> en comunidad, subir de arena, ganar recompensas y aprender de otros jugadores. Encuentra o crea el tuyo en <a href="https://joingroups.lat/clanes">Joingroups</a> y mejora tu experiencia en el juego en 2025.</p>
     `
     },
 

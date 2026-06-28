@@ -5,21 +5,21 @@ import { db } from '@/firebase/firebase';
 import TableSortClient from './TableSortClient'; // <-- Asegúrate de tener este componente
 
 export const metadata = {
-  title: 'Grupos de Telegram y WhatsApp por Categorías - JoinGroups.pro',
+  title: 'Grupos de Telegram y WhatsApp por Categorías - joingroups.lat',
   description: 'Explora miles de grupos activos en Telegram y WhatsApp. Únete fácilmente a comunidades de amistad, hobbies, tecnología, noticias, y más.',
   keywords: 'grupos de telegram, grupos de whatsapp, enlaces de telegram, enlaces de whatsapp, unirse a grupos, grupos por categoría, grupos 2025, comunidades online, chats temáticos',
   robots: 'index, follow',
   alternates: {
-    canonical: 'https://joingroups.pro/comunidades',
+    canonical: 'https://joingroups.lat/comunidades',
   },
   openGraph: {
     title: 'Grupos Activos de Telegram y WhatsApp - Categorías 2025',
-    description: 'Únete a comunidades activas por intereses. Encuentra tu grupo ideal y publica el tuyo gratis en JoinGroups.pro.',
-    url: 'https://joingroups.pro/comunidades',
-    siteName: 'JoinGroups.pro',
+    description: 'Únete a comunidades activas por intereses. Encuentra tu grupo ideal y publica el tuyo gratis en joingroups.lat.',
+    url: 'https://joingroups.lat/comunidades',
+    siteName: 'joingroups.lat',
     images: [
       {
-        url: 'https://joingroups.pro/opengraph-image.png',
+        url: 'https://joingroups.lat/opengraph-image.png',
         width: 1200,
         height: 630,
         alt: 'Explora grupos por categorías - JoinGroups',
@@ -31,7 +31,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Grupos de Telegram y WhatsApp por Temática - JoinGroups 2025',
     description: 'Encuentra comunidades por categoría: amistad, memes, tecnología, NSFW, y más. ¡Publica el tuyo gratis!',
-    images: ['https://joingroups.pro/opengraph-image.png'],
+    images: ['https://joingroups.lat/opengraph-image.png'],
   }
 };
 

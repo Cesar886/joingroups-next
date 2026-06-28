@@ -44,7 +44,7 @@ export default function Footer() {
             />
             <p className={classes.description}>
               <Link
-                href={i18n.language === 'es' ? 'https://joingroups.pro' : 'https://joingroups.pro'}
+                href={i18n.language === 'es' ? 'https://joingroups.lat' : 'https://joingroups.lat'}
                 style={{ color: '#E5E7EB', textDecoration: 'none', fontWeight: 500 }}
               >
                 JoinGroups
@@ -90,7 +90,7 @@ export default function Footer() {
         {/* After Footer */}
         <div className={classes.afterFooter}>
           <span style={{ color: '#6B7280', fontSize: '13px' }}>
-            © {new Date().getFullYear()} joingroups.pro. {t('Todos los derechos reservados.')}
+            © {new Date().getFullYear()} joingroups.lat. {t('Todos los derechos reservados.')}
           </span>
 
           <div className={classes.social}>

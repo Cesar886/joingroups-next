@@ -425,7 +425,7 @@ export default function CategoryPage() {
         <meta name="description" content={categoryContent.description} />
         <link
           rel="canonical"
-          href={`https://joingroups.pro/comunidades/grupos-de-${platform}/${category}`}
+          href={`https://joingroups.lat/comunidades/grupos-de-${platform}/${category}`}
         />
 
         <meta property="og:title" content={categoryContent.title} />

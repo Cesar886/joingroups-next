@@ -88,14 +88,14 @@ export default function Whatsapp() {
   return (
     <>
       <Head>
-        <title>Grupos de WhatsApp por Temas [Actualizado 2025] - JoinGroups.pro</title>
+        <title>Grupos de WhatsApp por Temas [Actualizado 2025] - joingroups.lat</title>
         <meta name="description" content="Descubre y únete a grupos de WhatsApp activos de todas las categorías: amor, amistad, stickers, etc. Enlaces de invitación verificados y actualizados." />
-        <link rel="canonical" href="https://joingroups.pro/grupos-de-whatsapp" />
-        <meta property="og:title" content="Los Mejores Grupos de WhatsApp para Unirte | JoinGroups.pro" />
+        <link rel="canonical" href="https://joingroups.lat/grupos-de-whatsapp" />
+        <meta property="og:title" content="Los Mejores Grupos de WhatsApp para Unirte | joingroups.lat" />
         <meta property="og:description" content="Busca entre cientos de grupos de WhatsApp y únete con un solo clic." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://joingroups.pro/grupos-de-whatsapp" />
-        <meta property="og:image" content="https://joingroups.pro/wapp.webp" />
+        <meta property="og:url" content="https://joingroups.lat/grupos-de-whatsapp" />
+        <meta property="og:image" content="https://joingroups.lat/wapp.webp" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="keywords" content="grupos de whatsapp, enlaces de whatsapp, unirse a grupo whatsapp, links de whatsapp" />
         <meta name="robots" content="index, follow" />

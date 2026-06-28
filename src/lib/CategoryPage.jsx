@@ -417,24 +417,24 @@ const router = useRouter();
         />
 
         {/* CANONICAL ÚNICO */}
-        <link rel="canonical" href={`https://joingroups.pro/comunidades/grupos-de-${platform}/${category}`} />
+        <link rel="canonical" href={`https://joingroups.lat/comunidades/grupos-de-${platform}/${category}`} />
 
         {/* OPEN GRAPH ÚNICO */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={`https://joingroups.pro/comunidades/grupos-de-${platform}/${category}`} />
+        <meta property="og:url" content={`https://joingroups.lat/comunidades/grupos-de-${platform}/${category}`} />
         <meta property="og:title" content={`${categoryContent.title} | Los Mejores Grupos de ${platformName}`} />
         <meta property="og:description" content={`${categoryContent.description} Comunidad activa y verificada de ${category} en ${platformName}.`} />
         {/* IMPORTANTE: Reemplaza estas URLs con tus propias imágenes de alta calidad para cada categoría/plataforma */}
-        <meta property="og:image" content={`https://joingroups.pro/images/og-${platform}-${category}.jpg`} />
+        <meta property="og:image" content={`https://joingroups.lat/images/og-${platform}-${category}.jpg`} />
         <meta property="og:site_name" content="JoinGroups" />
 
         {/* TWITTER CARDS ÚNICO */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={`https://joingroups.pro/comunidades/grupos-de-${platform}/${category}`} />
+        <meta name="twitter:url" content={`https://joingroups.lat/comunidades/grupos-de-${platform}/${category}`} />
         <meta name="twitter:title" content={`${categoryContent.title} | Únete Ahora`} />
         <meta name="twitter:description" content={`Descubre los mejores grupos de ${category} en ${platformName}. Enlaces directos y comunidades activas.`} />
         {/* IMPORTANTE: Reemplaza estas URLs con tus propias imágenes de alta calidad para cada categoría/plataforma */}
-        <meta name="twitter:image" content={`https://joingroups.pro/images/twitter-${platform}-${category}.jpg`} />
+        <meta name="twitter:image" content={`https://joingroups.lat/images/twitter-${platform}-${category}.jpg`} />
 
         {/* SCHEMA.ORG ÚNICO POR CATEGORÍA */}
         <script type="application/ld+json">
@@ -444,7 +444,7 @@ const router = useRouter();
               "@type": "CollectionPage",
               "name": "${categoryContent.title} en ${platformName}",
               "description": "${categoryContent.description}",
-              "url": "https://joingroups.pro/comunidades/grupos-de-${platform}/${category}",
+              "url": "https://joingroups.lat/comunidades/grupos-de-${platform}/${category}",
               "mainEntity": {
                 "@type": "ItemList",
                 "name": "Grupos de ${capitalize(category )} en ${platformName}",
@@ -458,7 +458,7 @@ const router = useRouter();
                     "description": typeof group.description === 'object' 
                       ? group.description[baseLang] || group.description['es'] 
                       : group.description,
-                    "url": `https://joingroups.pro/comunidades/grupos-de-${platform}/${group.slug || slugify(group.name )}`
+                    "url": `https://joingroups.lat/comunidades/grupos-de-${platform}/${group.slug || slugify(group.name )}`
                   }))
                 )}
               },
@@ -469,25 +469,25 @@ const router = useRouter();
                     "@type": "ListItem",
                     "position": 1,
                     "name": "Inicio",
-                    "item": "https://joingroups.pro/"
+                    "item": "https://joingroups.lat/"
                   },
                   {
                     "@type": "ListItem",
                     "position": 2,
                     "name": "Comunidades",
-                    "item": "https://joingroups.pro/comunidades"
+                    "item": "https://joingroups.lat/comunidades"
                   },
                   {
                     "@type": "ListItem",
                     "position": 3,
                     "name": "Grupos de ${platformName}",
-                    "item": "https://joingroups.pro/comunidades/grupos-de-${platform}"
+                    "item": "https://joingroups.lat/comunidades/grupos-de-${platform}"
                   },
                   {
                     "@type": "ListItem",
                     "position": 4,
                     "name": "${capitalize(category )}",
-                    "item": "https://joingroups.pro/comunidades/grupos-de-${platform}/${category}"
+                    "item": "https://joingroups.lat/comunidades/grupos-de-${platform}/${category}"
                   }
                 ]
               },

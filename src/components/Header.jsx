@@ -129,7 +129,7 @@ export default function Header() {
                     leftSection={country.emoji}
                     onClick={() => {
                       i18n.changeLanguage(country.lang);
-                      window.location.href = `https://${country.value}.joingroups.pro`;
+                      window.location.href = `https://${country.value}.joingroups.lat`;
                     }}
                   >
                     {country.label}

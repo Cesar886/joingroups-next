@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: post.title,
       description: post.description || post.title,
-      url: `https://joingroups.pro/blog/${slug}`,
+      url: `https://joingroups.lat/blog/${slug}`,
       type: 'article',
     },
     twitter: {

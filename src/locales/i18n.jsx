@@ -13,7 +13,7 @@ const resources = {
 
 function detectLangFromHostname() {
   if (typeof window === 'undefined') return 'es';
-  const subdomain = window.location.hostname.split('.')[0]; // us.joingroups.pro → "us"
+  const subdomain = window.location.hostname.split('.')[0]; // us.joingroups.lat → "us"
   if (subdomain === 'us') return 'en';
   if (subdomain === 'mx' || subdomain === 'es') return 'es';
   return 'es'; // fallback

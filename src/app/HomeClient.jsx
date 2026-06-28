@@ -133,7 +133,11 @@ export default function HomeClient({ serverData }) {
 
       const destacadosWhatsapp = sortedGroups.filter(g => g.tipo?.toLowerCase() === 'whatsapp' && g.destacado === true);
       const nuevosWhatsapp = sortedGroups.filter(g => g.tipo?.toLowerCase() === 'whatsapp' && !destacadosWhatsapp.some(d => d.id === g.id));
-      setGroupsWhatsapp([...destacadosWhatsapp, ...nuevosWhatsapp].slice(0, 5));
+      const whatsappPriorityName = '☆꧁༒☬ṡẗïċḳëṛṡ❤️༒꧂';
+      const whatsappSorted = [...destacadosWhatsapp, ...nuevosWhatsapp];
+      const whatsappPriorityGroups = whatsappSorted.filter((group) => group.name === whatsappPriorityName);
+      const whatsappRemainingGroups = whatsappSorted.filter((group) => group.name !== whatsappPriorityName);
+      setGroupsWhatsapp([...whatsappPriorityGroups, ...whatsappRemainingGroups].slice(0, 5));
 
       const clanesSnapshot = await getDocs(collection(db, 'clanes'));
       const allClanes = clanesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -306,7 +310,7 @@ export default function HomeClient({ serverData }) {
 
 
         {/* ── Clanes Section ── */}
-        <Box mt="xl" className={styles.sectionCard}>
+        <Box mt="xl" className={[styles.sectionCard, styles.clanesSection].filter(Boolean).join(" ")}>
           <div className={styles.sectionHeader}>
             <span className={`${styles.sectionBadge} ${styles.badgeClanes}`}>
               <IconCrown size={11} />
@@ -338,43 +342,8 @@ export default function HomeClient({ serverData }) {
         </Box>
 
 
-        {/* ── Telegram Section ── */}
-        <Box mt="lg" className={styles.sectionCard}>
-          <div className={styles.sectionHeader}>
-            <span className={`${styles.sectionBadge} ${styles.badgeTelegram}`}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
-              </svg>
-              Telegram
-            </span>
-            <Title order={2} fz={isMobile ? 17 : 20} fw={700} style={{ letterSpacing: '-0.01em', color: '#0F0F14' }}>
-              {isMobile ? 'Grupos de Telegram' : 'Grupos nuevos y destacados de Telegram'}
-            </Title>
-          </div>
-
-          <div style={{ padding: '0 8px 8px' }}>
-            {groupsTelegram.map((group, i) => renderCard(group, i, true))}
-          </div>
-
-          <div style={{ padding: '12px 16px 16px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
-            <Button
-              variant="subtle"
-              component={Link}
-              href="/comunidades/grupos-de-telegram"
-              color="blue"
-              size="sm"
-              radius="md"
-              rightSection={<IconChevronRight size={14} />}
-              style={{ fontWeight: 600, fontSize: '13px' }}
-            >
-              {t('Ver todos los grupos de Telegram')}
-            </Button>
-          </div>
-        </Box>
-
-
         {/* ── WhatsApp Section ── */}
-        <Box mt="lg" className={styles.sectionCard}>
+        <Box mt="lg" className={[styles.sectionCard, styles.whatsappSection].filter(Boolean).join(" ")}>
           <div className={styles.sectionHeader}>
             <span className={`${styles.sectionBadge} ${styles.badgeWhatsapp}`}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
@@ -404,6 +373,43 @@ export default function HomeClient({ serverData }) {
               style={{ fontWeight: 600, fontSize: '13px' }}
             >
               {t('Ver todos los grupos de WhatsApp')}
+            </Button>
+          </div>
+        </Box>
+
+
+
+
+        {/* ── Telegram Section ── */}
+        <Box mt="lg" className={[styles.sectionCard, styles.telegramSection].filter(Boolean).join(" ")}>
+          <div className={styles.sectionHeader}>
+            <span className={`${styles.sectionBadge} ${styles.badgeTelegram}`}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
+              </svg>
+              Telegram
+            </span>
+            <Title order={2} fz={isMobile ? 17 : 20} fw={700} style={{ letterSpacing: '-0.01em', color: '#0F0F14' }}>
+              {isMobile ? 'Grupos de Telegram' : 'Grupos nuevos y destacados de Telegram'}
+            </Title>
+          </div>
+
+          <div style={{ padding: '0 8px 8px' }}>
+            {groupsTelegram.map((group, i) => renderCard(group, i, true))}
+          </div>
+
+          <div style={{ padding: '12px 16px 16px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+            <Button
+              variant="subtle"
+              component={Link}
+              href="/comunidades/grupos-de-telegram"
+              color="blue"
+              size="sm"
+              radius="md"
+              rightSection={<IconChevronRight size={14} />}
+              style={{ fontWeight: 600, fontSize: '13px' }}
+            >
+              {t('Ver todos los grupos de Telegram')}
             </Button>
           </div>
         </Box>

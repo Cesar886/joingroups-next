@@ -211,7 +211,13 @@
 
 @media (max-width: 768px) {
   .mobileContainerFix {
+    display: flex;
+    flex-direction: column;
     padding: 0 !important;
     margin: 0 12px;
   }
+
+  .clanesSection { order: 1; }
+  .whatsappSection { order: 2; }
+  .telegramSection { order: 3; }
 }
