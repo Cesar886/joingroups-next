@@ -84,7 +84,7 @@ export default function Telegram() {
   return (
     <>
       <Head>
-        <title>Grupos de Telegram Activos por Categoría [2025] - joingroups.lat</title>
+        <title>Grupos de Telegram Activos por Categoría [2026] - joingroups.lat</title>
         <meta name="description" content="Encuentra y únete a los mejores grupos de Telegram en español. Listas actualizadas de enlaces de invitación a comunidades activas y canales." />
         <link rel="canonical" href="https://joingroups.lat/grupos-de-telegram" />
         <meta property="og:title" content="Únete a los Mejores Grupos de Telegram | joingroups.lat" />

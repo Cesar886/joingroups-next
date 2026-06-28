@@ -100,25 +100,25 @@ export default function Clanes() {
   return (
     <>
       <Head>
-        <title>Clanes de Videojuegos Activos 2025: Únete o Publica tu Clan Gratis</title>
+        <title>Clanes de Videojuegos Activos 2026: Únete o Publica tu Clan Gratis</title>
         <meta
           name="description"
-          content="Encuentra y únete a los mejores clanes de videojuegos activos en 2025. Publica tu clan gratis para reclutar miembros y conectar con comunidades de jugadores de Clash Royale y Clash of Clans."
+          content="Encuentra y únete a los mejores clanes de videojuegos activos en 2026. Publica tu clan gratis para reclutar miembros y conectar con comunidades de jugadores de Clash Royale y Clash of Clans."
         />
         <meta
           name="keywords"
-          content="Clanes de Videojuegos, clanes activos, mejores clanes, unirse a clan, publicar clan, comunidades de jugadores, clanes gratis, Clash Royale, Clash of Clans, grupos de juegos, reclutar jugadores, clanes 2025"
+          content="Clanes de Videojuegos, clanes activos, mejores clanes, unirse a clan, publicar clan, comunidades de jugadores, clanes gratis, Clash Royale, Clash of Clans, grupos de juegos, reclutar jugadores, clanes 2026"
         />
         <link rel="canonical" href="https://joingroups.lat/clanes" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://joingroups.lat/clanes" />
-        <meta property="og:title" content="Clanes de Videojuegos Activos 2025: Únete o Publica tu Clan Gratis" />
+        <meta property="og:title" content="Clanes de Videojuegos Activos 2026: Únete o Publica tu Clan Gratis" />
         <meta property="og:description" content="Encuentra y únete a los mejores clanes de videojuegos activos. Publica tu clan gratis para reclutar miembros y conectar con la comunidad gamer de Clash Royale y Clash of Clans." />
         <meta property="og:image" content="https://joingroups.lat/JoinGroups.ico" />
         <meta property="og:site_name" content="JoinGroups" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://joingroups.lat/clanes" />
-        <meta name="twitter:title" content="Clanes de Videojuegos Activos 2025: Únete o Publica tu Clan Gratis" />
+        <meta name="twitter:title" content="Clanes de Videojuegos Activos 2026: Únete o Publica tu Clan Gratis" />
         <meta name="twitter:description" content="Encuentra y únete a los mejores clanes de videojuegos activos. Publica tu clan gratis para reclutar miembros y conectar con la comunidad gamer de Clash Royale y Clash of Clans." />
         <meta name="twitter:image" content="https://joingroups.lat/JoinGroups.ico" />
         <script type="application/ld+json">
@@ -126,8 +126,8 @@ export default function Clanes() {
           {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            "name": "Clanes de Videojuegos Activos 2025",
-            "description": "Explora y únete a los clanes de videojuegos más activos en 2025. Publica tu clan gratis para reclutar jugadores y conectar con comunidades de Clash Royale y Clash of Clans.",
+            "name": "Clanes de Videojuegos Activos 2026",
+            "description": "Explora y únete a los clanes de videojuegos más activos en 2026. Publica tu clan gratis para reclutar jugadores y conectar con comunidades de Clash Royale y Clash of Clans.",
             "url": "https://joingroups.lat/clanes",
             "mainEntity": {
               "@type": "ItemList",

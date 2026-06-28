@@ -408,12 +408,12 @@ const router = useRouter();
     <>
       <Head>
         {/* TÍTULO ÚNICO POR CATEGORÍA */}
-        <title>{categoryContent.title} Activos 2025 | Enlaces Directos JoinGroups</title>
+        <title>{categoryContent.title} Activos 2026 | Enlaces Directos JoinGroups</title>
 
         {/* DESCRIPCIÓN ÚNICA POR CATEGORÍA */}
         <meta
           name="description"
-          content={`${categoryContent.description} Enlaces verificados y actualizados en 2025. Únete gratis a las mejores comunidades de ${category}.`}
+          content={`${categoryContent.description} Enlaces verificados y actualizados en 2026. Únete gratis a las mejores comunidades de ${category}.`}
         />
 
         {/* CANONICAL ÚNICO */}
@@ -643,7 +643,7 @@ const router = useRouter();
         >
 
         <Title order={1} mb="sm">
-            {categoryContent.title} Activos 2025
+            {categoryContent.title} Activos 2026
         </Title>
 
         <Text size="md" mb="md">
@@ -805,7 +805,7 @@ const router = useRouter();
 
           <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
             Grupos de {capitalize(category)}, {platformName} {category}, Comunidades de {category}, 
-            Enlaces {category}, Unirse grupos {category}, {category} 2025
+            Enlaces {category}, Unirse grupos {category}, {category} 2026
           </Text>
         </Paper>
       </ScrollArea>

@@ -116,7 +116,7 @@ const formatCreatedAt = (value, lang) => {
 };
 
 const DESKTOP_GROUP_AD = {
-  key: '13ffd663b16098ca0ab4303c93202549',
+  key: '13ffd663b16098ca0ab4303c93202649',
   format: 'iframe',
   height: 90,
   width: 728,

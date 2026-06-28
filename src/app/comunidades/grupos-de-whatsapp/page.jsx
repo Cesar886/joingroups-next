@@ -88,7 +88,7 @@ export default function Whatsapp() {
   return (
     <>
       <Head>
-        <title>Grupos de WhatsApp por Temas [Actualizado 2025] - joingroups.lat</title>
+        <title>Grupos de WhatsApp por Temas [Actualizado 2026] - joingroups.lat</title>
         <meta name="description" content="Descubre y únete a grupos de WhatsApp activos de todas las categorías: amor, amistad, stickers, etc. Enlaces de invitación verificados y actualizados." />
         <link rel="canonical" href="https://joingroups.lat/grupos-de-whatsapp" />
         <meta property="og:title" content="Los Mejores Grupos de WhatsApp para Unirte | joingroups.lat" />

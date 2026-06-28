@@ -73,7 +73,7 @@ export default function Acerca() {
 
       <h2 className="text-2xl font-semibold mt-8 mb-2">Última revisión</h2>
       <p className="mb-4 text-sm text-gray-600">
-        Este documento fue actualizado por última vez el 29 de junio de 2025. JoinGroup se reserva el derecho de modificar esta sección en función del desarrollo del proyecto o cambios legales aplicables.
+        Este documento fue actualizado por última vez el 29 de junio de 2026. JoinGroup se reserva el derecho de modificar esta sección en función del desarrollo del proyecto o cambios legales aplicables.
       </p>
     </div>
   );

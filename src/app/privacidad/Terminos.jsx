@@ -47,7 +47,7 @@ export default function Terminos() {
       </p>
 
       <p className="mt-6 text-sm text-gray-600">
-        Última actualización: junio 2025.
+        Última actualización: junio 2026.
       </p>
     </div>
   );

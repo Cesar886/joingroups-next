@@ -275,7 +275,7 @@ export default function SubirGrupo() {
   return (
     <>
       <Head>
-        <title>Publicar Grupo de Telegram o WhatsApp | Gratis en JoinGroups 2025</title>
+        <title>Publicar Grupo de Telegram o WhatsApp | Gratis en JoinGroups 2026</title>
         <meta name="description" content="Envía tu grupo o canal de Telegram o WhatsApp para ser listado en el directorio verificado JoinGroups. Publicar es gratis y fácil." />
         <link rel="canonical" href="https://joingroups.lat/form" />
         <meta name="robots" content="index, follow" />

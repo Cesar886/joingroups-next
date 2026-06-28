@@ -172,7 +172,7 @@ export default function HowToCreateTelegramGroupOptimized() {
         Remember that the key to success lies in consistency, quality content, and genuine interaction with your <strong>members</strong>. Start building your <strong>Telegram</strong> community today and watch <strong>how</strong> it grows!
       </Text>
 
-      <Text className="mt-8 text-sm text-gray-600">Last updated: July 2025</Text>
+      <Text className="mt-8 text-sm text-gray-600">Last updated: July 2026</Text>
     </div>
   );
 }

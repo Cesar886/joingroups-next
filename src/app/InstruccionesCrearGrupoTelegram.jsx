@@ -172,7 +172,7 @@ export default function InstruccionesCrearGrupoTelegramOptimizado() {
         Recuerda que la clave del éxito reside en la constancia, la calidad del contenido y la interacción genuina con tus <strong>miembros</strong>. ¡Empieza hoy mismo a construir tu comunidad en <strong>Telegram</strong> y observa <strong>cómo</strong> crece!
       </Text>
 
-      <Text className="mt-8 text-sm text-gray-600">Última actualización: julio 2025</Text>
+      <Text className="mt-8 text-sm text-gray-600">Última actualización: julio 2026</Text>
     </div>
   );
 }

@@ -579,7 +579,7 @@ export default function CategoryPage() {
           >
 
           <Title order={1} mb="sm">
-              {categoryContent.title} Activos 2025
+              {categoryContent.title} Activos 2026
           </Title>
 
           <Text size="md" mb="md">
@@ -741,7 +741,7 @@ export default function CategoryPage() {
 
             <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
               Grupos de {capitalize(category)}, {platformName} {category}, Comunidades de {category}, 
-              Enlaces {category}, Unirse grupos {category}, {category} 2025
+              Enlaces {category}, Unirse grupos {category}, {category} 2026
             </Text>
           </Paper>
         </ScrollArea>

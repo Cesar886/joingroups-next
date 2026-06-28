@@ -233,7 +233,7 @@ export default function ClanesGroupForm() {
   return (
     <>
       <Head>
-        <title>{`Publicar Clan de ${game} | Gratis en JoinGroups 2025`}</title>
+        <title>{`Publicar Clan de ${game} | Gratis en JoinGroups 2026`}</title>
         <meta name="description" content={`Envía tu clan de ${game} para ser listado en nuestro directorio verificado.`} />
         <link rel="canonical" href="https://joingroups.lat/clanes/publicar-clan" />
       </Head>

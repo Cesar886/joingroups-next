@@ -7,8 +7,8 @@ import Head from 'next/head'; // Asegúrate de importar esto si no usas app rout
 
 export const metadata = {
   title: 'Clanes de Clash Royale ⚔️ | Únete, Busca o Recluta Jugadores de Clash Royale',
-  description: 'Encuentra los mejores clanes de Clash Royale para 2025. Filtra por trofeos, únete a un clan activo o publica tu clan gratis para reclutar nuevos miembros y dominar la arena. ¡Tu comunidad de clanes de Clash Royale te espera!',
-  keywords: 'clanes Clash Royale, unirse a clan Clash Royale, reclutar jugadores Clash Royale, publicar clan gratis Clash Royale, guerra de clanes Clash Royale, clanes activos 2025, mejores clanes Clash Royale, clanes en español Clash Royale, buscar clan Clash Royale, comunidad Clash Royale clanes',
+  description: 'Encuentra los mejores clanes de Clash Royale para 2026. Filtra por trofeos, únete a un clan activo o publica tu clan gratis para reclutar nuevos miembros y dominar la arena. ¡Tu comunidad de clanes de Clash Royale te espera!',
+  keywords: 'clanes Clash Royale, unirse a clan Clash Royale, reclutar jugadores Clash Royale, publicar clan gratis Clash Royale, guerra de clanes Clash Royale, clanes activos 2026, mejores clanes Clash Royale, clanes en español Clash Royale, buscar clan Clash Royale, comunidad Clash Royale clanes',
   robots: 'index, follow',
   alternates: {
     canonical: 'https://joingroups.lat/clanes/clanes-de-clash-royale',
@@ -63,7 +63,7 @@ export default async function ClashRoyalePage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Clanes de Clash Royale Activos 2025',
+    name: 'Clanes de Clash Royale Activos 2026',
     description: metadata.description,
     url: 'https://joingroups.lat/clanes/clanes-de-clash-royale',
     breadcrumb: {
