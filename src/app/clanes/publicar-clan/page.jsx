@@ -255,7 +255,7 @@ export default function ClanesGroupForm() {
 
           {/* Suggestion banner */}
           <a
-            href="https://wa.me/5212284935831?text=Hola%2C%20me%20gustaría%20sugerir%20un%20nuevo%20juego%20para%20los%20clanes%20en%20JoinGroups"
+            href="https://wa.me/5218261308623?text=Hola%2C%20me%20gustaría%20sugerir%20un%20nuevo%20juego%20para%20los%20clanes%20en%20JoinGroups"
             target="_blank"
             rel="noopener noreferrer"
             className={classes.suggestionBanner}

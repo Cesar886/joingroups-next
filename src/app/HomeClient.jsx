@@ -378,8 +378,6 @@ export default function HomeClient({ serverData }) {
         </Box>
 
 
-
-
         {/* ── Telegram Section ── */}
         <Box mt="lg" className={[styles.sectionCard, styles.telegramSection].filter(Boolean).join(" ")}>
           <div className={styles.sectionHeader}>
@@ -531,7 +529,7 @@ export default function HomeClient({ serverData }) {
           color="gray"
           mt="xl"
           component="a"
-          href="https://wa.me/5212284935831?text=Hola,%20quisiera%20sugerir%20un%20cambio%20para%20la%20pagina%20de%20JoinGroups"
+          href="https://wa.me/5218261308623?text=Hola,%20quisiera%20sugerir%20un%20cambio%20para%20la%20pagina%20de%20JoinGroups"
           target="_blank"
           rel="noopener noreferrer"
           fullWidth

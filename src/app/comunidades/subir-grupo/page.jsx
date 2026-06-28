@@ -300,7 +300,7 @@ export default function SubirGrupo() {
 
           {/* Support banner */}
           <a
-            href="https://wa.me/5212284935831?text=Hola,%20tengo%20un%20problema%20para%20publicar%20mi%20grupo%20en%20JoinGroups"
+            href="https://wa.me/5218261308623?text=Hola,%20tengo%20un%20problema%20para%20publicar%20mi%20grupo%20en%20JoinGroups"
             target="_blank"
             rel="noopener noreferrer"
             className={classes.suggestionBanner}
