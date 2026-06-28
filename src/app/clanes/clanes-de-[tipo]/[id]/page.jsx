@@ -14,7 +14,7 @@ import slugify from '@/lib/slugify';
 import { useTranslation } from 'react-i18next';
 import classes from '@/app/styles/DetailsClans.module.css';
 import {
-  IconShield, IconMapPin, IconTrophy, IconGift, IconUsers,
+  IconMapPin, IconTrophy, IconGift, IconUsers,
   IconCrown, IconStar, IconWorld, IconExternalLink,
   IconAlertTriangle, IconBrandDiscord, IconBrandWhatsapp,
   IconBrandTelegram, IconBrandFacebook, IconChevronRight,
@@ -81,7 +81,11 @@ export default function GroupDetailClanes() {
     const tag = group.tag.startsWith('#') ? `%23${group.tag.slice(1)}` : group.tag;
     fetch(`${API_URL}/api/clash?tag=${tag}&type=full`)
       .then(r => r.json())
-      .then(r => { setClan(r.info); setGlobalRank(r.globalRank ?? null); setLocalRank(r.localRank ?? null); })
+      .then(r => {
+        setClan(r.info ?? null);
+        setGlobalRank(r.globalRank ?? null);
+        setLocalRank(r.localRank ?? null);
+      })
       .catch(console.error);
   }, [group]);
 
@@ -96,11 +100,17 @@ export default function GroupDetailClanes() {
   const roleLabel = r => ({ leader: 'Líder', coLeader: 'Co-Líder', elder: 'Veterano' }[r] ?? 'Miembro');
   const roleClass = r => classes[{ leader: 'roleBadgeLeader', coLeader: 'roleBadgeCoLeader', elder: 'roleBadgeElder' }[r] ?? 'roleBadgeMember'];
 
+  const getTopBy = (items, key) => items.reduce((best, item) => (Number(item?.[key] || 0) > Number(best?.[key] || 0) ? item : best), null);
+
   if (loading) return <div className={classes.loadingState}>Cargando...</div>;
   if (notFound || !group) return <div className={classes.loadingState}>{t('Grupo no encontrado.')}</div>;
 
   const isOpen = clan?.type === 'open';
   const clanName = clan?.name ?? group?.name ?? 'Clan';
+  const memberList = Array.isArray(clan?.memberList) ? clan.memberList : [];
+  const topTrophyMember = getTopBy(memberList, 'trophies');
+
+
 
   return (
     <div className={classes.clanPageBg}>
@@ -211,10 +221,16 @@ export default function GroupDetailClanes() {
                     <div className={classes.statTileVal}>#{localRank}</div>
                   </div>
                 )}
-                {clan.location && !globalRank && !localRank && (
-                  <div className={`${classes.statTile}`} style={{ gridColumn: 'span 2' }}>
+                {clan.location && (
+                  <div className={classes.statTile}>
                     <div className={classes.statTileLbl}><IconWorld size={10} /> Ubicación</div>
-                    <div className={classes.statTileVal} style={{ fontSize: 16 }}>{clan.location.name}</div>
+                    <div className={classes.statTileText}>{clan.location.name}</div>
+                  </div>
+                )}
+                {topTrophyMember && (
+                  <div className={classes.statTile}>
+                    <div className={classes.statTileLbl}><IconTrophy size={10} /> Más trofeos</div>
+                    <div className={classes.statTileText}>{topTrophyMember.name}</div>
                   </div>
                 )}
               </div>
@@ -222,8 +238,9 @@ export default function GroupDetailClanes() {
             </>
           )}
 
+
           {/* Members */}
-          {clan?.memberList?.length > 0 && (
+          {memberList.length > 0 && (
             <>
               <button className={classes.membersBtn} onClick={membersHandlers.open}>
                 <span className={classes.membersBtnLeft}>
@@ -231,7 +248,7 @@ export default function GroupDetailClanes() {
                   Ver miembros del clan
                 </span>
                 <span className={classes.membersBtnCount}>
-                  {clan.members}/50 <IconChevronRight size={13} />
+                  {memberList.length}/50 <IconChevronRight size={13} />
                 </span>
               </button>
               <div className={classes.sep} />
@@ -303,7 +320,7 @@ export default function GroupDetailClanes() {
         }}
       >
         <ScrollArea type="auto" style={{ maxHeight: '65vh' }}>
-          {clan?.memberList?.length > 0 ? (
+          {memberList.length > 0 ? (
             <table className={classes.membersTable}>
               <thead>
                 <tr>
@@ -312,11 +329,15 @@ export default function GroupDetailClanes() {
                   <th>Niv.</th>
                   <th>Trofeos</th>
                   <th>Donac.</th>
+                  <th>Recib.</th>
+                  <th>Arena</th>
+                  <th>Rango</th>
+                  <th>Cofre</th>
                   <th>Última vez</th>
                 </tr>
               </thead>
               <tbody>
-                {clan.memberList.map(m => (
+                {memberList.map(m => (
                   <tr key={m.tag}>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
@@ -336,6 +357,10 @@ export default function GroupDetailClanes() {
                       </span>
                     </td>
                     <td style={{ color: '#888', fontSize: 12 }}>{m.donations?.toLocaleString()}</td>
+                    <td style={{ color: '#888', fontSize: 12 }}>{m.donationsReceived?.toLocaleString()}</td>
+                    <td style={{ color: '#888', fontSize: 12 }}>{m.arena?.name ?? '—'}</td>
+                    <td style={{ color: '#888', fontSize: 12 }}>#{m.clanRank ?? '—'} / #{m.previousClanRank ?? '—'}</td>
+                    <td style={{ color: '#888', fontSize: 12 }}>{m.clanChestPoints?.toLocaleString()}</td>
                     <td style={{ color: '#C4C4C4', fontSize: 10.5 }}>{formatLastSeen(m.lastSeen)}</td>
                   </tr>
                 ))}
