@@ -7,6 +7,7 @@ import { collection, addDoc, query, where, getDocs, updateDoc } from 'firebase/f
 import { db } from '@/firebase/firebase';
 import { useRef, useState } from 'react';
 import slugify from '@/lib/slugify';
+import { logPublication, shouldBypassCaptchaInDev } from '@/lib/publicationDebug';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
 import Head from 'next/head';
@@ -58,6 +59,7 @@ export default function SubirGrupo() {
   const [redSocial, setRedSocial] = useState('Telegram');
   const [modalOpen, setModalOpen] = useState(false);
   const captchaRef = useRef(null);
+  const submittingRef = useRef(false);
 
   const form = useForm({
     initialValues: {
@@ -101,6 +103,8 @@ export default function SubirGrupo() {
   });
 
   async function translateText(text, source, target) {
+    if (shouldBypassCaptchaInDev()) return '';
+
     try {
       const res = await fetch(DEEPL_PROXY_URL, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -125,27 +129,79 @@ export default function SubirGrupo() {
       form.setFieldValue('descriptionEs', await translateText(descriptionEn, 'EN', 'ES'));
   }, 700);
 
-  const handleVerify = async () => {
+  const resetCaptcha = () => {
+    captchaRef.current?.resetCaptcha?.();
+  };
+
+  const handleCaptchaError = () => {
+    logPublication('group', 'captcha_error', { redSocial, link: form.values.link });
+    resetCaptcha();
+    setModalOpen(false);
+    showNotification({
+      title: t('Error de verificación'),
+      message: t('No se pudo completar el captcha. Inténtalo de nuevo.'),
+      color: 'red',
+    });
+  };
+
+  const handleCaptchaExpire = () => {
+    logPublication('group', 'captcha_expired', { redSocial, link: form.values.link });
+    resetCaptcha();
+    showNotification({
+      title: t('Captcha expirado'),
+      message: t('Vuelve a verificar que no eres un bot.'),
+      color: 'yellow',
+    });
+  };
+
+  const getAvailableGroupSlug = async (baseSlug) => {
+    const normalizedBase = baseSlug || 'grupo';
+
+    for (let suffix = 0; suffix < 50; suffix++) {
+      const candidate = suffix === 0 ? normalizedBase : normalizedBase + '-' + (suffix + 1);
+      const snap = await getDocs(query(collection(db, 'groups'), where('slug', '==', candidate)));
+
+      if (snap.empty) {
+        if (candidate !== normalizedBase) {
+          await logPublication('group', 'slug_auto_incremented', {
+            from: normalizedBase,
+            to: candidate,
+          });
+        }
+
+        return candidate;
+      }
+    }
+
+    throw new Error(t('No se pudo generar una URL única para este grupo.'));
+  };
+
+  const handleVerify = async (token) => {
+    if (!token || submittingRef.current) return;
+
+    submittingRef.current = true;
     setModalOpen(false);
     setIsLoading(true);
+
     try {
       const rawLink = form.values.link.trim();
       const cleanLink = rawLink.endsWith('/') ? rawLink.slice(0, -1) : rawLink;
+      await logPublication('group', 'publish_started', {
+        redSocial,
+        name: form.values.name,
+        link: cleanLink,
+        categories: form.values.categories,
+      });
 
       const existing = await getDocs(query(collection(db, 'groups'), where('link', '==', cleanLink)));
       if (!existing.empty) {
+        await logPublication('group', 'duplicate_link', { link: cleanLink });
         showNotification({ title: t('Enlace duplicado'), message: t('Este grupo ya fue publicado antes 📌'), color: 'red' });
-        setIsLoading(false);
         return;
       }
 
-      const slug = slugify(form.values.name);
-      const slugSnap = await getDocs(query(collection(db, 'groups'), where('slug', '==', slug)));
-      if (!slugSnap.empty) {
-        showNotification({ title: t('Nombre duplicado'), message: t('Ya existe un grupo con ese nombre 📌'), color: 'red' });
-        setIsLoading(false);
-        return;
-      }
+      const baseSlug = slugify(form.values.name);
+      const slug = await getAvailableGroupSlug(baseSlug);
 
       const { descriptionEs, descriptionEn, ...cleanValues } = form.values;
       const docRef = await addDoc(collection(db, 'groups'), {
@@ -175,14 +231,28 @@ export default function SubirGrupo() {
         }, 5000);
       }
 
-      form.reset();
       const catSlug = slugify(form.values.categories[0] || 'general');
-      window.location.href = `https://joingroups.pro/comunidades/grupos-de-${redSocial.toLowerCase()}/${catSlug}/${slug}`;
+      const destination = `/comunidades/grupos-de-${redSocial.toLowerCase()}/${catSlug}/${slug}`;
+      await logPublication('group', 'publish_success', { id: docRef.id, slug, destination });
+      form.reset();
+      window.location.assign(destination);
     } catch (error) {
       console.error(error);
-      showNotification({ title: t('Error'), message: t('No se pudo guardar.'), color: 'red' });
+      await logPublication('group', 'publish_error', {
+        code: error?.code,
+        message: error?.message || String(error),
+      });
+      showNotification({
+        title: t('Error'),
+        message: error?.code === 'permission-denied'
+          ? t('No se pudo publicar por permisos de la base de datos.')
+          : t('No se pudo guardar. Inténtalo de nuevo.'),
+        color: 'red',
+      });
     } finally {
+      submittingRef.current = false;
       setIsLoading(false);
+      resetCaptcha();
     }
   };
 
@@ -248,7 +318,35 @@ export default function SubirGrupo() {
           <div className={classes.card}>
             <form onSubmit={(e) => {
               e.preventDefault();
-              if (!form.validate().hasErrors) setModalOpen(true);
+              if (isLoading) return;
+
+              const validation = form.validate();
+              if (validation.hasErrors) {
+                logPublication('group', 'validation_failed', {
+                  redSocial,
+                  name: form.values.name,
+                  link: form.values.link,
+                  errors: validation.errors,
+                });
+                return;
+              }
+
+              const bypassCaptcha = shouldBypassCaptchaInDev();
+              logPublication('group', 'submit_valid', {
+                redSocial,
+                name: form.values.name,
+                link: form.values.link,
+                captchaBypassed: bypassCaptcha,
+              });
+
+              if (bypassCaptcha) {
+                logPublication('group', 'captcha_bypassed_local_dev', { redSocial, link: form.values.link });
+                handleVerify('local-dev-bypass');
+                return;
+              }
+
+              resetCaptcha();
+              setModalOpen(true);
             }}>
 
               {/* Platform */}
@@ -485,7 +583,10 @@ export default function SubirGrupo() {
       {/* Captcha modal */}
       <Modal
         opened={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={() => {
+          setModalOpen(false);
+          resetCaptcha();
+        }}
         title={<span style={{ fontWeight: 800, fontSize: 15, color: '#0F0F14', letterSpacing: '-0.02em' }}>Verifica que no eres un bot</span>}
         centered
         styles={{
@@ -493,7 +594,15 @@ export default function SubirGrupo() {
           header: { background: '#fff', borderBottom: '1px solid #F5F5F5', borderRadius: '20px 20px 0 0', padding: '1.25rem 1.5rem' },
         }}
       >
-        <HCaptcha sitekey="71f4e852-9d22-4418-aef6-7c1c0a7c5b54" onVerify={handleVerify} ref={captchaRef} />
+        {!shouldBypassCaptchaInDev() && (
+          <HCaptcha
+            sitekey="71f4e852-9d22-4418-aef6-7c1c0a7c5b54"
+            onVerify={handleVerify}
+            onError={handleCaptchaError}
+            onExpire={handleCaptchaExpire}
+            ref={captchaRef}
+          />
+        )}
       </Modal>
     </>
   );

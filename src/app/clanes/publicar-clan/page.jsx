@@ -9,6 +9,7 @@ import {
 import { db } from '@/firebase/firebase';
 import { useRef, useState } from 'react';
 import slugify from '@/lib/slugify';
+import { logPublication, shouldBypassCaptchaInDev } from '@/lib/publicationDebug';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
 import Head from 'next/head';
@@ -72,10 +73,13 @@ export default function ClanesGroupForm() {
   });
 
   const captchaRef = useRef(null);
+  const submittingRef = useRef(false);
   const [modalOpen, setModalOpen] = useState(false);
   const DEEPL_PROXY_URL = 'https://daniel-rdz.tech/translate';
 
   async function translateText(text, source, target) {
+    if (shouldBypassCaptchaInDev()) return '';
+
     try {
       const res = await fetch(DEEPL_PROXY_URL, {
         method: 'POST',
@@ -106,32 +110,69 @@ export default function ClanesGroupForm() {
     }
   }, 900);
 
+  const resetCaptcha = () => {
+    captchaRef.current?.resetCaptcha?.();
+  };
+
+  const handleCaptchaError = () => {
+    logPublication('clan', 'captcha_error', { game, link: form.values.link });
+    resetCaptcha();
+    setModalOpen(false);
+    showNotification({
+      title: t('Error de verificación'),
+      message: t('No se pudo completar el captcha. Inténtalo de nuevo.'),
+      color: 'red',
+    });
+  };
+
+  const handleCaptchaExpire = () => {
+    logPublication('clan', 'captcha_expired', { game, link: form.values.link });
+    resetCaptcha();
+    showNotification({
+      title: t('Captcha expirado'),
+      message: t('Vuelve a verificar que no eres un bot.'),
+      color: 'yellow',
+    });
+  };
+
   const handleVerify = async (token) => {
-    if (!token) return;
+    if (!token || submittingRef.current) return;
+
+    submittingRef.current = true;
     setModalOpen(false);
     setIsLoading(true);
+
     try {
       const rawLink = form.values.link.trim();
+      await logPublication('clan', 'publish_started', { game, link: rawLink });
       const url = new URL(rawLink);
       let tag = new URLSearchParams(url.search).get('tag') || '';
       if (!tag) {
+        await logPublication('clan', 'tag_missing', { game, link: rawLink });
         showNotification({ title: t('Error al extraer tag'), message: t('No se pudo extraer el tag del enlace'), color: 'red' });
         return;
       }
       tag = tag.replace(/^%23/, '').replace(/^#/, '').toUpperCase();
       const encodedTag = encodeURIComponent(`#${tag}`);
+      await logPublication('clan', 'clash_lookup_started', { game, tag });
       const res = await fetch(`${API_URL}/api/clash?tag=${encodedTag}&type=full`);
+      if (!res.ok) {
+        await logPublication('clan', 'clash_lookup_failed', { game, tag, status: res.status });
+        throw new Error(t('No se pudo validar el clan. Inténtalo de nuevo.'));
+      }
       const data = await res.json();
       const clanName = data?.info?.name?.trim() || data?.name?.trim() || '';
       if (!clanName) {
+        await logPublication('clan', 'clan_name_missing', { game, tag });
         showNotification({ title: t('Error al obtener clan'), message: t('No se pudo obtener el nombre del clan.'), color: 'red' });
         return;
       }
       const slug = slugify(clanName);
+      const gameSlug = game.toLowerCase().replace(/\s+/g, '-');
       const { descriptionEs, descriptionEn, ...plainValues } = form.values;
       const docRef = await addDoc(collection(db, 'clanes'), {
         ...plainValues,
-        juego: game.toLowerCase().replace(/\s+/g, '-'),
+        juego: gameSlug,
         tag: `%23${tag}`,
         name: clanName,
         slug,
@@ -140,7 +181,7 @@ export default function ClanesGroupForm() {
         destacado: false,
         visitas: 0,
         createdAt: new Date(),
-        tipo: game.toLowerCase().replace(/\s+/g, '-'),
+        tipo: gameSlug,
         translationPending: !descriptionEs.trim() || !descriptionEn.trim(),
       });
       showNotification({ title: t('¡Éxito!'), message: t('Clan publicado correctamente'), color: 'green' });
@@ -161,13 +202,25 @@ export default function ClanesGroupForm() {
           if (attempts > 60) clearInterval(intervalId);
         }, 5000);
       }
+      const destination = `/clanes/clanes-de-${gameSlug}/${slug}`;
+      await logPublication('clan', 'publish_success', { id: docRef.id, slug, tag, destination });
       form.reset();
-      router.push(`/clanes/clanes-de-${game.toLowerCase().replace(/\s+/g, '-')}/${slug}`);
+      router.push(destination);
     } catch (error) {
       console.error(error);
-      showNotification({ title: t('Error'), message: t('No se pudo guardar.'), color: 'red' });
+      await logPublication('clan', 'publish_error', {
+        code: error?.code,
+        message: error?.message || String(error),
+      });
+      showNotification({
+        title: t('Error'),
+        message: error?.message || t('No se pudo guardar. Inténtalo de nuevo.'),
+        color: 'red',
+      });
     } finally {
+      submittingRef.current = false;
       setIsLoading(false);
+      resetCaptcha();
     }
   };
 
@@ -221,7 +274,33 @@ export default function ClanesGroupForm() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (!form.validate().hasErrors) setModalOpen(true);
+                if (isLoading) return;
+
+                const validation = form.validate();
+                if (validation.hasErrors) {
+                  logPublication('clan', 'validation_failed', {
+                    game,
+                    link: form.values.link,
+                    errors: validation.errors,
+                  });
+                  return;
+                }
+
+                const bypassCaptcha = shouldBypassCaptchaInDev();
+                logPublication('clan', 'submit_valid', {
+                  game,
+                  link: form.values.link,
+                  captchaBypassed: bypassCaptcha,
+                });
+
+                if (bypassCaptcha) {
+                  logPublication('clan', 'captcha_bypassed_local_dev', { game, link: form.values.link });
+                  handleVerify('local-dev-bypass');
+                  return;
+                }
+
+                resetCaptcha();
+                setModalOpen(true);
               }}
             >
               {/* Game selector */}
@@ -421,7 +500,10 @@ export default function ClanesGroupForm() {
       {/* Captcha modal */}
       <Modal
         opened={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={() => {
+          setModalOpen(false);
+          resetCaptcha();
+        }}
         title={<span style={{ fontWeight: 800, fontSize: 15, color: '#0F0F14', letterSpacing: '-0.02em' }}>{t('Verifica que no eres un bot')}</span>}
         centered
         styles={{
@@ -429,11 +511,15 @@ export default function ClanesGroupForm() {
           header: { background: '#fff', borderBottom: '1px solid #F5F5F5', borderRadius: '20px 20px 0 0', padding: '1.25rem 1.5rem' },
         }}
       >
-        <HCaptcha
-          sitekey="71f4e852-9d22-4418-aef6-7c1c0a7c5b54"
-          onVerify={handleVerify}
-          ref={captchaRef}
-        />
+        {!shouldBypassCaptchaInDev() && (
+          <HCaptcha
+            sitekey="71f4e852-9d22-4418-aef6-7c1c0a7c5b54"
+            onVerify={handleVerify}
+            onError={handleCaptchaError}
+            onExpire={handleCaptchaExpire}
+            ref={captchaRef}
+          />
+        )}
       </Modal>
     </>
   );
