@@ -93,6 +93,13 @@
   gap: 6px;
 }
 
+.heroIntro {
+  margin: 10px 0 0;
+  color: #6B7280;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .platformBadge {
   display: inline-flex;
   align-items: center;
@@ -136,7 +143,7 @@
 /* ── Stats strip ── */
 .statsStrip {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 1px solid #F0F0F0;
 }
 
@@ -157,11 +164,22 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
+  min-height: 20px;
   font-size: 18px;
   font-weight: 900;
   letter-spacing: 0;
   color: #0F0F14;
   line-height: 1;
+}
+
+.statValSafe {
+  font-size: 13px;
+  color: #15803D;
+}
+
+.statValAdult {
+  font-size: 14px;
+  color: #DC2626;
 }
 
 .statLbl {
@@ -208,9 +226,146 @@
 .categoryList {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
+  margin-top: 14px;
 }
 
+.profileCard {
+  padding: 0;
+  overflow: hidden;
+}
+
+.profileHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 1.35rem 1.5rem 0;
+}
+
+.profileTitleBlock {
+  min-width: 0;
+}
+
+.profileEyebrow {
+  margin-bottom: 6px;
+  color: #9CA3AF;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.profileTitle {
+  margin: 0;
+  color: #0F0F14;
+  font-size: 22px;
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.profileDesc {
+  margin: 16px 1.5rem 0;
+  padding: 15px 16px;
+  border-left: 3px solid #0F0F14;
+  border-radius: 0 14px 14px 0;
+  background: #F8FAFC;
+  color: #374151;
+  font-size: 14.5px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.contentPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.contentPill {
+  padding: 8px 11px;
+  color: #15803D;
+  background: #DCFCE7;
+  border: 1px solid #BBF7D0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
+}
+
+.contentPillAdult {
+  color: #DC2626;
+  background: #FEF2F2;
+  border-color: #FECACA;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 18px;
+  border-top: 1px solid #F1F5F9;
+}
+
+.detailItem {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+  padding: 16px 1.5rem;
+  border-right: 1px solid #F1F5F9;
+  border-bottom: 1px solid #F1F5F9;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FCFCFD 100%);
+}
+
+.detailItem:nth-child(2n) { border-right: none; }
+.detailItem:nth-last-child(-n + 2) { border-bottom: none; }
+
+.detailIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #4B5563;
+  background: #F3F4F6;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
+}
+
+.detailIcon svg { width: 18px; height: 18px; }
+.detailIconTelegram { background: #E0F4FD; color: #0369A1; }
+.detailIconWhatsapp { background: #DCFCE7; color: #15803D; }
+
+.detailCopy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detailLabel {
+  color: #9CA3AF;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.detailItem strong {
+  min-width: 0;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 850;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
 /* ──────────────────────────────────────────
    ACTIONS + AD
    ────────────────────────────────────────── */
@@ -448,6 +603,13 @@
 
 /* ── Responsive ── */
 @media (max-width: 720px) {
+  .statsStrip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .statCell:nth-child(2) { border-right: none; }
+  .statCell:nth-child(-n + 2) { border-bottom: 1px solid #F0F0F0; }
+
   .actionPanel {
     grid-template-columns: 1fr;
   }
@@ -456,12 +618,35 @@
     width: 100%;
   }
 
+  .profileHeader {
+    padding: 1.15rem 1.15rem 0;
+  }
+
+  .profileDesc {
+    margin: 14px 1.15rem 0;
+    padding: 13px 14px;
+    font-size: 13.5px;
+  }
+
+  .detailGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .detailItem {
+    border-right: none;
+    padding: 14px 1.15rem;
+  }
+
+  .detailItem:nth-last-child(2) { border-bottom: 1px solid #F1F5F9; }
 }
 
 @media (max-width: 480px) {
   .hero, .card, .actionPanel, .adSection { border-radius: 16px; }
   .heroBody { padding: 1.25rem 1.25rem 1.25rem; }
   .groupName { font-size: 18px; }
+  .profileHeader { flex-direction: column; }
+  .profileTitle { font-size: 20px; }
+  .contentPill { align-self: flex-start; }
 }
 
 @media (prefers-reduced-motion: reduce) {

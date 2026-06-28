@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   collection, query, where, getDocs,
-  limit, runTransaction, updateDoc
+  limit, updateDoc, increment
 } from 'firebase/firestore';
 import { Modal } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
@@ -12,8 +12,11 @@ import {
   IconAlertTriangle,
   IconBrandTelegram,
   IconBrandWhatsapp,
+  IconCalendar,
   IconExternalLink,
   IconEye,
+  IconMapPin,
+  IconTags,
 } from '@tabler/icons-react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -58,7 +61,59 @@ const countryMap = {
   au: '🇦🇺',
 };
 
+const countryNameMap = {
+  mx: 'México',
+  us: 'Estados Unidos',
+  ar: 'Argentina',
+  co: 'Colombia',
+  es: 'España',
+  pe: 'Perú',
+  cl: 'Chile',
+  ve: 'Venezuela',
+  br: 'Brasil',
+  ec: 'Ecuador',
+  gt: 'Guatemala',
+  bo: 'Bolivia',
+  do: 'República Dominicana',
+  hn: 'Honduras',
+  py: 'Paraguay',
+  sv: 'El Salvador',
+  ni: 'Nicaragua',
+  cr: 'Costa Rica',
+  pa: 'Panamá',
+  uy: 'Uruguay',
+  pr: 'Puerto Rico',
+  ca: 'Canadá',
+  de: 'Alemania',
+  fr: 'Francia',
+  it: 'Italia',
+  gb: 'Reino Unido',
+  nl: 'Países Bajos',
+  pt: 'Portugal',
+  jp: 'Japón',
+  kr: 'Corea del Sur',
+  cn: 'China',
+  in: 'India',
+  ru: 'Rusia',
+  au: 'Australia',
+};
+
 const asText = (value) => Array.isArray(value) ? value[0] : value;
+
+const isAdultValue = (value) => ['sí', 'si', 'yes', 'true'].includes(String(value || '').trim().toLowerCase());
+
+const formatCreatedAt = (value, lang) => {
+  if (!value) return 'Reciente';
+
+  const date = typeof value?.toDate === 'function' ? value.toDate() : new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Reciente';
+
+  return new Intl.DateTimeFormat(lang === 'es' ? 'es-MX' : 'en-US', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(date);
+};
 
 const DESKTOP_GROUP_AD = {
   key: '13ffd663b16098ca0ab4303c93202549',
@@ -228,19 +283,21 @@ export default function GroupDetail() {
           await updateDoc(docRef, { slug: slugify(data.name) });
         }
 
+        const resolvedGroup = { id: docSnap.id, ...data, slug: data.slug || slugify(data.name) };
         const visitKey = `visitado-${id}`;
         const yaVisitado = sessionStorage.getItem(visitKey);
 
         if (!yaVisitado) {
-          await runTransaction(db, async (trx) => {
-            const fresh = await trx.get(docRef);
-            const v = fresh.data()?.visitas || 0;
-            trx.update(docRef, { visitas: v + 1 });
-          });
-          sessionStorage.setItem(visitKey, 'true');
+          try {
+            await updateDoc(docRef, { visitas: increment(1) });
+            resolvedGroup.visitas = (resolvedGroup.visitas || 0) + 1;
+            sessionStorage.setItem(visitKey, 'true');
+          } catch (visitErr) {
+            console.warn('No se pudo actualizar visitas del grupo', visitErr);
+          }
         }
 
-        setGroup({ id: docSnap.id, ...data, slug: data.slug || slugify(data.name) });
+        setGroup(resolvedGroup);
       } catch (err) {
         console.error(err);
         setNotFound(true);
@@ -269,6 +326,15 @@ export default function GroupDetail() {
   const description = group.description && typeof group.description === 'object'
     ? group.description[baseLang] || group.description.es || group.description.en || t('Sin descripción')
     : group.description || t('Sin descripción');
+  const isAdultContent = isAdultValue(group.content18);
+  const contentLabel = isAdultContent ? '+18' : 'Apto para todos';
+  const countryFlag = countryMap[group.city] || '🌐';
+  const countryLabel = countryNameMap[group.city] || group.city || 'Global';
+  const createdLabel = formatCreatedAt(group.createdAt, baseLang);
+  const communityType = isWhatsapp
+    ? String(group.link || '').includes('/channel/') ? 'Canal' : 'Grupo'
+    : 'Grupo';
+  const categoryText = categoryList.length > 0 ? categoryList.join(', ') : 'General';
 
   const openGroupLink = () => {
     if (!group.link) return;
@@ -307,18 +373,19 @@ export default function GroupDetail() {
                 <span className={`${classes.platformBadge} ${isWhatsapp ? classes.platformWhatsapp : classes.platformTelegram}`}>
                   {platformName}
                 </span>
-                {categoryList.slice(0, 2).map((cat) => (
+                {categoryList.slice(0, 3).map((cat) => (
                   <span className={classes.catBadge} key={cat}>{cat}</span>
                 ))}
-                {group.content18 && (
+                {isAdultContent && (
                   <span className={`${classes.catBadge} ${classes.badge18}`}>+18</span>
                 )}
-                {group.city && (
-                  <span className={`${classes.catBadge} ${classes.flagBadge}`} title={group.city}>
-                    {countryMap[group.city] || group.city}
-                  </span>
-                )}
+                <span className={`${classes.catBadge} ${classes.flagBadge}`} title={countryLabel}>
+                  {countryFlag}
+                </span>
               </div>
+              <p className={classes.heroIntro}>
+                {communityType} de {platformName} en {categoryText}
+              </p>
             </div>
           </div>
 
@@ -334,12 +401,65 @@ export default function GroupDetail() {
               <span className={classes.statVal}>{categoryList.length || 1}</span>
               <span className={classes.statLbl}>{t('Categorías')}</span>
             </div>
+            <div className={classes.statCell}>
+              <span className={classes.statVal}>{countryFlag}</span>
+              <span className={classes.statLbl}>Ubicación</span>
+            </div>
+            <div className={classes.statCell}>
+              <span className={`${classes.statVal} ${isAdultContent ? classes.statValAdult : classes.statValSafe}`}>
+                {contentLabel}
+              </span>
+              <span className={classes.statLbl}>Contenido</span>
+            </div>
           </div>
         </section>
 
-        <section className={classes.card}>
-          <div className={classes.sectionLabel}>{t('Descripción:')}</div>
-          <p className={classes.desc}>{description}</p>
+
+        <section className={`${classes.card} ${classes.profileCard}`}>
+          <div className={classes.profileHeader}>
+            <div className={classes.profileTitleBlock}>
+              <div className={classes.profileEyebrow}>Comunidad</div>
+              <h2 className={classes.profileTitle}>{group.name}</h2>
+            </div>
+            <span className={`${classes.contentPill} ${isAdultContent ? classes.contentPillAdult : ''}`}>
+              {contentLabel}
+            </span>
+          </div>
+
+          <p className={classes.profileDesc}>{description}</p>
+
+          <div className={classes.detailGrid}>
+            <div className={classes.detailItem}>
+              <span className={`${classes.detailIcon} ${isWhatsapp ? classes.detailIconWhatsapp : classes.detailIconTelegram}`}>
+                {platformIcon}
+              </span>
+              <div className={classes.detailCopy}>
+                <span className={classes.detailLabel}>Plataforma</span>
+                <strong>{communityType} de {platformName}</strong>
+              </div>
+            </div>
+            <div className={classes.detailItem}>
+              <span className={classes.detailIcon}><IconTags size={16} /></span>
+              <div className={classes.detailCopy}>
+                <span className={classes.detailLabel}>Categoría principal</span>
+                <strong>{categoryList[0] || 'General'}</strong>
+              </div>
+            </div>
+            <div className={classes.detailItem}>
+              <span className={classes.detailIcon}><IconMapPin size={16} /></span>
+              <div className={classes.detailCopy}>
+                <span className={classes.detailLabel}>País</span>
+                <strong>{countryFlag} {countryLabel}</strong>
+              </div>
+            </div>
+            <div className={classes.detailItem}>
+              <span className={classes.detailIcon}><IconCalendar size={16} /></span>
+              <div className={classes.detailCopy}>
+                <span className={classes.detailLabel}>Publicado</span>
+                <strong>{createdLabel}</strong>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className={classes.adSection} aria-label={t('Publicidad')}>
@@ -366,7 +486,6 @@ export default function GroupDetail() {
             {t('Reportar Enlace roto')}
           </button>
         </section>
-
         <Modal
           centered
           opened={opened}
