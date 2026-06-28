@@ -672,6 +672,10 @@
   .statsStrip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .statCell:nth-child(2),
+  .statCell:nth-child(3) {
+    display: none;
+  }
   .statCell {
     padding: 0.72rem 0.55rem;
     min-height: 60px;
