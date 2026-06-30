@@ -1,6 +1,5 @@
 "use client";
 
-import { IconBrandInstagram } from '@tabler/icons-react';
 import classes from '@/app/styles/Footer.module.css';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
@@ -86,6 +85,21 @@ export default function Footer() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className={classes.afterFooter}>
+          <p className={classes.credit}>
+            <span>Code by</span>
+            <a
+              className={classes.creditBadge}
+              href="https://dev.danielrdz.site/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Sitio web de DevCraft"
+            >
+              DevCraft
+            </a>
+          </p>
         </div>
 
       </div>

@@ -1,42 +1,14 @@
 "use client";
 
-import {
-  ActionIcon,
-  Center,
-  Container,
-  Group,
-  Menu,
-  Tooltip,
-  rem,
-  Box,
-} from '@mantine/core';
+import { Container, Group } from '@mantine/core';
 import classes from '@/app/styles/Header.module.css';
 import { useTranslation } from 'react-i18next';
-import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import i18n from '@/locales/i18n.jsx';
-
-
-
-const countries = [
-  { value: 'es', label: 'México', emoji: '🇲🇽', lang: 'es' },
-  { value: 'en', label: 'Estados Unidos', emoji: '🇺🇸', lang: 'en' },
-];
-
 
 export default function Header() {
-  const { t, i18n } = useTranslation();
-  const [subdomain, setSubdomain] = useState('mx');
+  const { t } = useTranslation();
   const pathname = usePathname(); // ← usa esto directamente
-
-  // Detectar subdominio desde la URL
-  useEffect(() => {
-    const hostname = window.location.hostname;
-    if (hostname.includes('.')) {
-      setSubdomain(hostname.split('.')[0]);
-    }
-  }, []);
 
   const isClanesSection = pathname.startsWith('/clanes');
   
@@ -98,48 +70,6 @@ export default function Header() {
           >
             {items}
           </Group>
-
-          {/* Menú de selección de país fuera del contenedor con scroll */}
-          <Box
-            onPointerDownCapture={(e) => e.stopPropagation()}
-            onWheel={(e) => e.stopPropagation()}
-          >
-            <Menu shadow="md" width={200} withinPortal position="bottom-end">
-              <Menu.Target>
-                <ActionIcon
-                  size="lg"
-                  radius="xl"
-                  variant="subtle"
-                  style={{ fontSize: rem(24) }}
-                >
-                  {countries.find((c) => c.value === subdomain)?.emoji ?? '🇲🇽'}
-                </ActionIcon>
-              </Menu.Target>
-
-              <Menu.Dropdown
-                style={{
-                  maxHeight: rem(300),
-                  overflowY: 'auto',
-                }}
-                onWheel={(e) => e.stopPropagation()}
-              >
-                {countries.map((country) => (
-                  <Menu.Item
-                    key={country.value}
-                    leftSection={country.emoji}
-                    onClick={() => {
-                      i18n.changeLanguage(country.lang);
-                      window.location.href = `https://${country.value}.joingroups.lat`;
-                    }}
-                  >
-                    {country.label}
-                  </Menu.Item>
-                ))}
-              </Menu.Dropdown>
-
-            </Menu>
-          </Box>
-
         </div>
       </Container>
     </header>

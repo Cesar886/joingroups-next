@@ -62,35 +62,73 @@
 
 .afterFooter {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
   margin-top: 2.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.social {
-  display: flex;
-  gap: 8px;
-}
-
-.socialIcon {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.credit {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: center;
-  color: #9CA3AF;
-  transition: background 0.15s ease, color 0.15s ease;
-  cursor: pointer;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #737B8C;
 }
 
-.socialIcon:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #FFFFFF;
+.credit span::after {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  margin-left: 8px;
+  vertical-align: middle;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0));
+}
+
+.creditBadge {
+  position: relative;
+  color: #F6F7FA;
+  font-family: var(--font-geist-sans), Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  text-decoration: none;
+  text-transform: none;
+  background: linear-gradient(90deg, #FFFFFF 0%, #C9D1DE 48%, #EEF2F8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 8px 22px rgba(255, 255, 255, 0.08);
+  transition: filter 0.18s ease, opacity 0.18s ease;
+}
+
+.creditBadge::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.48), transparent);
+  opacity: 0;
+  transform: scaleX(0.7);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.creditBadge:hover {
+  filter: brightness(1.12);
+}
+
+.creditBadge:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 @media (max-width: 768px) {
@@ -113,12 +151,6 @@
   }
 
   .afterFooter {
-    flex-direction: column;
-    gap: 1rem;
     text-align: center;
-  }
-
-  .social {
-    margin-top: 0;
   }
 }

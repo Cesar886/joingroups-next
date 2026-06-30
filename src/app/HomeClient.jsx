@@ -1,6 +1,5 @@
 "use client";
 import {
-  ActionIcon,
   Title,
   Text,
   Button,
@@ -8,10 +7,8 @@ import {
   Stack,
   Group,
   Box,
-  Menu,
   Center,
   Divider,
-  rem,
 } from '@mantine/core';
 import Link from 'next/link';
 import {
@@ -32,43 +29,6 @@ import slugify from '@/lib/slugify';
 import '@/locales/i18n';
 
 
-
-const countries = [
-  { value: 'mx', label: 'México', emoji: '🇲🇽', lang: 'es' },
-  { value: 'us', label: 'Estados Unidos', emoji: '🇺🇸', lang: 'en' },
-  { value: 'ar', label: 'Argentina', emoji: '🇦🇷', lang: 'es' },
-  { value: 'co', label: 'Colombia', emoji: '🇨🇴', lang: 'es' },
-  { value: 'es', label: 'España', emoji: '🇪🇸', lang: 'es' },
-  { value: 'pe', label: 'Perú', emoji: '🇵🇪', lang: 'es' },
-  { value: 'cl', label: 'Chile', emoji: '🇨🇱', lang: 'es' },
-  { value: 've', label: 'Venezuela', emoji: '🇻🇪', lang: 'es' },
-  { value: 'br', label: 'Brasil', emoji: '🇧🇷', lang: 'pt' },
-  { value: 'ec', label: 'Ecuador', emoji: '🇪🇨', lang: 'es' },
-  { value: 'gt', label: 'Guatemala', emoji: '🇬🇹', lang: 'es' },
-  { value: 'bo', label: 'Bolivia', emoji: '🇧🇴', lang: 'es' },
-  { value: 'do', label: 'República Dominicana', emoji: '🇩🇴', lang: 'es' },
-  { value: 'hn', label: 'Honduras', emoji: '🇭🇳', lang: 'es' },
-  { value: 'py', label: 'Paraguay', emoji: '🇵🇾', lang: 'es' },
-  { value: 'sv', label: 'El Salvador', emoji: '🇸🇻', lang: 'es' },
-  { value: 'ni', label: 'Nicaragua', emoji: '🇳🇮', lang: 'es' },
-  { value: 'cr', label: 'Costa Rica', emoji: '🇨🇷', lang: 'es' },
-  { value: 'pa', label: 'Panamá', emoji: '🇵🇦', lang: 'es' },
-  { value: 'uy', label: 'Uruguay', emoji: '🇺🇾', lang: 'es' },
-  { value: 'pr', label: 'Puerto Rico', emoji: '🇵🇷', lang: 'es' },
-  { value: 'ca', label: 'Canadá', emoji: '🇨🇦', lang: 'en' },
-  { value: 'de', label: 'Alemania', emoji: '🇩🇪', lang: 'de' },
-  { value: 'fr', label: 'Francia', emoji: '🇫🇷', lang: 'fr' },
-  { value: 'it', label: 'Italia', emoji: '🇮🇹', lang: 'it' },
-  { value: 'gb', label: 'Reino Unido', emoji: '🇬🇧', lang: 'en' },
-  { value: 'nl', label: 'Países Bajos', emoji: '🇳🇱', lang: 'nl' },
-  { value: 'pt', label: 'Portugal', emoji: '🇵🇹', lang: 'pt' },
-  { value: 'jp', label: 'Japón', emoji: '🇯🇵', lang: 'ja' },
-  { value: 'kr', label: 'Corea del Sur', emoji: '🇰🇷', lang: 'ko' },
-  { value: 'cn', label: 'China', emoji: '🇨🇳', lang: 'zh' },
-  { value: 'in', label: 'India', emoji: '🇮🇳', lang: 'hi' },
-  { value: 'ru', label: 'Rusia', emoji: '🇷🇺', lang: 'ru' },
-  { value: 'au', label: 'Australia', emoji: '🇦🇺', lang: 'en' },
-];
 
 const countryMap = {
   mx: '🇲🇽', us: '🇺🇸', ar: '🇦🇷', co: '🇨🇴', es: '🇪🇸',
@@ -94,22 +54,12 @@ export default function HomeClient({ serverData }) {
   const { t, i18n } = useTranslation();
   const [groups, setGroups] = useState([]);
   const [clanes, setClanes] = useState([]);
-  const [subdomain, setSubdomain] = useState('mx');
   const baseLang = typeof i18n.language === 'string' ? i18n.language.split('-')[0] : 'es';
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [buttonPosition, setButtonPosition] = useState('top-left');
   const positionRef = useRef('top-left');
   const [groupsTelegram, setGroupsTelegram] = useState([]);
   const [groupsWhatsapp, setGroupsWhatsapp] = useState([]);
-
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const host = window.location.hostname;
-      const sd = host.includes('.') ? host.split('.')[0] : 'mx';
-      setSubdomain(sd);
-    }
-  }, []);
 
 
   useEffect(() => {
@@ -435,53 +385,6 @@ export default function HomeClient({ serverData }) {
             Publicar clan de Clash Royale
           </Button>
         </Center>
-
-
-        {/* ── Country Selector ── */}
-        <Box
-          mt="xl"
-          onPointerDownCapture={(e) => e.stopPropagation()}
-          onWheel={(e) => e.stopPropagation()}
-        >
-          <Menu shadow="md" width={200} withinPortal position="bottom-end">
-            <Menu.Target>
-              <ActionIcon
-                size="lg"
-                radius="xl"
-                variant="subtle"
-                style={{ fontSize: rem(24), display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
-              >
-                <span style={{ fontSize: '16px', display: 'inline-block', lineHeight: '1', borderRadius: '2px', overflow: 'hidden', width: '20px', height: '14px' }}>
-                  {countries.find((c) => c.value === subdomain)?.emoji ?? '🇲🇽'}
-                </span>
-                <span style={{ fontSize: '0.75rem', transform: 'translateY(1px)' }}>▼</span>
-              </ActionIcon>
-            </Menu.Target>
-
-            <Menu.Dropdown
-              style={{ maxHeight: rem(300), overflowY: 'auto' }}
-              onWheel={(e) => e.stopPropagation()}
-            >
-              {countries.map((country) => (
-                <Menu.Item
-                  key={country.value}
-                  leftSection={
-                    <span style={{ fontSize: '16px', display: 'inline-block', lineHeight: '1', borderRadius: '2px', overflow: 'hidden', width: '20px', height: '14px' }}>
-                      {country.emoji}
-                    </span>
-                  }
-                  onClick={() => {
-                    const currentPath = window.location.pathname + window.location.search;
-                    i18n.changeLanguage(country.lang);
-                    window.location.href = `https://${country.value}.joingroups.lat${currentPath}`;
-                  }}
-                >
-                  {country.label}
-                </Menu.Item>
-              ))}
-            </Menu.Dropdown>
-          </Menu>
-        </Box>
 
 
         {/* ── SEO Content ── */}
