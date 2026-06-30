@@ -3,6 +3,7 @@
 import { MantineProvider } from '@mantine/core';
 import { HelmetProvider } from 'react-helmet-async';
 import FloatingButton from '@/components/FloatingButton'
+import '@/locales/i18n';
 
 
 

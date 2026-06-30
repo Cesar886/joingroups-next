@@ -54,7 +54,7 @@ const whatsappChannelRegex = /^https:\/\/(wa\.me|whatsapp\.com)\/channel\/[a-zA-
 export default function SubirGrupo() {
   const [isLoading, setIsLoading] = useState(false);
   const { t, i18n } = useTranslation();
-  const baseLang = i18n.language.split('-')[0];
+  const baseLang = (i18n.language || 'es').split('-')[0];
   const [redSocial, setRedSocial] = useState('Telegram');
   const [modalOpen, setModalOpen] = useState(false);
   const captchaRef = useRef(null);

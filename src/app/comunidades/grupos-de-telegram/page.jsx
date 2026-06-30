@@ -35,13 +35,25 @@ export default function Telegram() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orden = searchParams.get('orden');
-  const baseLang = i18n.language.split('-')[0];
+  const baseLang = (i18n.language || 'es').split('-')[0];
 
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [collections, setCollections] = useState([]);
+  const [showAllCats, setShowAllCats] = useState(false);
   const groupsPerPage = 12;
+
+  useEffect(() => {
+    const fetchCollections = async () => {
+      const snapshot = await getDocs(collection(db, 'colections'));
+      const docs = snapshot.docs.map(doc => doc.data());
+      const allCollections = docs.flatMap(doc => Array.isArray(doc.colections) ? doc.colections : []);
+      setCollections([...new Set(allCollections)]);
+    };
+    fetchCollections();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -125,6 +137,18 @@ export default function Telegram() {
               <img src="/wapp.webp" alt="WhatsApp" style={{ width: 15, height: 15, borderRadius: 4 }} />
               WhatsApp
             </button>
+            <button
+              className={classes.platformBtn}
+              onClick={() => router.push('/comunidades')}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: -2 }}>
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+              Comunidades
+            </button>
           </div>
 
           {/* Search */}
@@ -154,6 +178,40 @@ export default function Telegram() {
               >
                 {label}
               </button>
+            ))}
+          </div>
+
+          {/* Categorías — una sola fila con scroll */}
+          <div className={classes.categoryRow}>
+            <Link
+              href="/comunidades/grupos-de-telegram"
+              className={`${classes.categoryPill} ${classes.categoryPillActive}`}
+            >
+              Todas
+            </Link>
+            {[
+              { slug: 'tributos', label: 'Tributos Telegram' },
+              { slug: 'grupos-caseros', label: 'Grupos Caseros España' },
+              { slug: 'packs', label: 'Packs Telegram' },
+              { slug: 'desnudas', label: 'Telegram Desnudas' },
+              { slug: 'peliculas', label: 'Películas Telegram' },
+            ].map((cat) => (
+              <Link
+                key={cat.slug}
+                href={`/comunidades/grupos-de-telegram/${cat.slug}`}
+                className={classes.categoryPill}
+              >
+                {cat.label}
+              </Link>
+            ))}
+            {collections.map((cat) => (
+              <Link
+                key={cat}
+                href={`/comunidades/grupos-de-telegram/${slugify(cat)}`}
+                className={classes.categoryPill}
+              >
+                {cat}
+              </Link>
             ))}
           </div>
 

@@ -309,7 +309,7 @@ const router = useRouter();
   const currentGroups = sortedData.slice(indexOfFirstGroup, indexOfLastGroup);
 
   // Determinar el idioma base para descripciones multilingües
-  const baseLang = i18n.language.split('-')[0];
+  const baseLang = (i18n.language || 'es').split('-')[0];
 
   // Mapear los grupos actuales a filas de la tabla (o Paper components)
   const rows = currentGroups.map((row, idx) => {

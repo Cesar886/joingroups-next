@@ -302,7 +302,7 @@ export default function GroupDetail() {
   if (loading) return <div className={classes.loadingState}>{t('Cargando...')}</div>;
   if (notFound || !group) return <div className={classes.loadingState}>{t('Grupo no encontrado.')}</div>;
 
-  const baseLang = i18n.language.split('-')[0];
+  const baseLang = (i18n.language || 'es').split('-')[0];
   const platformSlug = (platform || group?.tipo || 'telegram').toLowerCase().replace('grupos-de-', '');
   const isWhatsapp = platformSlug === 'whatsapp';
   const platformName = isWhatsapp ? 'WhatsApp' : 'Telegram';

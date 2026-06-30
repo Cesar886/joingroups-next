@@ -2,80 +2,47 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import {
-  IconSearch,
-} from '@tabler/icons-react';
-import {
-  Box,
-  Group,
-  Paper,
-  ScrollArea,
-  Container,
-  Badge,
-  Table,
-  Text,
-  TextInput,
-  Button,
-  Title,
-} from '@mantine/core';
+import { IconSearch, IconEye, IconChevronRight } from '@tabler/icons-react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
-import { useMediaQuery } from '@mantine/hooks';
-import slugify from '@/lib/slugify'; // Asegúrate de que esta ruta sea correcta
+import slugify from '@/lib/slugify';
 import { useTranslation } from 'react-i18next';
 import Head from 'next/head';
-
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import classes from '@/app/styles/TableSortTelegram.module.css';
 
-
-// Mapa de países para emojis (si lo usas en tus grupos)
 const countryMap = {
-  mx: '🇲🇽',
-  us: '🇺🇸',
-  ar: '🇦🇷',
-  co: '🇨🇴',
-  es: '🇪🇸',
-  pe: '🇵🇪',
-  cl: '🇨🇱',
-  ve: '🇻🇪',
-  br: '🇧🇷',
-  ec: '🇪🇨',
-  gt: '🇬🇹',
-  bo: '🇧🇴',
-  do: '🇩🇴',
-  hn: '🇭🇳',
-  py: '🇵🇾',
-  sv: '🇸🇻',
-  ni: '🇳🇮',
-  cr: '🇨🇷',
-  pa: '🇵🇦',
-  uy: '🇺🇾',
-  pr: '🇵🇷',
-  ca: '🇨🇦',
-  de: '🇩🇪',
-  fr: '🇫🇷',
-  it: '🇮🇹',
-  gb: '🇬🇧',
-  nl: '🇳🇱',
-  pt: '🇵🇹',
-  jp: '🇯🇵',
-  kr: '🇰🇷',
-  cn: '🇨🇳',
-  in: '🇮🇳',
-  ru: '🇷🇺',
-  au: '🇦🇺',
+  mx:'🇲🇽', us:'🇺🇸', ar:'🇦🇷', co:'🇨🇴', es:'🇪🇸', pe:'🇵🇪',
+  cl:'🇨🇱', ve:'🇻🇪', br:'🇧🇷', ec:'🇪🇨', gt:'🇬🇹', bo:'🇧🇴',
+  do:'🇩🇴', hn:'🇭🇳', py:'🇵🇾', sv:'🇸🇻', ni:'🇳🇮', cr:'🇨🇷',
+  pa:'🇵🇦', uy:'🇺🇾', pr:'🇵🇷', ca:'🇨🇦', de:'🇩🇪', fr:'🇫🇷',
+  it:'🇮🇹', gb:'🇬🇧', nl:'🇳🇱', pt:'🇵🇹', jp:'🇯🇵', kr:'🇰🇷',
+  cn:'🇨🇳', in:'🇮🇳', ru:'🇷🇺', au:'🇦🇺',
 };
 
-// Función para capitalizar la primera letra de una cadena
+const asCategoryArray = (categories) => {
+  if (Array.isArray(categories)) return categories;
+  if (!categories) return [];
+  return [categories];
+};
+
 const capitalize = (str) => {
   if (!str) return '';
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-// Función para generar contenido único por categoría (SEO y UX)
+const formatCategoryName = (value) => {
+  if (!value) return '';
+  return String(value)
+    .split('-')
+    .filter(Boolean)
+    .map(capitalize)
+    .join(' ');
+};
+
 const getCategoryContent = (category, platform) => {
   const platformName = platform === 'telegram' ? 'Telegram' : 'WhatsApp';
-  
+
   const categoryData = {
     'anime': {
       title: `Grupos de ${platformName} de Anime`,
@@ -86,10 +53,10 @@ const getCategoryContent = (category, platform) => {
           'Discusiones en tiempo real sobre episodios recientes',
           'Recomendaciones personalizadas de anime y manga',
           'Comunidad activa de fans apasionados',
-          'Acceso a contenido exclusivo y spoilers controlados'
+          'Acceso a contenido exclusivo y spoilers controlados',
         ],
-        popular: 'Los grupos de anime más populares incluyen comunidades de Naruto, One Piece, Attack on Titan, Demon Slayer y muchos más.'
-      }
+        popular: 'Los grupos de anime más populares incluyen comunidades de Naruto, One Piece, Attack on Titan, Demon Slayer y muchos más.',
+      },
     },
     'gaming': {
       title: `Grupos de ${platformName} de Gaming`,
@@ -100,10 +67,10 @@ const getCategoryContent = (category, platform) => {
           'Equipos para juegos multijugador',
           'Noticias y actualizaciones de videojuegos',
           'Torneos y competencias organizadas',
-          'Consejos y estrategias de expertos'
+          'Consejos y estrategias de expertos',
         ],
-        popular: 'Encuentra grupos de Free Fire, PUBG, Fortnite, League of Legends, Valorant y muchos otros juegos populares.'
-      }
+        popular: 'Encuentra grupos de Free Fire, PUBG, Fortnite, League of Legends, Valorant y muchos otros juegos populares.',
+      },
     },
     'tecnologia': {
       title: `Grupos de ${platformName} de Tecnología`,
@@ -114,10 +81,10 @@ const getCategoryContent = (category, platform) => {
           'Noticias tecnológicas en tiempo real',
           'Networking con profesionales del sector',
           'Recursos de aprendizaje y desarrollo',
-          'Discusiones sobre tendencias emergentes'
+          'Discusiones sobre tendencias emergentes',
         ],
-        popular: 'Grupos especializados en Python, JavaScript, Machine Learning, Blockchain, Criptomonedas y más.'
-      }
+        popular: 'Grupos especializados en Python, JavaScript, Machine Learning, Blockchain, Criptomonedas y más.',
+      },
     },
     'estudio': {
       title: `Grupos de ${platformName} de Estudio`,
@@ -128,10 +95,10 @@ const getCategoryContent = (category, platform) => {
           'Sesiones de estudio grupales organizadas',
           'Intercambio de materiales y recursos',
           'Apoyo mutuo entre estudiantes',
-          'Técnicas de estudio efectivas'
+          'Técnicas de estudio efectivas',
         ],
-        popular: 'Grupos para preparación de exámenes universitarios, idiomas, matemáticas, ciencias y más materias académicas.'
-      }
+        popular: 'Grupos para preparación de exámenes universitarios, idiomas, matemáticas, ciencias y más materias académicas.',
+      },
     },
     'amistad': {
       title: `Grupos de ${platformName} de Amistad`,
@@ -142,10 +109,10 @@ const getCategoryContent = (category, platform) => {
           'Ambiente seguro y moderado',
           'Actividades grupales y eventos',
           'Conversaciones significativas',
-          'Comunidad inclusiva y diversa'
+          'Comunidad inclusiva y diversa',
         ],
-        popular: 'Grupos organizados por edad, ubicación, intereses comunes y actividades sociales.'
-      }
+        popular: 'Grupos organizados por edad, ubicación, intereses comunes y actividades sociales.',
+      },
     },
     '18': {
       title: `Grupos de ${platformName} +18`,
@@ -156,10 +123,10 @@ const getCategoryContent = (category, platform) => {
           'Verificación de edad obligatoria',
           'Moderación activa 24/7',
           'Ambiente respetuoso y consensuado',
-          'Contenido de calidad verificado'
+          'Contenido de calidad verificado',
         ],
-        popular: 'Solo para mayores de 18 años. Acceso verificado y comunidades con normas claras.'
-      }
+        popular: 'Solo para mayores de 18 años. Acceso verificado y comunidades con normas claras.',
+      },
     },
     'musica': {
       title: `Grupos de ${platformName} de Música`,
@@ -170,10 +137,10 @@ const getCategoryContent = (category, platform) => {
           'Descubrimiento de música nueva',
           'Intercambio de playlists',
           'Discusiones sobre artistas y álbumes',
-          'Eventos musicales y conciertos'
+          'Eventos musicales y conciertos',
         ],
-        popular: 'Grupos de todos los géneros: rock, pop, reggaeton, electrónica, jazz, clásica y música independiente.'
-      }
+        popular: 'Grupos de todos los géneros: rock, pop, reggaeton, electrónica, jazz, clásica y música independiente.',
+      },
     },
     'deportes': {
       title: `Grupos de ${platformName} de Deportes`,
@@ -184,56 +151,156 @@ const getCategoryContent = (category, platform) => {
           'Resultados y noticias en tiempo real',
           'Análisis y predicciones deportivas',
           'Comunidad de fanáticos apasionados',
-          'Organización de eventos deportivos'
+          'Organización de eventos deportivos',
         ],
-        popular: 'Grupos de fútbol, básquetbol, tenis, MMA, F1 y todos los deportes populares.'
-      }
-    }
+        popular: 'Grupos de fútbol, básquetbol, tenis, MMA, F1 y todos los deportes populares.',
+      },
+    },
+    'tributos': {
+      title: `Grupos de ${platformName} de Tributos 2026`,
+      description: `Encuentra los mejores grupos de tributos en ${platformName} actualizados 2026. Comunidad activa de tributos verificados. Únete gratis a los mejores canales de tributos.`,
+      content: {
+        intro: `Descubre la comunidad de tributos más activa en ${platformName}. Grupos verificados con contenido exclusivo y miembros activos.`,
+        benefits: [
+          'Comunidad activa y verificada',
+          'Contenido exclusivo actualizado',
+          'Enlaces verificados sin spam',
+          'Ambiente respetuoso y moderado',
+        ],
+        popular: 'Los grupos de tributos más populares con cientos de miembros activos y contenido actualizado a diario.',
+      },
+    },
+    'grupos-caseros': {
+      title: `Grupos ${platformName} Caseros España 2026 | Comunidad Española`,
+      description: `Grupos de ${platformName} caseros en España actualizados 2026. Encuentra comunidades españolas de caseros verificadas. Únete a los mejores grupos caseros de España.`,
+      content: {
+        intro: `La comunidad de caseros española más grande en ${platformName}. Grupos verificados con contenido casero de calidad.`,
+        benefits: [
+          'Comunidad española activa',
+          'Contenido casero verificado',
+          'Miembros de toda España',
+          'Grupos moderados y seguros',
+        ],
+        popular: 'Grupos caseros españoles con miembros activos de Madrid, Barcelona, Valencia y toda España.',
+      },
+    },
+    'caseros': {
+      title: `Grupos ${platformName} Caseros 2026 | Comunidad Activa`,
+      description: `Encuentra los mejores grupos caseros en ${platformName} actualizados 2026. Comunidad activa y verificada. Únete gratis a los grupos caseros más populares.`,
+      content: {
+        intro: `Descubre la mejor comunidad casera en ${platformName}. Grupos verificados con contenido exclusivo.`,
+        benefits: [
+          'Comunidad activa',
+          'Contenido verificado',
+          'Enlaces actualizados',
+          'Ambiente respetuoso',
+        ],
+        popular: 'Los grupos caseros más populares del momento en Telegram.',
+      },
+    },
+    'desnudas': {
+      title: `Grupos de ${platformName} de Desnudas 2026 | Canales Activos`,
+      description: `Encuentra los mejores canales de ${platformName} con contenido de desnudas actualizado 2026. Comunidad activa y verificada. Únete gratis a los grupos más populares.`,
+      content: {
+        intro: `Explora los mejores canales de ${platformName} con contenido de desnudas, comunidades activas y verificadas.`,
+        benefits: [
+          'Comunidad activa y verificada',
+          'Contenido actualizado a diario',
+          'Enlaces seguros y revisados',
+          'Canales con miles de miembros',
+        ],
+        popular: 'Los canales de desnudas más populares con contenido exclusivo y actualizado.',
+      },
+    },
+    'packs': {
+      title: `Packs ${platformName} 2026 | Mejores Canales de Packs`,
+      description: `Encuentra los mejores packs de ${platformName} actualizados 2026. Canales verificados con contenido exclusivo. Únete a packs activos.`,
+      content: {
+        intro: `Los mejores packs en ${platformName} actualizados. Canales verificados con contenido exclusivo para miembros.`,
+        benefits: [
+          'Packs verificados y actualizados',
+          'Contenido exclusivo',
+          'Canales activos con miles de miembros',
+          'Actualización constante',
+        ],
+        popular: 'Los packs más populares del momento en Telegram con contenido exclusivo.',
+      },
+    },
+    'peliculas': {
+      title: `Grupos de ${platformName} de Películas 2026 | Canales de Cine`,
+      description: `Encuentra los mejores grupos de ${platformName} para ver películas actualizados 2026. Canales verificados con contenido cinematográfico. Únete gratis a comunidades de cine.`,
+      content: {
+        intro: `Descubre los mejores grupos de ${platformName} para ver películas, canales verificados con contenido cinematográfico actualizado.`,
+        benefits: [
+          'Películas actualizadas a diario',
+          'Canales verificados sin spam',
+          'Variedad de géneros y estrenos',
+          'Comunidad de cinéfilos activa',
+        ],
+        popular: 'Grupos de cine con estrenos, clásicos y películas de todos los géneros.',
+      },
+    },
   };
 
-  // Contenido genérico si la categoría no está definida explícitamente
   return categoryData[category] || {
-    title: `Grupos de ${platformName} de ${capitalize(category)}`,
-    description: `Encuentra y únete a los mejores grupos de ${platformName} de ${capitalize(category)}. Comunidades activas y verificadas.`,
+    title: `Grupos de ${platformName} de ${formatCategoryName(category)}`,
+    description: `Encuentra y únete a los mejores grupos de ${platformName} de ${formatCategoryName(category)}. Comunidades activas y verificadas.`,
     content: {
-      intro: `Descubre la mejor comunidad de ${capitalize(category)} en ${platformName}. Conecta con personas que comparten tus intereses.`,
+      intro: `Descubre la mejor comunidad de ${formatCategoryName(category)} en ${platformName}. Conecta con personas que comparten tus intereses.`,
       benefits: [
         'Comunidad activa y participativa',
         'Contenido relevante y actualizado',
         'Moderación profesional',
-        'Ambiente seguro y respetuoso'
+        'Ambiente seguro y respetuoso',
       ],
-      popular: `Encuentra los grupos más activos y populares de ${capitalize(category)}.`
-    }
+      popular: `Encuentra los grupos más activos y populares de ${formatCategoryName(category)}.`,
+    },
   };
 };
 
-// Función para filtrar datos por búsqueda y categoría
+const extraCategoryContent = {
+  anime: {
+    title: 'Géneros de anime más populares',
+    text: 'Encuentra grupos especializados en Shonen, Seinen, Shojo, Isekai y comunidades activas de series populares.',
+  },
+  gaming: {
+    title: 'Plataformas de gaming cubiertas',
+    text: 'Desde gaming móvil hasta PC y consolas: busca equipos, torneos, noticias y comunidades de tus juegos favoritos.',
+  },
+  tecnologia: {
+    title: 'Áreas tecnológicas especializadas',
+    text: 'Programación, inteligencia artificial, blockchain, ciberseguridad, DevOps y networking profesional.',
+  },
+  '18': {
+    title: 'Acceso verificado y seguro',
+    text: 'Comunidades para adultos con normas claras, moderación activa y enfoque en respeto y consentimiento.',
+  },
+};
+
 function filterData(data, search, category) {
   const query = search.toLowerCase().trim();
+  const normalizedCategory = String(category || '').toLowerCase();
 
   return data.filter((item) => {
-    const matchesSearch =
+    const categories = asCategoryArray(item.categories);
+    const matchesSearch = !query ||
       item.name?.toLowerCase().includes(query) ||
       item.content18?.toLowerCase().includes(query) ||
-      item.categories?.some(cat => cat.toLowerCase().includes(query));
+      categories.some(cat => String(cat).toLowerCase().includes(query));
 
-    // Asegurarse de que la categoría del grupo coincida con la categoría de la URL
-    const matchesCategory = item.categories?.some((cat) =>
-      // Aplicar slugify a la categoría del item antes de comparar con el slug de la URL
-      slugify(cat).toLowerCase() === category.toLowerCase()
+    const matchesCategory = categories.some((cat) =>
+      slugify(cat).toLowerCase() === normalizedCategory
     );
 
     return matchesSearch && matchesCategory;
   });
 }
 
-// Función para ordenar datos (top, nuevos, destacados)
 function sortData(data, { search, category, orden }) {
-  let filtered = filterData(data, search, category);
-  
+  const filtered = filterData(data, search, category);
+
   if (orden === 'top' || orden === 'vistos') {
-    filtered.sort((a, b) => b.visitas - a.visitas);
+    filtered.sort((a, b) => (b.visitas ?? 0) - (a.visitas ?? 0));
   } else if (orden === 'nuevos') {
     filtered.sort((a, b) => {
       const dateA = a.createdAt?.toDate?.() ?? new Date(0);
@@ -241,8 +308,7 @@ function sortData(data, { search, category, orden }) {
       return dateB - dateA;
     });
   }
-  // 'destacados' mantiene el orden original (por defecto de Firebase o el que venga)
-  
+
   return filtered;
 }
 
@@ -250,49 +316,60 @@ export default function CategoryPage() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();   
+  const searchParams = useSearchParams();
+  const pathParts = pathname?.split('/') || [];
+  // pathname ej: /comunidades/grupos-de-telegram/packs
+  //   [0]='' [1]='comunidades' [2]='grupos-de-telegram' [3]='packs'
+  const initialPlatform = pathParts?.[2]?.replace('grupos-de-', '') || 'telegram';
+  const initialCategory = pathParts?.[3] || '';
+
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState([]);
-  const isMobile = useMediaQuery('(max-width: 768px)');
   const [currentPage, setCurrentPage] = useState(1);
-  const [collections, setCollections] = useState([]); // Para los badges de otras categorías
-  const [category, setCategory] = useState('');
-  const [platform, setPlatform] = useState('');
-  
-  const orden = searchParams.get('orden'); // Obtiene el parámetro de ordenamiento (ej. 'top')
-  
-  // Determinar el tipo de plataforma (telegram/whatsapp) desde la URL
-  const platformName = capitalize(platform); // 'Telegram' o 'Whatsapp'
+  const [collections, setCollections] = useState([]);
+  const [category, setCategory] = useState(initialCategory);
+  const [platform, setPlatform] = useState(initialPlatform);
+  const [showAllCats, setShowAllCats] = useState(false);
+
+  const orden = searchParams.get('orden');
+  const lang = i18n.language || 'es';
+  const baseLang = lang.split('-')[0];
+  const platformName = platform === 'whatsapp' ? 'WhatsApp' : 'Telegram';
+  const platformKey = platform === 'whatsapp' ? 'whatsapp' : 'telegram';
+  const platformIcon = platformKey === 'telegram' ? '/telegramicons.png' : '/wapp.webp';
+  const categoryLabel = formatCategoryName(category);
+  const categoryContent = getCategoryContent(category, platformKey);
+  const categoryExtra = extraCategoryContent[category];
+  const groupsPerPage = 12;
+  const indexOfLastGroup = currentPage * groupsPerPage;
+  const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
+  const currentGroups = sortedData.slice(indexOfFirstGroup, indexOfLastGroup);
+  const totalPages = Math.ceil(sortedData.length / groupsPerPage);
+  const collectionsExist = Array.isArray(collections) && collections.length > 0;
 
   useEffect(() => {
-    const pathParts = pathname?.split('/');
-    const currentPlatform = pathParts?.[3]?.replace('grupos-de-', '');
-    const currentCategory = pathParts?.[4];
+    // pathname ej: /comunidades/grupos-de-telegram/packs
+    //   [0]='' [1]='comunidades' [2]='grupos-de-telegram' [3]='packs'
+    const currentPlatform = pathParts?.[2]?.replace('grupos-de-', '') || 'telegram';
+    const currentCategory = pathParts?.[3] || '';
 
     setPlatform(currentPlatform);
     setCategory(currentCategory);
   }, [pathname]);
-  
-  // Obtener contenido específico de la categoría para SEO y UX
-  const categoryContent = getCategoryContent(category, platform);
-  
-  // Efecto para cargar los datos de los grupos
+
   useEffect(() => {
     const fetchData = async () => {
       const snapshot = await getDocs(collection(db, 'groups'));
       const groups = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      
-      // Filtrar por la plataforma actual (telegram o whatsapp)
-      const platformGroups = groups.filter(g => g.tipo?.trim().toLowerCase() === platform);
-      
+      const platformGroups = groups.filter(g => g.tipo?.trim().toLowerCase() === platformKey);
+
       setData(platformGroups);
     };
-    
-    fetchData();
-  }, [platform]); // Se ejecuta cuando cambia la plataforma (navegación entre Telegram/WhatsApp)
 
-  // Efecto para cargar todas las colecciones (para los badges de otras categorías)
+    fetchData();
+  }, [platformKey]);
+
   useEffect(() => {
     const fetchCollections = async () => {
       const snapshot = await getDocs(collection(db, 'colections'));
@@ -300,453 +377,249 @@ export default function CategoryPage() {
       const allCollections = docs.flatMap(doc => Array.isArray(doc.colections) ? doc.colections : []);
       setCollections([...new Set(allCollections)]);
     };
-    
+
     fetchCollections();
   }, []);
 
-  // Efecto para aplicar el ordenamiento y filtrado cuando cambian los datos, búsqueda, categoría u orden
   useEffect(() => {
     const sorted = sortData(data, { search, category, orden });
     setSortedData(sorted);
-    setCurrentPage(1); // Resetear a la primera página al cambiar filtros/orden
+    setCurrentPage(1);
   }, [data, search, category, orden]);
 
-  // Manejador para el cambio en la barra de búsqueda
-  const handleSearchChange = (event) => {
-    setSearch(event.currentTarget.value);
+  const setOrden = (value) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (value) {
+      params.set('orden', value);
+    } else {
+      params.delete('orden');
+    }
+
+    const query = params.toString();
+    router.push(query ? `${pathname}?${query}` : pathname);
   };
 
-  // Lógica de paginación
-  const groupsPerPage = 12;
-  const indexOfLastGroup = currentPage * groupsPerPage;
-  const indexOfFirstGroup = indexOfLastGroup - groupsPerPage;
-  const currentGroups = sortedData.slice(indexOfFirstGroup, indexOfLastGroup);
+  const getDesc = (row) => {
+    if (row.description && typeof row.description === 'object') {
+      return row.description[baseLang] || row.description[lang] || row.description.es || row.description.en || '';
+    }
 
-  // Determinar el idioma base para descripciones multilingües
-  const baseLang = i18n.language.split('-')[0];
-
-  // Mapear los grupos actuales a filas de la tabla (o Paper components)
-  const rows = currentGroups.map((row, idx) => {
-    const slug = row.slug || slugify(row.name);
-
-    const descriptionText =
-      typeof row.description === 'object'
-        ? row.description[baseLang] || row.description[i18n.language] || row.description['es']
-        : row.description;
-        
-    const iconSrc = platform === 'telegram' ? '/telegramicons.png' : '/wapp.webp';
-
-    return (
-      <Paper
-        withBorder
-        radius="md"
-        shadow="xs"
-        mb="sm"
-        key={`${row.id}-${slug}-${idx}`}
-        onClick={() => router.push(`/comunidades/grupos-de-${platform}/${slug}`)} // Navega al detalle del grupo
-        style={{ cursor: 'pointer' }} // Indica que es clickeable
-      >
-        <Table horizontalSpacing="md" withRowBorders={false}>
-          <Table.Tbody>
-            <Table.Tr>
-              <Table.Td colSpan={3}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  {row.city && (
-                    <Text size="sm">
-                      {countryMap[row.city] || row.city}
-                    </Text>
-                  )}
-                  <Text 
-                    fw={700}
-                    style={{ marginLeft: '8px' }}
-                  >
-                    {row.name}
-                  </Text>
-                  <img
-                    src={iconSrc}
-                    alt={row.name}
-                    style={{
-                      width: platform === 'telegram' ? '24px' : '39px',
-                      height: platform === 'telegram' ? '24px' : '39px',
-                      borderRadius: '4px',
-                      objectFit: 'cover',
-                      marginLeft: 'auto',
-                      marginRight: platform === 'telegram' ? '9px' : '0px',
-                      marginTop: platform === 'telegram' ? '5px' : '0px',
-                    }}
-                  />
-                </div>
-              </Table.Td>
-            </Table.Tr>
-            <Table.Tr>
-              <Table.Td width="33%">
-                <Text>{t(row.categories)}</Text>
-                <Text size="xs" c="dimmed">{t('Categoría')}</Text>
-              </Table.Td>
-              <Table.Td width="33%">
-                <Text>
-                  {row.content18 === 'Sí'
-                    ? '18+'
-                    : isMobile
-                      ? t('Público')
-                      : t('Apto para todo público')}
-                </Text>
-                <Text size="xs" c="dimmed">{t('Contenido')}</Text>
-              </Table.Td>
-              <Table.Td width="33%">
-                <Text>{row.visitas}</Text>
-                <Text size="xs" c="dimmed">{t('Vistas')}</Text>
-              </Table.Td>
-            </Table.Tr>
-          </Table.Tbody>
-        </Table>
-        <Box p="sm" style={{ borderTop: '1px solid #eee', paddingTop: 10 }}>
-          <Text
-            lineClamp={1}
-            style={{
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-            }}
-          >
-            {descriptionText}
-          </Text>
-        </Box>
-      </Paper>
-    );
-  });
-
-  const collectionsExist = Array.isArray(collections) && collections.length > 0;
+    return row.description || '';
+  };
 
   return (
     <>
       <Head>
         <title>{categoryContent.title}</title>
         <meta name="description" content={categoryContent.description} />
-        <link
-          rel="canonical"
-          href={`https://www.joingroups.lat/comunidades/grupos-de-${platform}/${category}`}
-        />
-
+        <link rel="canonical" href={`https://www.joingroups.lat/comunidades/grupos-de-${platformKey}/${category}`} />
         <meta property="og:title" content={categoryContent.title} />
         <meta property="og:description" content={categoryContent.description} />
         <meta property="og:type" content="website" />
       </Head>
 
-      <Container size="lg" px="md">
-        <ScrollArea>
-          <TextInput
-            placeholder={t(`Buscar grupos de ${category}...`)}
-            mb="md"
-            leftSection={<IconSearch size={16} stroke={1.5} />}
-            value={search}
-            onChange={handleSearchChange}
-          />
+      <div className={classes.pageBg}>
+        <div className={classes.wrapper}>
+          <div className={classes.hero}>
+            <div className={classes.eyebrow}>
+              <span className={classes.eyebrowDot} />
+              Directorio verificado
+            </div>
+            <h1 className={classes.pageTitle}>{categoryLabel || platformName}</h1>
+            <p className={classes.pageSub}>
+              {sortedData.length} grupos disponibles
+            </p>
+          </div>
 
-          <Group gap='xs' mb="md" justify="center">
-            {/* Botones de Plataforma (Telegram/WhatsApp) */}
-            <Button
-              variant="light"
-              size="xs"
-              radius="md"
+          <div className={classes.platformRow}>
+            <button
+              className={`${classes.platformBtn} ${platformKey === 'telegram' ? classes.platformBtnActive : ''}`}
               onClick={() => router.push('/comunidades/grupos-de-telegram')}
-              leftSection={
-                <img
-                  src="/telegramicons.png"
-                  alt="Telegram"
-                  style={{ width: 16, height: 16 }}
-                />
-              }
             >
-              {t('Telegram')}
-            </Button>
-
-            <Button
-              variant="light"
-              size="xs"
-              radius="md"
+              <img src="/telegramicons.png" alt="Telegram" style={{ width: 15, height: 15 }} />
+              Telegram
+            </button>
+            <button
+              className={`${classes.platformBtn} ${platformKey === 'whatsapp' ? classes.platformBtnActive : ''}`}
               onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
-              leftSection={
-                <img
-                  src="/wapp.webp"
-                  alt="Whatsapp"
-                  style={{ width: 29, height: 29 }}
-                />
-              }
             >
-              {t('Whatsapp')}
-            </Button>
-
-            {/* Botones de Ordenamiento (Top, Nuevos, Destacados) */}
-            <Group mt="md" mb="md">
-              <Button
-                onClick={() => {
-                  const params = new URLSearchParams(location.search);
-                  const currentOrden = params.get('orden');
-                  if (currentOrden === 'top') {
-                    params.delete('orden'); // quitar si ya estaba activo
-                  } else {
-                    params.set('orden', 'top');
-                  }
-                  const search = params.toString();
-                  router.push(`?${search}`);
-                }}
-                variant={orden === 'top' ? 'filled' : 'light'}
-              >
-                Top
-              </Button>
-
-              <Button
-                onClick={() => {
-                  const params = new URLSearchParams(location.search);
-                  const currentOrden = params.get('orden');
-                  if (currentOrden === 'nuevos') {
-                    params.delete('orden');
-                  } else {
-                    params.set('orden', 'nuevos');
-                  }
-                  const search = params.toString();
-                  router.push(`?${search}`);                  
-                }}
-                variant={orden === 'nuevos' ? 'filled' : 'light'}
-              >
-                Nuevos
-              </Button>
-
-              <Button
-                onClick={() => {
-                  const params = new URLSearchParams(location.search);
-                  params.delete('orden'); // quitar orden para mostrar "destacados"
-                  const search = params.toString();
-                  router.push(`?${search}`);
-                }}
-                variant={!orden ? 'filled' : 'light'}
-              >
-                Destacados
-              </Button>
-            </Group>
-
-            {/* BADGES DE OTRAS CATEGORÍAS */}
-            <Box
-              style={{
-                display: 'flex',
-                overflowX: 'auto',
-                gap: '10px',
-                padding: '10px 0',
-                WebkitOverflowScrolling: 'touch',
-              }}
+              <img src="/wapp.webp" alt="WhatsApp" style={{ width: 15, height: 15, borderRadius: 4 }} />
+              WhatsApp
+            </button>
+            <button
+              className={`${classes.platformBtn} ${!platformKey ? classes.platformBtnActive : ''}`}
+              onClick={() => router.push('/comunidades')}
             >
-              {collectionsExist &&
-                collections
-                .filter(cat => slugify(cat).toLowerCase() !== (category || '').toLowerCase())
-                  .map((cat, i) => (
-                    <Badge
-                      key={i}
-                      variant="light"
-                      color="violet"
-                      size="lg"
-                      radius="xl"
-                      onClick={() => router.push(`/comunidades/grupos-de-${platform}/${slugify(cat)}`)}
-                      style={{
-                        padding: '10px 16px',
-                        fontSize: '14px',
-                        fontWeight: 600,
-                        backgroundColor: '#f3e8ff',
-                        color: '#4a0080',
-                        whiteSpace: 'nowrap',
-                        flexShrink: 0,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
-                      {cat}
-                    </Badge>
-                  ))}
-            </Box>
-          </Group>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: -2 }}>
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+              Comunidades
+            </button>
+          </div>
 
-          <Paper
-          withBorder
-          radius="md"
-          shadow="xs"
-          mt={isMobile ? 'md' : 'xl'}
-          p={isMobile ? 'sm' : 'md'}
-          style={{
-              backgroundColor: '#f9f9f9',
-              marginBottom: isMobile ? '12px' : '20px',
-              paddingBottom: isMobile ? '6px' : '10px',
-          }}
-          >
+          <div className={classes.controlsBar}>
+            <div className={classes.searchBox}>
+              <IconSearch size={15} className={classes.searchIcon} />
+              <input
+                className={classes.searchInput}
+                placeholder={t(`Buscar grupos de ${categoryLabel || platformName}...`)}
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
 
-          <Title order={1} mb="sm">
-              {categoryContent.title} Activos 2026
-          </Title>
+          <div className={classes.sortRow}>
+            {[
+              { label: 'Destacados', val: null },
+              { label: 'Top vistos', val: 'top' },
+              { label: 'Nuevos', val: 'nuevos' },
+            ].map(({ label, val }) => (
+              <button
+                key={label}
+                className={`${classes.sortPill} ${orden === val ? classes.sortPillActive : ''}`}
+                onClick={() => setOrden(val)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
 
-          <Text size="md" mb="md">
-              {isMobile
-              ? categoryContent.content.intro.slice(0, 100) + '...'
-              : categoryContent.content.intro}
-          </Text>
-
-          <Title order={3} mb="sm">
-              ¿Por qué elegir nuestros grupos de {capitalize(category)}?
-          </Title>
-
-          <Box mb="md">
-              {categoryContent.content.benefits.slice(0, isMobile ? 2 : categoryContent.content.benefits.length).map((benefit, index) => (
-              <Text key={index} size="sm" mb="xs" style={{ display: 'flex', alignItems: 'center' }}>
-                  <span style={{ color: '#5e2ca5', marginRight: '8px', fontWeight: 'bold' }}>✓</span>
-                  {benefit}
-              </Text>
+          {/* Categorías — una sola fila con scroll */}
+          <div className={classes.categoryRow}>
+            <Link
+              href={`/comunidades/grupos-de-${platformKey}`}
+              className={`${classes.categoryPill} ${!category ? classes.categoryPillActive : ''}`}
+            >
+              Todas
+            </Link>
+            {[
+              { slug: 'tributos', label: 'Tributos Telegram' },
+              { slug: 'grupos-caseros', label: 'Grupos Caseros España' },
+              { slug: 'packs', label: 'Packs Telegram' },
+              { slug: 'desnudas', label: 'Telegram Desnudas' },
+              { slug: 'peliculas', label: 'Películas Telegram' },
+            ]
+              .filter(cat => cat.slug !== String(category || '').toLowerCase())
+              .map((cat) => (
+                <Link
+                  key={cat.slug}
+                  href={`/comunidades/grupos-de-${platformKey}/${cat.slug}`}
+                  className={classes.categoryPill}
+                >
+                  {cat.label}
+                </Link>
               ))}
-          </Box>
-
-          <Text size="sm" c="dimmed" mb="md">
-              {isMobile
-              ? categoryContent.content.popular.slice(0, 80) + '...'
-              : categoryContent.content.popular}
-          </Text>
-
-          {/* CONTENIDO ESPECÍFICO ADICIONAL POR CATEGORÍA */}
-          {category === 'anime' && (
-              <Box mb="md">
-              <Title order={4} mb="xs">Géneros de Anime Más Populares</Title>
-              <Text size="sm" c="dimmed">
-                  {isMobile
-                  ? 'Grupos de Shonen, Seinen, Isekai y más.'
-                  : 'Encuentra grupos especializados en Shonen (Naruto, Dragon Ball), Seinen (Attack on Titan, Tokyo Ghoul), Shojo (Sailor Moon, Fruits Basket), Isekai (Re:Zero, Overlord) y muchos más géneros. Cada grupo está moderado por fans expertos que mantienen discusiones de calidad.'}
-              </Text>
-              </Box>
-          )}
-
-          {category === 'gaming' && (
-              <Box mb="md">
-              <Title order={4} mb="xs">Plataformas de Gaming Cubiertas</Title>
-              <Text size="sm" c="dimmed">
-                  {isMobile
-                  ? 'Grupos de Free Fire, LoL, Valorant y más.'
-                  : 'Desde gaming móvil (Free Fire, PUBG Mobile, Call of Duty Mobile) hasta PC gaming (Valorant, CS:GO, League of Legends) y consolas (FIFA, Fortnite, Apex Legends). Encuentra equipos, participa en torneos y mejora tu gameplay.'}
-              </Text>
-              </Box>
-          )}
-
-          {category === 'tecnologia' && (
-              <Box mb="md">
-              <Title order={4} mb="xs">Áreas Tecnológicas Especializadas</Title>
-              <Text size="sm" c="dimmed">
-                  {isMobile
-                  ? 'Grupos de programación, IA y más.'
-                  : 'Programación (Python, JavaScript, React), Inteligencia Artificial, Blockchain y Criptomonedas, Ciberseguridad, DevOps, y las últimas tendencias en tecnología. Networking profesional y oportunidades laborales.'}
-              </Text>
-              </Box>
-          )}
-
-          {category === '18' && (
-              <Box mb="md">
-              <Title order={4} mb="xs">Acceso Verificado y Seguro</Title>
-              <Text size="sm" c="dimmed">
-                  {isMobile
-                  ? 'Grupos verificados +18 con normas claras.'
-                  : 'Todos nuestros grupos +18 requieren verificación de edad. Moderación activa 24/7, normas claras de respeto y consenso. Ambiente maduro y responsable para adultos.'}
-              </Text>
-              </Box>
-          )}
-          </Paper>
-
-
-          {rows.length > 0 ? (
-            <>
-              {rows}
-              
-              <Group mt="xl" justify="center" gap="xs">
-                <Button
-                  variant="light"
-                  size="xs"
-                  radius="md"
-                  onClick={() => setCurrentPage(1)}
-                  disabled={currentPage === 1}
+            {collections
+              .filter(cat => slugify(cat).toLowerCase() !== String(category || '').toLowerCase())
+              .map((cat) => (
+                <Link
+                  key={cat}
+                  href={`/comunidades/grupos-de-${platformKey}/${slugify(cat)}`}
+                  className={classes.categoryPill}
                 >
-                  {t('Inicio (paginación)')}
-                </Button>
-                <Button
-                  variant="subtle"
-                  size="xs"
-                  radius="md"
-                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                >
-                  ← {t('Anterior')}
-                </Button>
-                <Text size="sm" fw={500} mt={4}>
-                  {t('Página')} <strong>{currentPage}</strong>
-                </Text>
-                <Button
-                  variant="subtle"
-                  size="xs"
-                  radius="md"
-                  onClick={() =>
-                    setCurrentPage((prev) =>
-                      indexOfLastGroup < sortedData.length ? prev + 1 : prev
-                    )
-                  }
-                  disabled={indexOfLastGroup >= sortedData.length}
-                >
-                  {t('Siguiente')} →
-                </Button>
-              </Group>
-            </>
-          ) : (
-            <Box ta="center" mt="xl">
-              <Text fw={500} c="dimmed" mb="sm">
-                {t(`No se encontraron grupos de ${category} en este momento.`)}
-              </Text>
-              <Text size="sm" c="dimmed" mb="md">
-                {t('¿Tienes un grupo de esta categoría? ¡Publícalo gratis!')}
-              </Text>
-              <Button
-                component={Link}
-                href="/comunidades/subir-grupo"
-                variant="filled"
-                color="violet"
+                  {cat}
+                </Link>
+              ))}
+          </div>
+
+          {currentGroups.length > 0 ? currentGroups.map((row, idx) => {
+            const categories = asCategoryArray(row.categories);
+            const slug = row.slug || slugify(row.name);
+            const mainCat = categories[0] || categoryLabel || 'otros';
+            const desc = getDesc(row);
+            const detailCategory = category || slugify(mainCat);
+
+            return (
+              <div
+                key={`${row.id}-${idx}`}
+                className={classes.groupCard}
+                onClick={() => router.push(`/comunidades/grupos-de-${platformKey}/${detailCategory}/${slug}`)}
               >
+                <div className={classes.groupCardTop}>
+                  <div className={classes.groupAvatar}>
+                    <img src={platformIcon} alt={platformName} />
+                  </div>
+                  <div className={classes.groupInfo}>
+                    <div className={classes.groupName}>{row.name}</div>
+                    <div className={classes.groupMeta}>
+                      {row.city && countryMap[row.city] && (
+                        <>
+                          <span className={classes.groupFlag}>{countryMap[row.city]}</span>
+                          <span className={classes.groupMetaDot} />
+                        </>
+                      )}
+                      {row.content18 === 'Sí' && (
+                        <span className={classes.badge18}>18+</span>
+                      )}
+                    </div>
+                  </div>
+                  <IconChevronRight size={16} style={{ color: '#D4D4D4', flexShrink: 0 }} />
+                </div>
+
+                {desc && <div className={classes.groupDesc}>{desc}</div>}
+
+                <div className={classes.groupFooter}>
+                  <span className={classes.groupCategory}>{mainCat}</span>
+                  <span className={classes.groupViews}>
+                    <IconEye size={11} />
+                    {row.visitas ?? 0}
+                  </span>
+                </div>
+              </div>
+            );
+          }) : (
+            <div className={classes.emptyState}>
+              <p>{t(`No se encontraron grupos de ${categoryLabel || category} en este momento.`)}</p>
+              <Link href="/comunidades/subir-grupo" className={classes.emptyAction}>
                 {t('Publicar mi grupo')}
-              </Button>
-            </Box>
+              </Link>
+            </div>
           )}
 
-          <Paper
-            withBorder
-            radius="md"
-            shadow="xs"
-            mt="xl"
-            p="md"
-            style={{ backgroundColor: '#f9f9f9', marginBottom: '20px' }}
-          >
-            <Title order={3} mb="sm">
-              Cómo Unirse a Grupos de {capitalize(category)} en {platformName}
-            </Title>
+          {totalPages > 1 && (
+            <div className={classes.pagination}>
+              <button
+                className={classes.pageBtn}
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+              >
+                ««
+              </button>
+              <button
+                className={classes.pageBtn}
+                onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                ← {t('Anterior')}
+              </button>
+              <span className={classes.pageInfo}>{currentPage} / {totalPages}</span>
+              <button
+                className={classes.pageBtn}
+                onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+                disabled={currentPage >= totalPages}
+              >
+                {t('Siguiente')} →
+              </button>
+            </div>
+          )}
 
-            <Text size="sm" color="dimmed" mb="md">
-              Unirse a nuestros grupos de {category} es completamente gratuito y seguro. 
-              Simplemente haz clic en cualquier grupo que te interese y serás redirigido automáticamente a {platformName}. 
-              Todos los enlaces están verificados y actualizados regularmente para garantizar el acceso.
-            </Text>
-
-            <Text size="sm" color="dimmed" mb="md">
-              ¿Tienes un grupo de {category} y quieres hacerlo crecer? {' '}
-              <Link href="/comunidades/subir-grupo" style={{ color: '#228be6', textDecoration: 'underline' }}>
-                Publícalo gratis en JoinGroups
-              </Link> y llega a miles de usuarios interesados en {category}.
-            </Text>
-
-            <Text size="xs" color="dimmed" style={{ fontStyle: 'italic' }}>
-              Grupos de {capitalize(category)}, {platformName} {category}, Comunidades de {category}, 
-              Enlaces {category}, Unirse grupos {category}, {category} 2026
-            </Text>
-          </Paper>
-        </ScrollArea>
-      </Container>
-
+          <div className={classes.footerCta}>
+            <p className={classes.footerCtaTitle}>Cómo unirse a grupos de {categoryLabel || category} en {platformName}</p>
+            <p className={classes.footerCtaText}>
+              Unirse a estos grupos es gratis. Abre cualquier comunidad, revisa su descripción y accede desde el enlace verificado. Si tienes un grupo de {categoryLabel || category},{' '}
+              <Link href="/comunidades/subir-grupo">publícalo gratis en JoinGroups</Link> para llegar a más usuarios interesados.
+            </p>
+            <Link href={`/comunidades/grupos-de-${platformKey}`} className={classes.clashBtn}>
+              Ver todos los grupos de {platformName} →
+            </Link>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

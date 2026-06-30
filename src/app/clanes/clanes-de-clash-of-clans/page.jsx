@@ -23,7 +23,7 @@ function filterData(data, search) {
 export default function ClashOfClans() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
-  const baseLang = i18n.language.split('-')[0];
+  const baseLang = (i18n.language || 'es').split('-')[0];
 
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');

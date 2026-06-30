@@ -36,7 +36,7 @@ export default function Whatsapp() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orden = searchParams.get('orden');
-  const baseLang = i18n.language.split('-')[0];
+  const baseLang = (i18n.language || 'es').split('-')[0];
 
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');

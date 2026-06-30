@@ -348,7 +348,7 @@ export default function HomeClient({ serverData }) {
             {groupsTelegram.map((group, i) => renderCard(group, i, true))}
           </div>
 
-          <div style={{ padding: '12px 16px 16px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+          <div style={{ padding: '12px 16px 16px', borderTop: '1px solid rgba(0,0,0,0.05)', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <Button
               variant="subtle"
               component={Link}
@@ -360,6 +360,17 @@ export default function HomeClient({ serverData }) {
               style={{ fontWeight: 600, fontSize: '13px' }}
             >
               {t('Ver todos los grupos de Telegram')}
+            </Button>
+            <Button
+              variant="light"
+              component={Link}
+              href="/comunidades"
+              color="gray"
+              size="sm"
+              radius="md"
+              style={{ fontWeight: 600, fontSize: '13px' }}
+            >
+              {t('Todas las comunidades')}
             </Button>
           </div>
         </Box>

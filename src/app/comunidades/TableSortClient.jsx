@@ -99,6 +99,53 @@ const platformConfig = {
   },
 };
 
+
+const internalLinkGroups = [
+  {
+    title: 'Páginas destacadas de Telegram',
+    description: 'Accesos directos a las landings principales de Telegram.',
+    links: [
+      { href: '/comunidades/grupos-de-telegram/tributos', label: 'Tributos Telegram' },
+      { href: '/comunidades/grupos-de-telegram/grupos-caseros', label: 'Grupos caseros España' },
+      { href: '/comunidades/grupos-de-telegram/caseros', label: 'Caseros Telegram' },
+      { href: '/comunidades/grupos-de-telegram/packs', label: 'Packs Telegram' },
+      { href: '/comunidades/grupos-de-telegram/desnudas', label: 'Telegram desnudas' },
+      { href: '/comunidades/grupos-de-telegram/peliculas', label: 'Películas Telegram' },
+    ],
+  },
+  {
+    title: 'Categorías de grupos de Telegram',
+    description: 'Enlaces internos a las categorías principales del directorio.',
+    links: [
+      { href: '/comunidades/grupos-de-telegram/hot', label: 'Hot' },
+      { href: '/comunidades/grupos-de-telegram/nsfw', label: 'NSFW' },
+      { href: '/comunidades/grupos-de-telegram/peliculas-y-series', label: 'Películas y series' },
+      { href: '/comunidades/grupos-de-telegram/porno', label: 'Porno' },
+      { href: '/comunidades/grupos-de-telegram/xxx', label: 'XXX' },
+      { href: '/comunidades/grupos-de-telegram/hacking', label: 'Hacking' },
+      { href: '/comunidades/grupos-de-telegram/memes-y-humor', label: 'Memes y humor' },
+      { href: '/comunidades/grupos-de-telegram/criptomonedas', label: 'Criptomonedas' },
+      { href: '/comunidades/grupos-de-telegram/anime-y-manga', label: 'Anime y manga' },
+      { href: '/comunidades/grupos-de-telegram/18', label: '+18' },
+      { href: '/comunidades/grupos-de-telegram/futbol', label: 'Fútbol' },
+      { href: '/comunidades/grupos-de-telegram/tecnologia', label: 'Tecnología' },
+      { href: '/comunidades/grupos-de-telegram/programacion', label: 'Programación' },
+      { href: '/comunidades/grupos-de-telegram/gaming', label: 'Gaming' },
+      { href: '/comunidades/grupos-de-telegram/cursos-y-tutoriales', label: 'Cursos y tutoriales' },
+      { href: '/comunidades/grupos-de-telegram/musica-y-podcasts', label: 'Música y podcasts' },
+      { href: '/comunidades/grupos-de-telegram/arte-y-diseno', label: 'Arte y diseño' },
+      { href: '/comunidades/grupos-de-telegram/ciencia-y-educacion', label: 'Ciencia y educación' },
+      { href: '/comunidades/grupos-de-telegram/negocios-y-finanzas', label: 'Negocios y finanzas' },
+      { href: '/comunidades/grupos-de-telegram/trading', label: 'Trading' },
+      { href: '/comunidades/grupos-de-telegram/ofertas-y-descuentos', label: 'Ofertas y descuentos' },
+      { href: '/comunidades/grupos-de-telegram/emprendimiento', label: 'Emprendimiento' },
+      { href: '/comunidades/grupos-de-telegram/relaciones-y-citas', label: 'Relaciones y citas' },
+      { href: '/comunidades/grupos-de-telegram/telegram-bots', label: 'Telegram bots' },
+      { href: '/comunidades/grupos-de-telegram/stickers', label: 'Stickers' },
+    ],
+  },
+];
+
 function getPlatform(row) {
   return row?.tipo?.trim?.().toLowerCase() === 'telegram' ? 'telegram' : 'whatsapp';
 }
@@ -143,6 +190,7 @@ export default function TableSortClient({ serverData = [] }) {
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [hostname, setHostname] = useState('');
+  const [showAllLinks, setShowAllLinks] = useState(false);
 
   const selectedCategories = useMemo(
     () => catsParam.split(',').map((cat) => cat.trim()).filter(Boolean),
@@ -307,26 +355,18 @@ export default function TableSortClient({ serverData = [] }) {
         </section>
 
         <div className={styles.platformRow}>
-          <button type="button" className={`${styles.platformBtn} ${styles.platformBtnActive}`}>
+          <Link href="/comunidades" className={`${styles.platformBtn} ${styles.platformBtnActive}`}>
             <IconUsers size={15} />
             Todos
-          </button>
-          <button
-            type="button"
-            className={styles.platformBtn}
-            onClick={() => router.push('/comunidades/grupos-de-telegram')}
-          >
+          </Link>
+          <Link href="/comunidades/grupos-de-telegram" className={styles.platformBtn}>
             <img src="/telegramicons.png" alt="Telegram" className={styles.platformIcon} />
             Telegram
-          </button>
-          <button
-            type="button"
-            className={styles.platformBtn}
-            onClick={() => router.push('/comunidades/grupos-de-whatsapp')}
-          >
+          </Link>
+          <Link href="/comunidades/grupos-de-whatsapp" className={styles.platformBtn}>
             <img src="/wapp.webp" alt="WhatsApp" className={`${styles.platformIcon} ${styles.platformIconWhatsapp}`} />
             WhatsApp
-          </button>
+          </Link>
         </div>
 
         <div className={styles.controlsBar}>
@@ -367,6 +407,17 @@ export default function TableSortClient({ serverData = [] }) {
             >
               Todas
             </button>
+            {[
+              { href: '/comunidades/grupos-de-telegram/tributos', label: 'Tributos Telegram' },
+              { href: '/comunidades/grupos-de-telegram/grupos-caseros', label: 'Grupos Caseros España' },
+              { href: '/comunidades/grupos-de-telegram/packs', label: 'Packs Telegram' },
+              { href: '/comunidades/grupos-de-telegram/desnudas', label: 'Telegram Desnudas' },
+              { href: '/comunidades/grupos-de-telegram/peliculas', label: 'Películas Telegram' },
+            ].map((item) => (
+              <Link key={item.href} href={item.href} className={styles.categoryPill} style={{ textDecoration: 'none' }}>
+                {item.label}
+              </Link>
+            ))}
             {categories.map((category) => {
               const selected = selectedCategories.includes(category.name);
               return (
@@ -502,7 +553,7 @@ export default function TableSortClient({ serverData = [] }) {
           </div>
           <div className={styles.footerActions}>
             <Link href="/comunidades/subir-grupo" className={styles.primaryCta}>Publicar grupo</Link>
-            <Link href="/clanes/clanes-de-clash-royale" className={styles.secondaryCta}>Ver clanes</Link>
+            <Link href="/clanes" className={styles.secondaryCta}>Ver clanes</Link>
           </div>
         </section>
       </div>
