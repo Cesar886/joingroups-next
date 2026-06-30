@@ -28,13 +28,6 @@ export default function Footer() {
         { label: 'Todos los clanes', link: '/clanes' },
       ],
     },
-    {
-      title: 'Comunidad',
-      links: [
-        { label: t('Instagram Oficial'), link: 'https://www.instagram.com/daniel110a/' },
-        { label: t('Grupo en Telegram'), link: 'https://t.me/PhotosOfficialbot' },
-      ],
-    },
   ];
 
   return (
@@ -92,25 +85,6 @@ export default function Footer() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* After Footer */}
-        <div className={classes.afterFooter}>
-          <span style={{ color: '#6B7280', fontSize: '13px' }}>
-            © {new Date().getFullYear()} joingroups.lat. {t('Todos los derechos reservados.')}
-          </span>
-
-          <div className={classes.social}>
-            <a
-              href="https://www.instagram.com/daniel110a/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={classes.socialIcon}
-              aria-label="Instagram"
-            >
-              <IconBrandInstagram size={16} stroke={1.5} />
-            </a>
           </div>
         </div>
 
