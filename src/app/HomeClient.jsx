@@ -60,6 +60,7 @@ export default function HomeClient({ serverData }) {
   const positionRef = useRef('top-left');
   const [groupsTelegram, setGroupsTelegram] = useState([]);
   const [groupsWhatsapp, setGroupsWhatsapp] = useState([]);
+  const [showAllCatsHome, setShowAllCatsHome] = useState(false);
 
 
   useEffect(() => {
@@ -397,6 +398,120 @@ export default function HomeClient({ serverData }) {
           </Button>
         </Center>
 
+        {/* ── Categorías de Telegram ── */}
+        <Box mt="xl" className={styles.sectionCard}>
+          <div className={styles.sectionHeader}>
+            <span className={`${styles.sectionBadge} ${styles.badgeTelegram}`} style={{ display: isMobile ? 'none' : undefined }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/>
+              </svg>
+              Categorías
+            </span>
+            <Title order={2} fz={isMobile ? 17 : 20} fw={700} style={{ letterSpacing: '-0.01em', color: '#0F0F14' }}>
+              Grupos de Telegram por tema
+            </Title>
+          </div>
+          <Text fz="sm" mb={isMobile ? 'md' : 'lg'} px="md" style={{ color: '#6B7280', marginTop: 0 }}>
+            Explora comunidades activas organizadas por categoría.
+          </Text>
+          <Box px="md" pb="md">
+            <div style={{
+              position: 'relative',
+              maxHeight: showAllCatsHome ? 'none' : '88px',
+              overflow: 'hidden',
+              transition: 'max-height 0.3s ease',
+            }}>
+              <Group gap="xs" wrap="wrap">
+                {[
+                  { href: '/comunidades/grupos-de-telegram/tributos', label: 'Tributos Telegram' },
+                  { href: '/comunidades/grupos-de-telegram/grupos-caseros', label: 'Grupos Caseros España' },
+                  { href: '/comunidades/grupos-de-telegram/packs', label: 'Packs Telegram' },
+                  { href: '/comunidades/grupos-de-telegram/desnudas', label: 'Telegram Desnudas' },
+                  { href: '/comunidades/grupos-de-telegram/peliculas', label: 'Películas Telegram' },
+                  { href: '/comunidades/grupos-de-telegram/hot', label: 'Hot' },
+                  { href: '/comunidades/grupos-de-telegram/porno', label: 'Porno' },
+                  { href: '/comunidades/grupos-de-telegram/xxx', label: 'Xxx' },
+                  { href: '/comunidades/grupos-de-telegram/18', label: '18+' },
+                  { href: '/comunidades/grupos-de-telegram/nsfw', label: 'NSFW' },
+                  { href: '/comunidades/grupos-de-telegram/stickers', label: 'Stickers' },
+                  { href: '/comunidades/grupos-de-telegram/anime-y-manga', label: 'Anime y Manga' },
+                  { href: '/comunidades/grupos-de-telegram/emprendimiento', label: 'Emprendimiento' },
+                  { href: '/comunidades/grupos-de-telegram/futbol', label: 'Fútbol' },
+                  { href: '/comunidades/grupos-de-telegram/gaming', label: 'Gaming' },
+                  { href: '/comunidades/grupos-de-telegram/negocios-y-finanzas', label: 'Negocios y Finanzas' },
+                  { href: '/comunidades/grupos-de-telegram/ofertas-y-descuentos', label: 'Ofertas y Descuentos' },
+                  { href: '/comunidades/grupos-de-telegram/peliculas-y-series', label: 'Películas y Series' },
+                  { href: '/comunidades/grupos-de-telegram/telegram-bots', label: 'Telegram bots' },
+                ].map((item) => (
+                  <Button
+                    key={item.href}
+                    component={Link}
+                    href={item.href}
+                    variant="light"
+                    color="cyan"
+                    size="xs"
+                    radius="xl"
+                    style={{
+                      fontWeight: 500,
+                      fontSize: isMobile ? '11.5px' : '12.5px',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {item.label}
+                  </Button>
+                ))}
+              </Group>
+              {!showAllCatsHome && (
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: 40,
+                  background: 'linear-gradient(to bottom, transparent, #FFFFFF)',
+                  pointerEvents: 'none',
+                }} />
+              )}
+            </div>
+            <button
+              onClick={() => setShowAllCatsHome(!showAllCatsHome)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+                marginTop: 8,
+                padding: 0,
+                background: 'none',
+                border: 'none',
+                fontSize: 12.5,
+                fontWeight: 600,
+                color: '#229ED9',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+              }}
+              onMouseEnter={e => e.currentTarget.style.color = '#0369A1'}
+              onMouseLeave={e => e.currentTarget.style.color = '#229ED9'}
+            >
+              {showAllCatsHome ? 'Ver menos' : 'Ver más'}
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{
+                  width: 12,
+                  height: 12,
+                  transition: 'transform 0.2s ease',
+                  transform: showAllCatsHome ? 'rotate(180deg)' : 'rotate(0deg)',
+                }}
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+          </Box>
+        </Box>
 
         {/* ── SEO Content ── */}
         <Box mt="lg" className={styles.seoSection} mx="auto">

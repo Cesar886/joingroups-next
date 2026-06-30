@@ -90,11 +90,11 @@ export default function Whatsapp() {
       <Head>
         <title>Grupos de WhatsApp por Temas [Actualizado 2026] - joingroups.lat</title>
         <meta name="description" content="Descubre y únete a grupos de WhatsApp activos de todas las categorías: amor, amistad, stickers, etc. Enlaces de invitación verificados y actualizados." />
-        <link rel="canonical" href="https://www.joingroups.lat/grupos-de-whatsapp" />
+        <link rel="canonical" href="https://www.joingroups.lat/comunidades/grupos-de-whatsapp" />
         <meta property="og:title" content="Los Mejores Grupos de WhatsApp para Unirte | joingroups.lat" />
         <meta property="og:description" content="Busca entre cientos de grupos de WhatsApp y únete con un solo clic." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.joingroups.lat/grupos-de-whatsapp" />
+        <meta property="og:url" content="https://www.joingroups.lat/comunidades/grupos-de-whatsapp" />
         <meta property="og:image" content="https://www.joingroups.lat/wapp.webp" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="keywords" content="grupos de whatsapp, enlaces de whatsapp, unirse a grupo whatsapp, links de whatsapp" />
