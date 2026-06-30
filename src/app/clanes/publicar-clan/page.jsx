@@ -12,7 +12,6 @@ import slugify from '@/lib/slugify';
 import { logPublication, shouldBypassCaptchaInDev } from '@/lib/publicationDebug';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
-import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import {
   IconShield, IconLink, IconMail, IconAlignLeft,
@@ -232,12 +231,6 @@ export default function ClanesGroupForm() {
 
   return (
     <>
-      <Head>
-        <title>{`Publicar Clan de ${game} | Gratis en JoinGroups 2026`}</title>
-        <meta name="description" content={`Envía tu clan de ${game} para ser listado en nuestro directorio verificado.`} />
-        <link rel="canonical" href="https://joingroups.lat/clanes/publicar-clan" />
-      </Head>
-
       <div className={classes.pageBg}>
         <div className={classes.wrapper}>
 

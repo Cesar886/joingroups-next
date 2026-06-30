@@ -20,7 +20,7 @@ export default function InstruccionesCrearGrupoTelegramOptimizado() {
           name="keywords"
           content="crear grupo Telegram, comunidad Telegram, administrador grupo Telegram, configuración grupo Telegram, tutorial Telegram, grupos Telegram, miembros Telegram, buscar grupos Telegram, canales Telegram, YouTube Telegram, cómo crear grupo, gestionar grupo Telegram, crecer grupo Telegram, noticias Telegram, usuarios Telegram"
         />
-        <link rel="canonical" href="https://joingroups.lat/comunidades/como-crear-grupo-telegram" />
+        <link rel="canonical" href="https://www.joingroups.lat/comunidades/como-crear-grupo-telegram" />
 
         {/* Open Graph */}
         <meta property="og:title" content="Cómo Crear un Grupo de Telegram Exitoso: Guía Completa" />
@@ -29,8 +29,8 @@ export default function InstruccionesCrearGrupoTelegramOptimizado() {
           content="Aprende cómo crear y gestionar grupos de Telegram, optimizado para SEO con consejos prácticos y videos de YouTube incrustados. ¡Empieza tu comunidad hoy mismo!"
         />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://joingroups.lat/comunidades/como-crear-grupo-telegram" />
-        <meta property="og:image" content="https://joingroups.lat/og-preview.png" />
+        <meta property="og:url" content="https://www.joingroups.lat/comunidades/como-crear-grupo-telegram" />
+        <meta property="og:image" content="https://www.joingroups.lat/og-preview.png" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -39,7 +39,7 @@ export default function InstruccionesCrearGrupoTelegramOptimizado() {
           name="twitter:description"
           content="Guía definitiva para crear, gestionar y hacer crecer tu grupo de Telegram. Incluye optimización SEO y videos de YouTube incrustados."
         />
-        <meta name="twitter:image" content="https://joingroups.lat/og-preview.png" />
+        <meta name="twitter:image" content="https://www.joingroups.lat/og-preview.png" />
       </Head>
 
       <Title order={1} className="text-3xl font-bold mb-8">Cómo Crear un Grupo de Telegram Exitoso: Guía Completa para Principiantes y Expertos</Title>
@@ -120,7 +120,7 @@ export default function InstruccionesCrearGrupoTelegramOptimizado() {
       </Text>
       <List className="list-disc pl-6 mb-8">
         <ListItem className="mb-4"><strong>Comparte el enlace de invitación:</strong> Publica el enlace de invitación de tu <strong>grupo</strong> en tus redes sociales (Facebook, Twitter, Instagram, etc.), en tu sitio web, en tu blog, o en cualquier otra plataforma donde tu audiencia objetivo pueda <strong>encontrar</strong>lo. Asegúrate de que el mensaje que acompaña al enlace sea atractivo y explique claramente el propósito del <strong>grupo</strong>.</ListItem>
-        <ListItem className="mb-4"><strong>Directorios de <strong>Grupos de Telegram</strong>:</strong> Plataformas como <Anchor href="https://joingroups.lat" target="_blank" rel="noopener noreferrer">joingroups.lat</Anchor> (tu propio sitio) son excelentes lugares para listar tu <strong>grupo</strong> y permitir que <strong>usuarios</strong> interesados lo <strong>busquen</strong> y se unan. Aprovecha estos directorios para aumentar la visibilidad de tu comunidad.</ListItem>
+        <ListItem className="mb-4"><strong>Directorios de <strong>Grupos de Telegram</strong>:</strong> Plataformas como <Anchor href="https://www.joingroups.lat" target="_blank" rel="noopener noreferrer">joingroups.lat</Anchor> (tu propio sitio) son excelentes lugares para listar tu <strong>grupo</strong> y permitir que <strong>usuarios</strong> interesados lo <strong>busquen</strong> y se unan. Aprovecha estos directorios para aumentar la visibilidad de tu comunidad.</ListItem>
         <ListItem className="mb-4"><strong>Promoción Cruzada:</strong> Si eres parte de otras comunidades o <strong>canales</strong> de <strong>Telegram</strong> relevantes, considera la posibilidad de hacer promoción cruzada con otros administradores. Esto puede exponer tu <strong>grupo</strong> a una audiencia ya interesada en temas similares.</ListItem>
       </List>
       <Text className="mb-8">

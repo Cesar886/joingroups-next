@@ -2,42 +2,70 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
 import HomeClient from './HomeClient';
 
+const SITE_URL = 'https://www.joingroups.lat';
+
 export const metadata = {
-  title: 'Grupos de Telegram, WhatsApp y Clanes de Videojuegos',
-  description: 'Descubre y únete a miles de grupos de Telegram y WhatsApp activos. También encuentra clanes populares de videojuegos como Clash of Clans y más. Explora por país, categoría y tipo.',
-  keywords: 'grupos de Telegram, grupos de WhatsApp, clanes de videojuegos, comunidades activas, clash royale, clash of clans, grupos por país',
-  robots: 'index, follow',
-  alternates: {
-    canonical: 'https://joingroups.lat',
-    languages: {
-      'es-ES': 'https://es.joingroups.lat',
-      'en-US': 'https://en.joingroups.lat',
+  title: 'Clanes de Clash Royale y comunidades activas | JoinGroups',
+  description:
+    'Encuentra clanes de Clash Royale activos, busca clan para unirte o publica tu clan gratis para reclutar miembros. También explora grupos de Telegram y WhatsApp por categoría.',
+  keywords:
+    'clanes de Clash Royale, buscar clan Clash Royale, publicar clan Clash Royale, reclutar miembros Clash Royale, unirse a clanes activos, grupos de Telegram, grupos de WhatsApp',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
     },
   },
+  alternates: {
+    canonical: `${SITE_URL}/`,
+  },
   openGraph: {
-    title: 'Grupos de Telegram, WhatsApp y Clanes - joingroups.lat',
-    description: 'Un catálogo completo de comunidades activas. Filtra y únete fácil por país y categoría.',
-    url: 'https://joingroups.lat/',
-    siteName: 'joingroups.lat',
+    title: 'Clanes de Clash Royale y comunidades activas | JoinGroups',
+    description:
+      'Busca clanes de Clash Royale, publica tu clan para reclutar miembros y descubre comunidades activas en Telegram y WhatsApp.',
+    url: `${SITE_URL}/`,
+    siteName: 'JoinGroups',
     images: [
       {
-        url: 'https://joingroups.lat/opengraph-image.png',
+        url: `${SITE_URL}/JoinGroups.png`,
         width: 1200,
         height: 630,
-        alt: 'Grupos y clanes activos de Telegram, WhatsApp y videojuegos',
+        alt: 'JoinGroups: clanes de Clash Royale y comunidades activas',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Únete a Grupos de Telegram, WhatsApp y Clanes | joingroups.lat',
-    description: 'Explora comunidades activas por categoría y país. Publica o descubre grupos fácilmente.',
-    images: ['https://joingroups.lat/opengraph-image.png'],
+    title: 'Clanes de Clash Royale | Buscar o publicar clan',
+    description:
+      'Encuentra clanes activos de Clash Royale o publica tu clan gratis para reclutar miembros en JoinGroups.',
+    images: [`${SITE_URL}/JoinGroups.png`],
   },
-    other: {
+  other: {
     'yandex-verification': '6a0e37aeb6ffa1fa',
-    }
+  },
+};
+
+const homeJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'JoinGroups',
+  url: SITE_URL,
+  inLanguage: 'es',
+  description:
+    'Directorio para encontrar clanes de Clash Royale, publicar clanes y descubrir comunidades activas de Telegram y WhatsApp.',
+  publisher: {
+    '@type': 'Organization',
+    name: 'JoinGroups',
+    url: SITE_URL,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}/JoinGroups.png`,
+    },
+  },
 };
 
 export default async function Page() {
@@ -55,5 +83,13 @@ export default async function Page() {
   const normales = grupos.filter((g) => !g.destacado);
   const serverData = [...destacados, ...normales];
 
-  return <HomeClient serverData={serverData} />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+      />
+      <HomeClient serverData={serverData} />
+    </>
+  );
 }

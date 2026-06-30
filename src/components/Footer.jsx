@@ -21,6 +21,14 @@ export default function Footer() {
       ],
     },
     {
+      title: 'Clanes',
+      links: [
+        { label: 'Clanes de Clash Royale', link: '/clanes/clanes-de-clash-royale' },
+        { label: 'Publicar clan', link: '/clanes/publicar-clan' },
+        { label: 'Todos los clanes', link: '/clanes' },
+      ],
+    },
+    {
       title: 'Comunidad',
       links: [
         { label: t('Instagram Oficial'), link: 'https://www.instagram.com/daniel110a/' },
@@ -44,12 +52,12 @@ export default function Footer() {
             />
             <p className={classes.description}>
               <Link
-                href={i18n.language === 'es' ? 'https://joingroups.lat' : 'https://joingroups.lat'}
+                href={i18n.language === 'es' ? 'https://www.joingroups.lat' : 'https://www.joingroups.lat'}
                 style={{ color: '#E5E7EB', textDecoration: 'none', fontWeight: 500 }}
               >
                 JoinGroups
               </Link>
-              {t(' es tu herramienta para administrar, automatizar y organizar grupos de Telegram de forma eficiente.')}
+              {' es tu directorio para encontrar clanes de Clash Royale, publicar clanes y descubrir comunidades activas.'}
             </p>
           </div>
 

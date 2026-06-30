@@ -10,7 +10,6 @@ import slugify from '@/lib/slugify';
 import { logPublication, shouldBypassCaptchaInDev } from '@/lib/publicationDebug';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
-import Head from 'next/head';
 import {
   IconBrandWhatsapp, IconLink, IconMail, IconAlignLeft,
   IconMapPin, IconCheck, IconX, IconSend, IconUser,
@@ -274,17 +273,6 @@ export default function SubirGrupo() {
 
   return (
     <>
-      <Head>
-        <title>Publicar Grupo de Telegram o WhatsApp | Gratis en JoinGroups 2026</title>
-        <meta name="description" content="Envía tu grupo o canal de Telegram o WhatsApp para ser listado en el directorio verificado JoinGroups. Publicar es gratis y fácil." />
-        <link rel="canonical" href="https://joingroups.lat/form" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Publica tu Grupo en JoinGroups | Gratis, Fácil y Verificado" />
-        <meta property="og:description" content="Comparte tu grupo de Telegram o WhatsApp con miles de usuarios." />
-        <meta property="og:url" content="https://joingroups.lat/form" />
-        <meta property="og:type" content="website" />
-      </Head>
-
       <div className={classes.pageBg}>
         <div className={classes.wrapper}>
 

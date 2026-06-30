@@ -20,7 +20,7 @@ export default function HowToCreateTelegramGroupOptimized() {
           name="keywords"
           content="create Telegram group, Telegram community, Telegram group admin, Telegram group settings, Telegram tutorial, Telegram groups, Telegram members, search Telegram groups, Telegram channels, YouTube Telegram, how to create group, manage Telegram group, grow Telegram group, Telegram news, Telegram users"
         />
-        <link rel="canonical" href="https://joingroups.lat/comunidades/how-to-create-telegram-group" />
+        <link rel="canonical" href="https://www.joingroups.lat/comunidades/how-to-create-telegram-group" />
 
         {/* Open Graph */}
         <meta property="og:title" content="How to Create a Telegram Group: A Comprehensive Guide" />
@@ -29,8 +29,8 @@ export default function HowToCreateTelegramGroupOptimized() {
           content="Learn how to create and manage Telegram groups, optimized for SEO with practical tips and embedded YouTube tutorials. Start your community today!"
         />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://joingroups.lat/comunidades/how-to-create-telegram-group" />
-        <meta property="og:image" content="https://joingroups.lat/og-preview.png" />
+        <meta property="og:url" content="https://www.joingroups.lat/comunidades/how-to-create-telegram-group" />
+        <meta property="og:image" content="https://www.joingroups.lat/og-preview.png" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -39,7 +39,7 @@ export default function HowToCreateTelegramGroupOptimized() {
           name="twitter:description"
           content="The definitive guide to creating, managing, and growing your Telegram group. Includes SEO optimization and embedded YouTube videos."
         />
-        <meta name="twitter:image" content="https://joingroups.lat/og-preview.png" />
+        <meta name="twitter:image" content="https://www.joingroups.lat/og-preview.png" />
       </Head>
 
       <Title order={1} className="text-3xl font-bold mb-8">How to Create a Telegram Group: A Comprehensive Guide for Beginners and Experts</Title>
@@ -120,7 +120,7 @@ export default function HowToCreateTelegramGroupOptimized() {
       </Text>
       <List className="list-disc pl-6 mb-8">
         <ListItem className="mb-4"><strong>Share the invite link:</strong> Publish your <strong>group</strong>'s invite link on your social media (Facebook, Twitter, Instagram, etc.), on your website, blog, or any other platform where your target audience can <strong>find</strong> it. Make sure the message accompanying the link is engaging and clearly explains the <strong>group</strong>'s purpose.</ListItem>
-        <ListItem className="mb-4"><strong>Telegram Group Directories:</strong> Platforms like <Anchor href="https://joingroups.lat" target="_blank" rel="noopener noreferrer">joingroups.lat</Anchor> (your own site) are excellent places to list your <strong>group</strong> and allow interested <strong>users</strong> to <strong>search</strong> for and join it. Leverage these directories to increase your community's visibility.</ListItem>
+        <ListItem className="mb-4"><strong>Telegram Group Directories:</strong> Platforms like <Anchor href="https://www.joingroups.lat" target="_blank" rel="noopener noreferrer">joingroups.lat</Anchor> (your own site) are excellent places to list your <strong>group</strong> and allow interested <strong>users</strong> to <strong>search</strong> for and join it. Leverage these directories to increase your community's visibility.</ListItem>
         <ListItem className="mb-4"><strong>Cross-Promotion:</strong> If you are part of other relevant communities or <strong>Telegram channels</strong>, consider cross-promoting with other administrators. This can expose your <strong>group</strong> to an audience already interested in similar topics.</ListItem>
       </List>
       <Text className="mb-8">

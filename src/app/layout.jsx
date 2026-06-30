@@ -12,8 +12,29 @@ const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 
 export const metadata = {
-  title: 'JoinGroups Pro',
-  description: 'Grupos y clanes en Telegram y más',
+  metadataBase: new URL('https://www.joingroups.lat'),
+  title: {
+    default: 'JoinGroups | Clanes de Clash Royale y comunidades activas',
+    template: '%s | JoinGroups',
+  },
+  description:
+    'Directorio para encontrar clanes de Clash Royale, publicar clanes y descubrir comunidades activas de Telegram y WhatsApp.',
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    siteName: 'JoinGroups',
+    locale: 'es_MX',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
 };
 
 export default function RootLayout({ children }) {

@@ -10,16 +10,16 @@ export const metadata = {
   keywords: 'grupos de telegram, grupos de whatsapp, enlaces de telegram, enlaces de whatsapp, unirse a grupos, grupos por categoría, grupos 2026, comunidades online, chats temáticos',
   robots: 'index, follow',
   alternates: {
-    canonical: 'https://joingroups.lat/comunidades',
+    canonical: 'https://www.joingroups.lat/comunidades',
   },
   openGraph: {
     title: 'Grupos Activos de Telegram y WhatsApp - Categorías 2026',
     description: 'Únete a comunidades activas por intereses. Encuentra tu grupo ideal y publica el tuyo gratis en joingroups.lat.',
-    url: 'https://joingroups.lat/comunidades',
+    url: 'https://www.joingroups.lat/comunidades',
     siteName: 'joingroups.lat',
     images: [
       {
-        url: 'https://joingroups.lat/opengraph-image.png',
+        url: 'https://www.joingroups.lat/opengraph-image.png',
         width: 1200,
         height: 630,
         alt: 'Explora grupos por categorías - JoinGroups',
@@ -31,7 +31,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Grupos de Telegram y WhatsApp por Temática - JoinGroups 2026',
     description: 'Encuentra comunidades por categoría: amistad, memes, tecnología, NSFW, y más. ¡Publica el tuyo gratis!',
-    images: ['https://joingroups.lat/opengraph-image.png'],
+    images: ['https://www.joingroups.lat/opengraph-image.png'],
   }
 };
 

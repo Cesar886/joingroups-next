@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": { "title": "JoinGroups Communities API", "version": "1.0.0" },
-  "servers": [{ "url": "https://joingroups.lat" }],
+  "servers": [{ "url": "https://www.joingroups.lat" }],
   "paths": {
     "/api/communities": {
       "get": {

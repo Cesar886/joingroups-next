@@ -1,6 +1,8 @@
 # public/robots.txt
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /api/debug/
 
 User-agent: GPTBot
 Allow: /
@@ -8,10 +10,4 @@ Allow: /
 User-agent: ChatGPT-User
 Allow: /
 
-
-# Evita indexar carpetas internas del build (opcional)
-Disallow: /assets/
-Disallow: /static/
-
-# Apunta a tu sitemap
-Sitemap: https://joingroups.lat/sitemap.xml
+Sitemap: https://www.joingroups.lat/sitemap.xml

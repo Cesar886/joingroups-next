@@ -425,7 +425,7 @@ export default function CategoryPage() {
         <meta name="description" content={categoryContent.description} />
         <link
           rel="canonical"
-          href={`https://joingroups.lat/comunidades/grupos-de-${platform}/${category}`}
+          href={`https://www.joingroups.lat/comunidades/grupos-de-${platform}/${category}`}
         />
 
         <meta property="og:title" content={categoryContent.title} />
@@ -705,7 +705,7 @@ export default function CategoryPage() {
               </Text>
               <Button
                 component={Link}
-                href="/comunidades/form"
+                href="/comunidades/subir-grupo"
                 variant="filled"
                 color="violet"
               >
@@ -734,7 +734,7 @@ export default function CategoryPage() {
 
             <Text size="sm" color="dimmed" mb="md">
               ¿Tienes un grupo de {category} y quieres hacerlo crecer? {' '}
-              <Link href="/comunidades/form" style={{ color: '#228be6', textDecoration: 'underline' }}>
+              <Link href="/comunidades/subir-grupo" style={{ color: '#228be6', textDecoration: 'underline' }}>
                 Publícalo gratis en JoinGroups
               </Link> y llega a miles de usuarios interesados en {category}.
             </Text>

@@ -12,7 +12,7 @@ import { NextResponse } from 'next/server';
 
 // --- CORS (ajusta dominios permitidos) ---
 const ALLOWED_ORIGINS = [
-  'https://joingroups.lat',
+  'https://www.joingroups.lat',
   'https://chat.openai.com',
   'http://localhost:3000',
 ];

@@ -14,7 +14,7 @@ import classes from '@/app/styles/Header.module.css';
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import i18n from '@/locales/i18n.jsx';
 
 
@@ -38,7 +38,7 @@ export default function Header() {
     }
   }, []);
 
-  const isClanesSection = pathname.startsWith('/clanes') || pathname.startsWith('/clanes');
+  const isClanesSection = pathname.startsWith('/clanes');
   
   
   const links = [

@@ -29,7 +29,6 @@ import { db } from '@/firebase/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import slugify from '@/lib/slugify';
-import { useRouter } from 'next/navigation';
 import '@/locales/i18n';
 
 
@@ -93,7 +92,6 @@ const featuredButtons = [
 
 export default function HomeClient({ serverData }) {
   const { t, i18n } = useTranslation();
-  const router = useRouter();
   const [groups, setGroups] = useState([]);
   const [clanes, setClanes] = useState([]);
   const [subdomain, setSubdomain] = useState('mx');
@@ -176,21 +174,21 @@ export default function HomeClient({ serverData }) {
 
     const descriptionText =
       typeof row.description === 'object'
-        ? row.description[baseLang] || row.description[i18n.language] || row.description['es']
+        ? row.description[baseLang] || row.description[i18n.language] || row.description.es
         : row.description;
 
-    const handleClick = () => {
-      const categoria = row.categories?.[0] || 'otros';
-      const basePath = isGroup
-        ? `/comunidades/grupos-de-${row.tipo}/${slugify(categoria)}`
-        : `/clanes/clanes-de-${row.tipo}`;
-      router.push(`${basePath}/${slug}`);
-    };
+    const categoria = Array.isArray(row.categories)
+      ? row.categories[0] || 'otros'
+      : row.categories || 'otros';
+    const basePath = isGroup
+      ? `/comunidades/grupos-de-${row.tipo}/${slugify(categoria)}`
+      : `/clanes/clanes-de-${row.tipo}`;
+    const href = `${basePath}/${slug}`;
 
     return (
       <div key={`${row.id}-${idx}`}>
-        <div className={styles.groupRow} onClick={handleClick}>
-          <img src={iconSrc} alt={row.name} className={styles.groupIcon} />
+        <Link href={href} className={styles.groupRow}>
+          <img src={iconSrc} alt={row.name} className={styles.groupIcon} loading="lazy" />
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               {row.city && (
@@ -201,7 +199,7 @@ export default function HomeClient({ serverData }) {
             <div className={styles.groupDesc}>{descriptionText}</div>
           </div>
           <IconChevronRight size={15} style={{ color: '#D1D5DB', flexShrink: 0 }} />
-        </div>
+        </Link>
         {idx < 4 && <div className={styles.groupDivider} />}
       </div>
     );
@@ -221,7 +219,7 @@ export default function HomeClient({ serverData }) {
 
   return (
     <>
-      <Container size="lg" py="md" className={styles.mobileContainerFix}>
+      <Container component="main" size="lg" py="md" className={styles.mobileContainerFix}>
 
         {/* ── Hero ── */}
         <Stack align="center" spacing="md" px="md" mt="xl" mb="lg">
@@ -231,53 +229,57 @@ export default function HomeClient({ serverData }) {
             fw={800}
             fz={isMobile ? 26 : 40}
             lh={1.15}
-            style={{ letterSpacing: '-0.02em' }}
+            style={{ letterSpacing: 0 }}
           >
             <span className={styles.heroGradientText}>
               {isMobile
-                ? 'Grupos de Telegram, WhatsApp y Juegos'
-                : 'Los mejores Grupos de Telegram,\nWhatsApp y Clanes Activos'}
+                ? 'Clanes de Clash Royale activos'
+                : 'Clanes de Clash Royale y comunidades activas'}
             </span>
           </Title>
 
           <Text ta="center" fz={isMobile ? 'sm' : 'md'} maw={580} mx="auto"
             style={{ color: '#6B7280', lineHeight: 1.65 }}>
             {isMobile
-              ? 'Únete a comunidades en Telegram, WhatsApp y juegos populares.'
+              ? 'Busca clanes de Clash Royale, publica tu clan y únete a comunidades activas.'
               : <>
-                  En <strong style={{ color: '#374151' }}>JoinGroups.lat</strong> puedes unirte fácilmente a comunidades
-                  populares en <strong style={{ color: '#374151' }}>Telegram</strong>, <strong style={{ color: '#374151' }}>WhatsApp</strong> y
-                  juegos como <strong style={{ color: '#374151' }}>Clash Royale</strong>. Explora grupos por temas, idiomas y más.
+                  En <strong style={{ color: '#374151' }}>JoinGroups.lat</strong> puedes buscar <strong style={{ color: '#374151' }}>clanes de Clash Royale</strong>,
+                  publicar clan para <strong style={{ color: '#374151' }}>reclutar miembros</strong> y unirte a clanes activos. También puedes explorar
+                  comunidades de <strong style={{ color: '#374151' }}>Telegram</strong> y <strong style={{ color: '#374151' }}>WhatsApp</strong> por temática.
                 </>
             }
           </Text>
 
-          <Button
-            size="md"
-            component={Link}
-            href="/comunidades"
-            radius="xl"
-            style={{
-              background: 'linear-gradient(135deg, #4F46E5, #7C3AED)',
-              border: 'none',
-              fontWeight: 600,
-              fontSize: '14.5px',
-              padding: '0 24px',
-              height: 44,
-              boxShadow: '0 4px 14px rgba(79, 70, 229, 0.35)',
-              transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.boxShadow = '0 6px 20px rgba(79, 70, 229, 0.45)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 14px rgba(79, 70, 229, 0.35)';
-            }}
-          >
-            {t('Explorar Grupos Populares')}
-          </Button>
+          <Group justify="center" gap="sm">
+            <Button
+              size="md"
+              component={Link}
+              href="/clanes/clanes-de-clash-royale"
+              radius="xl"
+              style={{
+                background: 'linear-gradient(135deg, #4F46E5, #7C3AED)',
+                border: 'none',
+                fontWeight: 600,
+                fontSize: '14.5px',
+                padding: '0 24px',
+                height: 44,
+                boxShadow: '0 4px 14px rgba(79, 70, 229, 0.35)',
+              }}
+            >
+              Buscar clanes de Clash Royale
+            </Button>
+            <Button
+              size="md"
+              component={Link}
+              href="/clanes/publicar-clan"
+              radius="xl"
+              variant="light"
+              color="violet"
+              style={{ fontWeight: 700, fontSize: '14px', height: 44 }}
+            >
+              Publicar clan
+            </Button>
+          </Group>
         </Stack>
 
 
@@ -317,7 +319,7 @@ export default function HomeClient({ serverData }) {
               Clanes
             </span>
             <Title order={2} fz={isMobile ? 17 : 20} fw={700} style={{ letterSpacing: '-0.01em', color: '#0F0F14' }}>
-              {isMobile ? 'Clanes destacados' : 'Clanes destacados y con más vistas'}
+              {isMobile ? 'Clanes destacados' : 'Clanes de Clash Royale y otros destacados'}
             </Title>
           </div>
 
@@ -329,14 +331,14 @@ export default function HomeClient({ serverData }) {
             <Button
               variant="subtle"
               component={Link}
-              href="/clanes"
+              href="/clanes/clanes-de-clash-royale"
               color="violet"
               size="sm"
               radius="md"
               rightSection={<IconChevronRight size={14} />}
               style={{ fontWeight: 600, fontSize: '13px' }}
             >
-              Ver todos los clanes
+              Ver clanes de Clash Royale
             </Button>
           </div>
         </Box>
@@ -430,7 +432,7 @@ export default function HomeClient({ serverData }) {
               boxShadow: '0 4px 14px rgba(124, 58, 237, 0.3)',
             }}
           >
-            Publica tu CLAN ahora
+            Publicar clan de Clash Royale
           </Button>
         </Center>
 
@@ -486,20 +488,20 @@ export default function HomeClient({ serverData }) {
         <Box mt="lg" className={styles.seoSection} mx="auto">
           <Divider mb="lg" style={{ borderColor: 'rgba(0,0,0,0.06)' }} />
           <Title order={2} mb="md" fz={isMobile ? 18 : 22} fw={700} style={{ letterSpacing: '-0.01em', color: '#0F0F14' }}>
-            Únete a los mejores grupos y canales de Telegram, WhatsApp y más
+            Encuentra y publica clanes de Clash Royale en JoinGroups
           </Title>
 
           <Text fz="sm" mb="sm" style={{ color: '#6B7280', lineHeight: 1.75 }}>
-            ¿Quieres encontrar un <strong style={{ color: '#374151' }}>grupo</strong> o <strong style={{ color: '#374151' }}>canal</strong> activo en <strong style={{ color: '#374151' }}>Telegram</strong>, <strong style={{ color: '#374151' }}>WhatsApp</strong> o incluso juegos? En <strong style={{ color: '#374151' }}>JoinGroups</strong> puedes <strong style={{ color: '#374151' }}>descubrir, conocer</strong> y unirte fácilmente a miles de <strong style={{ color: '#374151' }}>grupos</strong> clasificados por temática, país y número de <strong style={{ color: '#374151' }}>miembros</strong>.
+            Si buscas <strong style={{ color: '#374151' }}>clanes de Clash Royale</strong>, JoinGroups te ayuda a comparar opciones reales antes de unirte: nombre del clan, descripción, miembros, requisitos y enlace oficial cuando está disponible.
           </Text>
           <Text fz="sm" mb="sm" style={{ color: '#6B7280', lineHeight: 1.75 }}>
-            Nuestra plataforma te ayuda a encontrar <strong style={{ color: '#374151' }}>canales</strong> de calidad en categorías como anime, música, desarrollo, amistad, NSFW, salud, IA, memes y más. Todos los <strong style={{ color: '#374151' }}>grupos</strong> son verificados y contienen contenido actualizado.
+            También puedes <strong style={{ color: '#374151' }}>publicar clan</strong> gratis para <strong style={{ color: '#374151' }}>reclutar miembros</strong> activos. Una ficha clara con requisitos, actividad y objetivos ayuda a que los jugadores adecuados encuentren tu clan.
           </Text>
           <Text fz="sm" mb="sm" style={{ color: '#6B7280', lineHeight: 1.75 }}>
-            <strong style={{ color: '#374151' }}>JoinGroups</strong> ha sido diseñado para que <strong style={{ color: '#374151' }}>puedas</strong> navegar rápidamente, desde cualquier dispositivo, ya sea <strong style={{ color: '#374151' }}>Android</strong> o PC. Utiliza nuestros filtros inteligentes por idioma, país o tipo de <strong style={{ color: '#374151' }}>contenido</strong> para encontrar exactamente lo que buscas.
+            El objetivo es simple: que puedas <strong style={{ color: '#374151' }}>buscar clan de Clash Royale</strong>, revisar si encaja con tu estilo de juego y <strong style={{ color: '#374151' }}>unirse a clanes activos</strong> sin perder tiempo.
           </Text>
           <Text fz="sm" mb="sm" style={{ color: '#6B7280', lineHeight: 1.75 }}>
-            Si eres creador, también puedes <strong style={{ color: '#374151' }}>crear</strong> tu propio <strong style={{ color: '#374151' }}>grupo</strong> y publicarlo gratis. Miles de <strong style={{ color: '#374151' }}>usuarios</strong> buscan comunidades nuevas cada día, así que no pierdas la oportunidad de hacer crecer la tuya.
+            Además del directorio de clanes, JoinGroups mantiene comunidades de Telegram y WhatsApp para quienes buscan grupos por categoría, país o tema.
           </Text>
           <Text fz="sm" mb="sm" style={{ color: '#6B7280', lineHeight: 1.75 }}>
             En <strong style={{ color: '#374151' }}>JoinGroups</strong> priorizamos la seguridad: no recopilamos datos personales y verificamos cada enlace manualmente. Nuestra misión es ayudarte a <strong style={{ color: '#374151' }}>conectar</strong> con <strong style={{ color: '#374151' }}>personas</strong> reales y comunidades auténticas, sin spam.

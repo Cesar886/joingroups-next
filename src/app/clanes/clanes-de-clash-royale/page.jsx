@@ -1,157 +1,188 @@
-// ✅ Archivo: /app/clanes/clanes-de-clash-royale/page.jsx
-
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebase';
-import ClashRoyaleClient from './ClashRoyaleClient';
-import Head from 'next/head'; // Asegúrate de importar esto si no usas app router con metadata export
+import slugify from '@/lib/slugify';
+import ClashRoyaleClient from '@/app/clanes/clanes-de-clash-royale/ClashRoyaleClient';
+
+const SITE_URL = 'https://www.joingroups.lat';
+const PAGE_URL = `${SITE_URL}/clanes/clanes-de-clash-royale`;
+const DETAIL_BASE_URL = `${SITE_URL}/clanes/clanes-de-clash-royale`;
 
 export const metadata = {
-  title: 'Clanes de Clash Royale ⚔️ | Únete, Busca o Recluta Jugadores de Clash Royale',
-  description: 'Encuentra los mejores clanes de Clash Royale para 2026. Filtra por trofeos, únete a un clan activo o publica tu clan gratis para reclutar nuevos miembros y dominar la arena. ¡Tu comunidad de clanes de Clash Royale te espera!',
-  keywords: 'clanes Clash Royale, unirse a clan Clash Royale, reclutar jugadores Clash Royale, publicar clan gratis Clash Royale, guerra de clanes Clash Royale, clanes activos 2026, mejores clanes Clash Royale, clanes en español Clash Royale, buscar clan Clash Royale, comunidad Clash Royale clanes',
-  robots: 'index, follow',
+  title: 'Clanes de Clash Royale | Buscar, unirse y publicar clanes activos',
+  description:
+    'Encuentra clanes de Clash Royale activos, revisa requisitos y publica tu clan gratis para reclutar miembros. Directorio de clanes para guerra de clanes, México, España y más.',
+  keywords:
+    'clanes de Clash Royale, buscar clan Clash Royale, publicar clan Clash Royale, reclutar miembros Clash Royale, unirse a clan Clash Royale, clanes activos Clash Royale, clanes Clash Royale México, clanes Clash Royale España, guerra de clanes Clash Royale',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
   alternates: {
-    canonical: 'https://joingroups.lat/clanes/clanes-de-clash-royale',
+    canonical: PAGE_URL,
   },
   openGraph: {
-    title: '⚔️ Clanes de Clash Royale | Encuentra o Publica el Tuyo',
-    description: 'Descubre clanes de Clash Royale y encuentra el mejor para ti. ¿Eres líder? Publica tu clan gratis y consigue jugadores activos fácilmente para tu clan de Clash Royale.',
-    url: 'https://joingroups.lat/clanes/clanes-de-clash-royale',
-    siteName: 'Clanes de Clash Royale',
+    title: 'Clanes de Clash Royale activos | JoinGroups',
+    description:
+      'Busca clanes de Clash Royale, compara actividad y publica el tuyo para reclutar jugadores activos.',
+    url: PAGE_URL,
+    siteName: 'JoinGroups',
     images: [
       {
-        url: 'https://joingroups.lat/clashRoyaleFondo1.png',
+        url: `${SITE_URL}/clashRoyaleFondo1.png`,
         width: 1200,
         height: 630,
-        alt: 'Personajes de Clash Royale luchando en la arena',
+        alt: 'Clanes de Clash Royale activos en JoinGroups',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Clanes de Clash Royale | Publica o Únete Gratis',
-    description: 'Busca clanes de Clash Royale o publica el tuyo gratis. Ideal para jugadores y líderes que quieren avanzar en guerra de clanes y encontrar su comunidad de Clash Royale.',
-    images: ['https://joingroups.lat/clashRoyaleFondo1.png'],
+    title: 'Clanes de Clash Royale | Buscar o publicar clan',
+    description:
+      'Encuentra clanes activos de Clash Royale o publica tu clan gratis para reclutar nuevos miembros.',
+    images: [`${SITE_URL}/clashRoyaleFondo1.png`],
   },
 };
 
+const faqItems = [
+  {
+    question: '¿Cómo puedo buscar un clan de Clash Royale en JoinGroups?',
+    answer:
+      'Usa el buscador de la página para filtrar clanes por nombre o categoría. Cada ficha muestra datos útiles como miembros, trofeos requeridos, visitas y descripción cuando están disponibles.',
+  },
+  {
+    question: '¿Puedo publicar mi clan de Clash Royale gratis?',
+    answer:
+      'Sí. Puedes publicar tu clan gratis desde el formulario de JoinGroups. El sistema valida el enlace de invitación y crea una ficha pública para ayudar a reclutar miembros.',
+  },
+  {
+    question: '¿Qué datos ayudan a elegir un buen clan?',
+    answer:
+      'Conviene revisar miembros, requisitos de trofeos, descripción, país o ubicación, actividad y enfoque del clan, especialmente si quieres participar en guerra de clanes.',
+  },
+  {
+    question: '¿Hay clanes de Clash Royale de México o España?',
+    answer:
+      'Cuando los datos públicos del clan incluyen ubicación, JoinGroups puede mostrar país o región. No se crean páginas regionales vacías si no hay suficientes clanes reales para sostenerlas.',
+  },
+  {
+    question: '¿Cómo recluto miembros para mi clan?',
+    answer:
+      'Publica una descripción clara con requisitos, estilo de juego, actividad y objetivos del clan. Eso ayuda a que jugadores compatibles encuentren tu ficha y se unan desde el enlace oficial.',
+  },
+];
 
-export default async function ClashRoyalePage() {
+async function getClashRoyaleClans() {
   const snapshot = await getDocs(collection(db, 'clanes'));
-  const groups = snapshot.docs.map(doc => {
+
+  const clanes = snapshot.docs.map((doc) => {
     const data = doc.data();
+    const { email, emailRepeat, ...publicData } = data;
+
     return {
       id: doc.id,
-      ...data,
+      ...publicData,
       createdAt: data.createdAt?.toDate?.().toISOString() || null,
     };
   });
 
-  const clashRoyaleFilter = groups.filter(g => g.tipo === 'clash-royale');
-  const destacados = clashRoyaleFilter.filter(g => g.destacado);
-  const normales = clashRoyaleFilter.filter(g => !g.destacado);
-  const sorted = [...destacados, ...normales];
+  const clashRoyaleClans = clanes.filter((clan) => clan.tipo === 'clash-royale');
+  const destacados = clashRoyaleClans.filter((clan) => clan.destacado);
+  const normales = clashRoyaleClans.filter((clan) => !clan.destacado);
 
-  const itemListElements = sorted.map((g, i) => ({
-    '@type': 'ListItem',
-    position: i + 1,
-    name: g.name,
-    url: g.url,
-  }));
+  return [...destacados, ...normales];
+}
 
-  const jsonLd = {
+function getClanDescription(clan) {
+  const rawDescription = typeof clan.description === 'string'
+    ? clan.description
+    : clan.description?.es || clan.description?.en || '';
+
+  const cleanDescription = rawDescription
+    .replace(/https?:\/\/\S+/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return cleanDescription.length > 180
+    ? `${cleanDescription.slice(0, 177)}...`
+    : cleanDescription;
+}
+
+function buildCollectionJsonLd(clanes) {
+  const itemListElement = clanes.slice(0, 50).map((clan, index) => {
+    const slug = clan.slug || slugify(clan.name || clan.id);
+
+    return {
+      '@type': 'ListItem',
+      position: index + 1,
+      url: `${DETAIL_BASE_URL}/${slug}`,
+      name: clan.name,
+      description: getClanDescription(clan) || undefined,
+    };
+  });
+
+  return {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Clanes de Clash Royale Activos 2026',
+    name: 'Clanes de Clash Royale',
     description: metadata.description,
-    url: 'https://joingroups.lat/clanes/clanes-de-clash-royale',
+    url: PAGE_URL,
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'JoinGroups',
+      url: SITE_URL,
+    },
     breadcrumb: {
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://joingroups.lat/' },
-        { '@type': 'ListItem', position: 2, name: 'Clanes', item: 'https://joingroups.lat/clanes' },
-        { '@type': 'ListItem', position: 3, name: 'Clash Royale', item: 'https://joingroups.lat/clanes/clanes-de-clash-royale' }
-      ]
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${SITE_URL}/` },
+        { '@type': 'ListItem', position: 2, name: 'Clanes', item: `${SITE_URL}/clanes` },
+        { '@type': 'ListItem', position: 3, name: 'Clash Royale', item: PAGE_URL },
+      ],
     },
     mainEntity: {
       '@type': 'ItemList',
-      itemListElement: itemListElements,
+      name: 'Catálogo de clanes de Clash Royale',
+      numberOfItems: clanes.length,
+      itemListElement,
     },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Clanes de Clash Royale',
-      url: 'https://joingroups.lat',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://joingroups.lat/icon-512.png',
-      }
-    }
   };
+}
+
+function buildFaqJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+}
+
+export default async function ClashRoyalePage() {
+  const clanes = await getClashRoyaleClans();
 
   return (
     <>
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </Head>
-
-      {/* ✅ FAQPage debe ir fuera del <Head> para que Google lo lea */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: [
-              {
-                '@type': 'Question',
-                name: '¿Cómo me uno a un clan de Clash Royale?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'En JoinGroups puedes filtrar clanes por nivel, país o actividad. Luego haz clic en el enlace de invitación para unirte directamente.',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: '¿Es gratis publicar mi clan?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Sí, publicar tu clan en JoinGroups es completamente gratis. Solo necesitas completar el formulario y validar tu enlace.',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: '¿Qué requisitos debe cumplir mi clan?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'No hay requisitos estrictos, pero los clanes exitosos suelen tener miembros activos, donar cartas y participar en guerras de clanes.',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: '¿Puedo buscar clanes por idioma o país?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Sí. Puedes usar los filtros para buscar clanes por idioma, país, nivel o categoría.',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: '¿Cómo puedo destacar mi clan?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Después de publicarlo, puedes contactar al equipo de JoinGroups por WhatsApp para opciones de promoción y aparecer arriba en la lista.',
-                },
-              },
-            ],
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildCollectionJsonLd(clanes)) }}
       />
-
-      <ClashRoyaleClient initialData={sorted} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqJsonLd()) }}
+      />
+      <ClashRoyaleClient initialData={clanes} faqItems={faqItems} />
     </>
   );
 }
