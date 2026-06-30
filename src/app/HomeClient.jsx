@@ -282,7 +282,7 @@ export default function HomeClient({ serverData }) {
             <Button
               variant="subtle"
               component={Link}
-              href="/clanes/clanes-de-clash-royale"
+              href="/clanes"
               color="violet"
               size="sm"
               radius="md"
@@ -318,7 +318,7 @@ export default function HomeClient({ serverData }) {
             <Button
               variant="subtle"
               component={Link}
-              href="/comunidades/grupos-de-whatsapp"
+              href="/comunidades"
               color="teal"
               size="sm"
               radius="md"
@@ -353,7 +353,7 @@ export default function HomeClient({ serverData }) {
             <Button
               variant="subtle"
               component={Link}
-              href="/comunidades/grupos-de-telegram"
+              href="/comunidades"
               color="blue"
               size="sm"
               radius="md"
@@ -361,17 +361,6 @@ export default function HomeClient({ serverData }) {
               style={{ fontWeight: 600, fontSize: '13px' }}
             >
               {t('Ver todos los grupos de Telegram')}
-            </Button>
-            <Button
-              variant="light"
-              component={Link}
-              href="/comunidades"
-              color="gray"
-              size="sm"
-              radius="md"
-              style={{ fontWeight: 600, fontSize: '13px' }}
-            >
-              {t('Todas las comunidades')}
             </Button>
           </div>
         </Box>
