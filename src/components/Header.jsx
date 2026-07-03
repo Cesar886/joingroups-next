@@ -15,6 +15,7 @@ export default function Header() {
   
   const links = [
     { link: '/', label: t('Inicio') },
+    { link: '/clanes/clanes-de-clash-royale', label: 'Clash Royale' },
     {
       link: isClanesSection ? '/clanes/publicar-clan' : '/comunidades/subir-grupo',
       label: isClanesSection ? t('Publica tu clan') : t('Publica Tu Grupo'),

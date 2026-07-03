@@ -28,6 +28,13 @@ export const metadata = {
     locale: 'es_MX',
     type: 'website',
   },
+  alternates: {
+    languages: {
+      'es': 'https://www.joingroups.lat',
+      'en': 'https://www.joingroups.lat/en',
+      'x-default': 'https://www.joingroups.lat',
+    },
+  },
   twitter: {
     card: 'summary_large_image',
   },
