@@ -337,7 +337,7 @@ export default function CategoryPage() {
   const baseLang = lang.split('-')[0];
   const platformName = platform === 'whatsapp' ? 'WhatsApp' : 'Telegram';
   const platformKey = platform === 'whatsapp' ? 'whatsapp' : 'telegram';
-  const platformIcon = platformKey === 'telegram' ? '/telegramicons.png' : '/wapp.webp';
+  const platformIcon = platformKey === 'telegram' ? '/telegramicons.webp' : '/wapp.webp';
   const categoryLabel = formatCategoryName(category);
   const categoryContent = getCategoryContent(category, platformKey);
   const categoryExtra = extraCategoryContent[category];
@@ -437,7 +437,7 @@ export default function CategoryPage() {
               className={`${classes.platformBtn} ${platformKey === 'telegram' ? classes.platformBtnActive : ''}`}
               onClick={() => router.push('/comunidades/grupos-de-telegram')}
             >
-              <img src="/telegramicons.png" alt="Telegram" style={{ width: 15, height: 15 }} />
+              <img src="/telegramicons.webp" alt="Telegram" style={{ width: 15, height: 15 }} />
               Telegram
             </button>
             <button

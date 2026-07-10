@@ -36,7 +36,7 @@ const getGameInfo = (tipo) => {
   const isRoyale = tipo === 'clash-royale';
   return {
     label: isRoyale ? 'Clash Royale' : 'Clash of Clans',
-    icon: isRoyale ? '/clashRoyaleFondo1.png' : '/clashOfClansFondo.png',
+    icon: isRoyale ? '/clashRoyaleFondo1.webp' : '/clashOfClansFondo.webp',
     className: isRoyale ? styles.avatarRoyale : styles.avatarCoc,
   };
 };
@@ -103,11 +103,11 @@ export default function ClanesClient({ serverData }) {
               Todos los clanes
             </button>
             <button className={styles.gameBtn} onClick={() => router.push('/clanes/clanes-de-clash-royale')}>
-              <img src="/clashRoyaleFondo1.png" alt="Clash Royale" className={styles.gameIcon} />
+              <img src="/clashRoyaleFondo1.webp" alt="Clash Royale" className={styles.gameIcon} />
               Clash Royale
             </button>
             <button className={styles.gameBtn} onClick={() => router.push('/clanes/clanes-de-clash-of-clans')}>
-              <img src="/clashOfClansFondo.png" alt="Clash of Clans" className={styles.gameIcon} />
+              <img src="/clashOfClansFondo.webp" alt="Clash of Clans" className={styles.gameIcon} />
               Clash of Clans
             </button>
           </div>

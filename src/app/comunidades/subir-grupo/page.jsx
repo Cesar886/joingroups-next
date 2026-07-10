@@ -348,7 +348,7 @@ export default function SubirGrupo() {
                     onClick={() => { setRedSocial(p); form.setFieldValue('link', ''); }}
                   >
                     <img
-                      src={p === 'Telegram' ? '/telegramicons.png' : '/wapp.webp'}
+                      src={p === 'Telegram' ? '/telegramicons.webp' : '/wapp.webp'}
                       alt={p}
                       style={{ width: 16, height: 16, borderRadius: p === 'Whatsapp' ? 4 : 0 }}
                     />

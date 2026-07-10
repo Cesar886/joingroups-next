@@ -320,7 +320,7 @@ const router = useRouter();
         ? row.description[baseLang] || row.description[i18n.language] || row.description['es']
         : row.description;
         
-    const iconSrc = platform === 'telegram' ? '/telegramicons.png' : '/wapp.webp';
+    const iconSrc = platform === 'telegram' ? '/telegramicons.webp' : '/wapp.webp';
 
     return (
       <Paper
@@ -519,7 +519,7 @@ const router = useRouter();
             onClick={() => router.push('/comunidades/grupos-de-telegram')}
             leftSection={
               <img
-                src="/telegramicons.png"
+                src="/telegramicons.webp"
                 alt="Telegram"
                 style={{ width: 16, height: 16 }}
               />

@@ -120,8 +120,8 @@ export default function HomeClient({ serverData }) {
   const renderCard = (row, idx, isGroup = true) => {
     const slug = row.slug || slugify(row.name);
     const iconSrc = isGroup
-      ? (row.tipo?.trim().toLowerCase() === 'telegram' ? '/telegramicons.png' : '/wapp.webp')
-      : (row.tipo === 'clash-royale' ? '/clashRoyaleFondo1.png' : '/clashOfClansFondo.png');
+      ? (row.tipo?.trim().toLowerCase() === 'telegram' ? '/telegramicons.webp' : '/wapp.webp')
+      : (row.tipo === 'clash-royale' ? '/clashRoyaleFondo1.webp' : '/clashOfClansFondo.webp');
 
     const descriptionText =
       typeof row.description === 'object'

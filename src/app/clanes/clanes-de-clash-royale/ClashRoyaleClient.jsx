@@ -185,7 +185,7 @@ export default function ClashRoyaleClient({ initialData, faqItems = [] }) {
         <div className={classes.gameRow}>
           <button className={`${classes.gameBtn} ${classes.gameBtnActive}`}>
             <img
-              src="/clashRoyaleFondo1.png"
+              src="/clashRoyaleFondo1.webp"
               alt="Icono de Clash Royale"
               loading="lazy"
               decoding="async"
@@ -195,7 +195,7 @@ export default function ClashRoyaleClient({ initialData, faqItems = [] }) {
           </button>
           <button className={classes.gameBtn} onClick={() => router.push('/clanes/clanes-de-clash-of-clans')}>
             <img
-              src="/clashOfClansFondo.png"
+              src="/clashOfClansFondo.webp"
               alt="Icono de Clash of Clans"
               loading="lazy"
               decoding="async"
@@ -231,7 +231,7 @@ export default function ClashRoyaleClient({ initialData, faqItems = [] }) {
           <div className={classes.promoBanner}>
             <div className={classes.promoBannerIcon}>
               <img
-                src="/clashRoyaleFondo1.png"
+                src="/clashRoyaleFondo1.webp"
                 alt="Emblema de Clash Royale para publicar un clan"
                 loading="lazy"
                 decoding="async"
@@ -262,7 +262,7 @@ export default function ClashRoyaleClient({ initialData, faqItems = [] }) {
                   <div className={classes.clanCardTop}>
                     <div className={classes.clanAvatar}>
                       <img
-                        src="/clashRoyaleFondo1.png"
+                        src="/clashRoyaleFondo1.webp"
                         alt={`Emblema de Clash Royale del clan ${info?.name ?? row.name}`}
                         loading="lazy"
                         decoding="async"

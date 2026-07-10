@@ -29,7 +29,7 @@ export async function generateMetadata({ params }) {
       type: 'article',
       images: [
         {
-          url: `${SITE_URL}/JoinGroups.png`,
+          url: post.image ? `${SITE_URL}${post.image}` : `${SITE_URL}/JoinGroups.webp`,
           width: 1200,
           height: 630,
           alt: post.title,
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }) {
       card: 'summary_large_image',
       title: post.title,
       description: post.description || post.title,
-      images: [`${SITE_URL}/JoinGroups.png`],
+      images: [post.image ? `${SITE_URL}${post.image}` : `${SITE_URL}/JoinGroups.webp`],
     },
   };
 }
@@ -56,13 +56,16 @@ function buildArticleJsonLd(post) {
       '@type': 'WebPage',
       '@id': `${SITE_URL}/blog/${post.slug}`,
     },
+    image: post.image
+      ? `${SITE_URL}${post.image}`
+      : `${SITE_URL}/JoinGroups.webp`,
     publisher: {
       '@type': 'Organization',
       name: 'JoinGroups',
       url: SITE_URL,
       logo: {
         '@type': 'ImageObject',
-        url: `${SITE_URL}/JoinGroups.png`,
+        url: `${SITE_URL}/JoinGroups.webp`,
       },
     },
     author: {
@@ -70,8 +73,8 @@ function buildArticleJsonLd(post) {
       name: 'JoinGroups',
       url: SITE_URL,
     },
-    datePublished: '2026-01-01',
-    dateModified: '2026-06-30',
+    datePublished: post.datePublished || '2026-01-01',
+    dateModified: post.dateModified || '2026-06-30',
   };
 }
 

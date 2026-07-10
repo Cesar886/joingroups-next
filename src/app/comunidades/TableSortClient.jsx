@@ -85,7 +85,7 @@ const countries = [
 const platformConfig = {
   telegram: {
     label: 'Telegram',
-    icon: '/telegramicons.png',
+    icon: '/telegramicons.webp',
     iconClass: styles.telegramIcon,
     avatarClass: styles.telegramAvatar,
     chipClass: styles.telegramChip,
@@ -360,7 +360,7 @@ export default function TableSortClient({ serverData = [] }) {
             Todos
           </Link>
           <Link href="/comunidades/grupos-de-telegram" className={styles.platformBtn}>
-            <img src="/telegramicons.png" alt="Telegram" className={styles.platformIcon} />
+            <img src="/telegramicons.webp" alt="Telegram" className={styles.platformIcon} />
             Telegram
           </Link>
           <Link href="/comunidades/grupos-de-whatsapp" className={styles.platformBtn}>
@@ -438,7 +438,7 @@ export default function TableSortClient({ serverData = [] }) {
         <div className={styles.promoBanner}>
           <div className={styles.promoBannerIconGroup}>
             <span className={`${styles.promoBannerIcon} ${styles.telegramAvatar}`}>
-              <img src="/telegramicons.png" alt="Telegram" />
+              <img src="/telegramicons.webp" alt="Telegram" />
             </span>
             <span className={`${styles.promoBannerIcon} ${styles.whatsappAvatar}`}>
               <img src="/wapp.webp" alt="WhatsApp" />

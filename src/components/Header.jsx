@@ -52,7 +52,7 @@ export default function Header() {
           <Link href="/" className={classes.logoLink}>
             <Group align="center" gap="xs" wrap="nowrap">
               <img
-                src="/JoinGroups.png"
+                src="/JoinGroups.webp"
                 alt="Join Group Logo"
                 width={42}
                 height={42}

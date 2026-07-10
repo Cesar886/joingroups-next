@@ -29,7 +29,7 @@ export const metadata = {
     siteName: 'JoinGroups',
     images: [
       {
-        url: `${SITE_URL}/JoinGroups.png`,
+        url: `${SITE_URL}/JoinGroups.webp`,
         width: 1200,
         height: 630,
         alt: 'JoinGroups: clanes de Clash Royale y comunidades activas',
@@ -42,7 +42,7 @@ export const metadata = {
     title: 'Clanes de Clash Royale | Buscar o publicar clan',
     description:
       'Encuentra clanes activos de Clash Royale o publica tu clan gratis para reclutar miembros en JoinGroups.',
-    images: [`${SITE_URL}/JoinGroups.png`],
+    images: [`${SITE_URL}/JoinGroups.webp`],
   },
   other: {
     'yandex-verification': '6a0e37aeb6ffa1fa',
@@ -63,7 +63,7 @@ const homeJsonLd = {
     url: SITE_URL,
     logo: {
       '@type': 'ImageObject',
-      url: `${SITE_URL}/JoinGroups.png`,
+      url: `${SITE_URL}/JoinGroups.webp`,
     },
   },
 };

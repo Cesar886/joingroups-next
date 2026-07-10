@@ -103,7 +103,7 @@ export default function Telegram() {
         <meta property="og:description" content="Explora miles de grupos de Telegram activos, organizados por temas como amistad, juegos, noticias y más." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.joingroups.lat/comunidades/grupos-de-telegram" />
-        <meta property="og:image" content="https://www.joingroups.lat/JoinGroup.png" />
+        <meta property="og:image" content="https://www.joingroups.lat/JoinGroup.webp" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="keywords" content="grupos de telegram, enlaces de telegram, unirse a grupo telegram, canales de telegram, telegram grupos español" />
         <meta name="robots" content="index, follow" />
@@ -127,7 +127,7 @@ export default function Telegram() {
           {/* Platform switcher */}
           <div className={classes.platformRow}>
             <button className={`${classes.platformBtn} ${classes.platformBtnActive}`}>
-              <img src="/telegramicons.png" alt="Telegram" style={{ width: 15, height: 15 }} />
+              <img src="/telegramicons.webp" alt="Telegram" style={{ width: 15, height: 15 }} />
               Telegram
             </button>
             <button
@@ -218,7 +218,7 @@ export default function Telegram() {
           {/* Promo banner */}
           <div className={classes.promoBanner}>
             <div className={classes.promoBannerIcon}>
-              <img src="/telegramicons.png" alt="Telegram" style={{ width: 22, height: 22 }} />
+              <img src="/telegramicons.webp" alt="Telegram" style={{ width: 22, height: 22 }} />
             </div>
             <div className={classes.promoBannerBody}>
               <strong>¿Tienes un grupo de Telegram?</strong>
@@ -240,7 +240,7 @@ export default function Telegram() {
               >
                 <div className={classes.groupCardTop}>
                   <div className={classes.groupAvatar}>
-                    <img src="/telegramicons.png" alt="Telegram" />
+                    <img src="/telegramicons.webp" alt="Telegram" />
                   </div>
                   <div className={classes.groupInfo}>
                     <div className={classes.groupName}>{row.name}</div>

@@ -5,62 +5,74 @@ import { blogs } from '@/app/data/blogs';
 
 const SITE_URL = 'https://www.joingroups.lat';
 
+// Regional countries for clash royale clan pages
+const REGIONAL_COUNTRIES = ['mexico', 'espana', 'argentina'];
+
+const RECENT_DATE = new Date('2026-07-10');
+
 export default async function sitemap() {
   const staticEntries = [
     {
       url: `${SITE_URL}/`,
-      lastModified: new Date(),
+      lastModified: RECENT_DATE,
       changeFrequency: 'daily',
       priority: 1.0,
     },
     {
       url: `${SITE_URL}/clanes`,
-      lastModified: new Date(),
+      lastModified: RECENT_DATE,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${SITE_URL}/clanes/clanes-de-clash-royale`,
-      lastModified: new Date(),
+      lastModified: RECENT_DATE,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${SITE_URL}/clanes/clanes-de-clash-of-clans`,
-      lastModified: new Date(),
+      lastModified: RECENT_DATE,
       changeFrequency: 'daily',
       priority: 0.8,
     },
     {
       url: `${SITE_URL}/clanes/publicar-clan`,
-      lastModified: new Date(),
+      lastModified: RECENT_DATE,
       changeFrequency: 'weekly',
       priority: 0.7,
     },
     {
       url: `${SITE_URL}/comunidades`,
-      lastModified: new Date(),
+      lastModified: RECENT_DATE,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${SITE_URL}/comunidades/grupos-de-telegram`,
-      lastModified: new Date(),
+      lastModified: RECENT_DATE,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${SITE_URL}/comunidades/grupos-de-whatsapp`,
-      lastModified: new Date(),
+      lastModified: RECENT_DATE,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${SITE_URL}/privacidad`,
-      lastModified: new Date(),
+      lastModified: RECENT_DATE,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
+    // Regional clan pages
+    ...REGIONAL_COUNTRIES.map((country) => ({
+      url: `${SITE_URL}/clanes/clanes-de-clash-royale/${country}`,
+      lastModified: RECENT_DATE,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    })),
   ];
 
   // Dynamic clan detail pages from Firestore
@@ -71,9 +83,15 @@ export default async function sitemap() {
       const data = doc.data();
       const slug = data.slug || slugify(data.name || doc.id);
       const tipo = data.tipo || 'clash-royale';
+      let lastMod = RECENT_DATE;
+      if (data.createdAt?.toDate) {
+        lastMod = data.createdAt.toDate();
+      } else if (data.createdAt) {
+        lastMod = new Date(data.createdAt);
+      }
       return {
         url: `${SITE_URL}/clanes/clanes-de-${tipo}/${slug}`,
-        lastModified: data.createdAt?.toDate?.() || new Date(),
+        lastModified: lastMod,
         changeFrequency: 'weekly',
         priority: 0.6,
       };
@@ -83,13 +101,18 @@ export default async function sitemap() {
     console.warn('Could not fetch clanes for sitemap:', e.message);
   }
 
-  // Blog posts
-  const blogEntries = blogs.map((post) => ({
-    url: `${SITE_URL}/blog/${post.slug}`,
-    lastModified: new Date('2026-06-30'),
-    changeFrequency: 'monthly',
-    priority: 0.6,
-  }));
+  // Blog posts with real dates from blogs.js
+  const blogEntries = blogs.map((post) => {
+    const modDate = post.dateModified
+      ? new Date(post.dateModified)
+      : new Date('2026-06-30');
+    return {
+      url: `${SITE_URL}/blog/${post.slug}`,
+      lastModified: modDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    };
+  });
 
   return [...staticEntries, ...clanEntries, ...blogEntries];
 }

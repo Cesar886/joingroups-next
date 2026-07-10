@@ -77,20 +77,20 @@ const cleanText = (value) => String(value || '')
   .replace(/[\u0300-\u036f]/g, '')
   .toLowerCase();
 
-const capitalizeWords = (value) => String(value || '')
-  .split(' ')
-  .filter(Boolean)
-  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-  .join(' ');
+const capitalizeFirst = (value) => {
+  const str = String(value || '').trim();
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
 
 export function isAllowedSeoQuery(query) {
   const normalized = cleanText(query);
   return !BLOCKED_QUERY_TERMS.some((term) => normalized.includes(term));
 }
 
-const buildDescription = ({ label, location, year }) => {
+const buildDescription = ({ label, location, year, topic }) => {
   const locationText = location.code === 'global' ? 'comunidades hispanas' : location.label;
-  return `Encuentra ${label} actualizados para ${locationText} en ${year}. Directorio con grupos reales de Telegram, categorias claras y enlaces revisados por JoinGroups.`;
+  const topicSuffix = topic ? `. Explora grupos sobre ${topic.label}, comunidades activas y enlaces verificados` : '';
+  return `Encuentra los mejores ${label} actualizados para ${locationText} en ${year}. Directorio con grupos reales de Telegram, categorias claras y enlaces revisados${topicSuffix}.`;
 };
 
 const makeDefinition = ({ query, label, location, year, topic = null, source }) => {
@@ -98,6 +98,8 @@ const makeDefinition = ({ query, label, location, year, topic = null, source }) 
   const slug = slugify(slugParts.join(' '));
   const locationTitle = location.code === 'global' ? '' : ` ${location.label}`;
 
+  const topicSuffix = topic ? ` de ${topic.label}` : '';
+  const descArgs = { label, location, year, topic };
   return {
     slug,
     query,
@@ -106,9 +108,9 @@ const makeDefinition = ({ query, label, location, year, topic = null, source }) 
     year,
     location,
     topic,
-    title: `${capitalizeWords(label)}${locationTitle} ${year}`,
-    h1: `${capitalizeWords(label)} ${location.phrase} (${year})`,
-    description: buildDescription({ label, location, year }),
+    title: `${capitalizeFirst(label)}${locationTitle} ${year} | Grupos de Telegram activos y verificados`,
+    h1: `${capitalizeFirst(label)} ${location.phrase} (${year})`,
+    description: buildDescription(descArgs),
     canonical: SITE_URL + "/seo/telegram/" + slug,
   };
 };

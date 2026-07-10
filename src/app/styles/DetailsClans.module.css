@@ -73,7 +73,7 @@
   transform: translateY(-50%);
   width: 220px;
   height: 220px;
-  background-image: url("/escudo.png");
+  background-image: url("/escudo.webp");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

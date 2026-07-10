@@ -63,11 +63,11 @@ export default function ClashOfClansClient({ serverData }) {
           {/* Game switcher */}
           <div className={classes.gameRow}>
             <button className={classes.gameBtn} onClick={() => router.push('/clanes/clanes-de-clash-royale')}>
-              <img src="/clashRoyaleFondo1.png" alt="Clash Royale" style={{ width: 18, height: 18, borderRadius: 4 }} />
+              <img src="/clashRoyaleFondo1.webp" alt="Clash Royale" style={{ width: 18, height: 18, borderRadius: 4 }} />
               Clash Royale
             </button>
             <button className={`${classes.gameBtn} ${classes.gameBtnActive}`}>
-              <img src="/clashOfClansFondo.png" alt="Clash of Clans" style={{ width: 18, height: 18, borderRadius: 4 }} />
+              <img src="/clashOfClansFondo.webp" alt="Clash of Clans" style={{ width: 18, height: 18, borderRadius: 4 }} />
               Clash of Clans
             </button>
           </div>
@@ -88,7 +88,7 @@ export default function ClashOfClansClient({ serverData }) {
           {/* Promo banner */}
           <div className={classes.promoBanner}>
             <div className={classes.promoBannerIcon}>
-              <img src="/clashOfClansFondo.png" alt="CoC" style={{ width: 28, height: 28, borderRadius: 4 }} />
+              <img src="/clashOfClansFondo.webp" alt="CoC" style={{ width: 28, height: 28, borderRadius: 4 }} />
             </div>
             <div className={classes.promoBannerBody}>
               <strong>¿Eres líder de clan?</strong>
@@ -109,7 +109,7 @@ export default function ClashOfClansClient({ serverData }) {
               >
                 <div className={classes.clanCardTop}>
                   <div className={classes.clanAvatar}>
-                    <img src="/clashOfClansFondo.png" alt="CoC" />
+                    <img src="/clashOfClansFondo.webp" alt="CoC" />
                   </div>
                   <div className={classes.clanInfo}>
                     <div className={classes.clanName}>{row.name}</div>

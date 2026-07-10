@@ -122,7 +122,7 @@ export default function Whatsapp() {
               className={classes.platformBtn}
               onClick={() => router.push('/comunidades/grupos-de-telegram')}
             >
-              <img src="/telegramicons.png" alt="Telegram" style={{ width: 15, height: 15 }} />
+              <img src="/telegramicons.webp" alt="Telegram" style={{ width: 15, height: 15 }} />
               Telegram
             </button>
             <button className={`${classes.platformBtn} ${classes.platformBtnActive}`}>

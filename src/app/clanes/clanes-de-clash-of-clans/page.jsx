@@ -28,7 +28,7 @@ export const metadata = {
     siteName: 'JoinGroups',
     images: [
       {
-        url: `${SITE_URL}/clashOfClansFondo.png`,
+        url: `${SITE_URL}/clashOfClansFondo.webp`,
         width: 1200,
         height: 630,
         alt: 'Clanes de Clash of Clans activos en JoinGroups',
@@ -41,7 +41,7 @@ export const metadata = {
     title: 'Clanes de Clash of Clans | Únete o Publica tu Clan Gratis',
     description:
       'Encuentra los mejores clanes de Clash of Clans activos o publica tu clan gratis.',
-    images: [`${SITE_URL}/clashOfClansFondo.png`],
+    images: [`${SITE_URL}/clashOfClansFondo.webp`],
   },
 };
 

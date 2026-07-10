@@ -5,6 +5,9 @@ export const blogs = [
     slug: 'guia-mejores-clanes-de-clash-royale-2026',
     title: 'Guía definitiva: Mejores clanes de Clash Royale en 2026',
     description: 'Descubre los clanes más activos y competitivos de Clash Royale este año.',
+    datePublished: '2026-01-15',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Unirse a un buen clan puede marcar la diferencia en tu experiencia dentro de Clash Royale. Ya sea que busques cofres, guerras o simplemente compartir con una comunidad activa, esta guía es para ti.</p>
 
@@ -32,6 +35,9 @@ export const blogs = [
     slug: 'como-elegir-clan-perfecto-clash-royale',
     title: 'Cómo elegir el clan perfecto en Clash Royale [Guía 2026]',
     description: 'Descubre cómo encontrar un clan activo y competitivo que se adapte a tu estilo de juego en Clash Royale. Recomendaciones, filtros por país y consejos clave.',
+    datePublished: '2026-02-10',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>¿Estás buscando un clan competitivo en Clash Royale que realmente te ayude a avanzar? Elegir el <strong>clan ideal</strong> puede marcar una gran diferencia en tu progreso, recompensas y experiencia de juego.</p>
 
@@ -75,6 +81,9 @@ export const blogs = [
     slug: 'clanes-de-clash-royale-por-nivel',
     title: 'Clanes de Clash Royale según tu nivel de jugador',
     description: 'Encuentra el clan perfecto en Clash Royale si eres principiante, jugador intermedio o competitivo. Filtra fácilmente clanes por nivel y juega con personas como tú.',
+    datePublished: '2026-03-05',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>¿Eres nuevo en Clash Royale y no sabes qué clan elegir? ¿O ya llevas tiempo jugando y buscas un clan más competitivo? Sea cual sea tu nivel, elegir el <strong>clan adecuado según tu experiencia</strong> es clave para avanzar en el juego.</p>
 
@@ -114,6 +123,9 @@ export const blogs = [
     slug: 'ventajas-de-unirse-a-un-clan',
     title: '7 ventajas de unirte a un clan en Clash Royale',
     description: '¿Aún no estás en un clan en Clash Royale? Descubre los beneficios clave de ser parte de una comunidad activa y cómo esto puede mejorar tu rendimiento en el juego.',
+    datePublished: '2026-04-12',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Si juegas Clash Royale y aún no formas parte de un clan, estás perdiendo una parte esencial de la experiencia. Los clanes no solo son grupos de jugadores, son comunidades que pueden ayudarte a mejorar, avanzar más rápido y disfrutar más el juego.</p>
 
@@ -157,6 +169,9 @@ export const blogs = [
     slug: 'top-clanes-populares-clash-royale-julio-2026',
     title: 'Top clanes más populares de Clash Royale en julio 2026',
     description: 'Conoce los clanes con más miembros activos, mejores resultados en guerras y alto nivel de participación durante julio 2026.',
+    datePublished: '2026-05-20',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>¿Quieres unirte a uno de los <strong>clanes más populares de Clash Royale</strong> este mes? En <a href="/clanes/clanes-de-clash-royale">Joingroups</a> hemos analizado los datos de julio 2026 para mostrarte los clanes con mayor actividad, más miembros y mejores estadísticas del momento.</p>
 
@@ -199,6 +214,9 @@ export const blogs = [
     slug: 'como-publicar-clan-en-joingroups',
     title: '¿Cómo publicar tu clan de Clash Royale en Joingroups?',
     description: 'Guía completa para atraer nuevos miembros a tu clan publicándolo en Joingroups de forma fácil y rápida.',
+    datePublished: '2026-06-01',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>¿Quieres que tu clan de Clash Royale gane más visibilidad y reciba nuevos miembros activos? Publicar tu clan en <a href="/clanes/publicar-clan">Joingroups</a> es la forma más rápida y efectiva para lograrlo.</p>
 
@@ -235,6 +253,9 @@ export const blogs = [
     slug: 'clanes-cofres-legendarios-rapido',
     title: 'Clanes que ayudan a conseguir cofres legendarios más rápido',
     description: 'Descubre cómo unirte a clanes activos que maximizan la obtención de cofres legendarios en Clash Royale.',
+    datePublished: '2026-06-10',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Conseguir cofres legendarios en Clash Royale puede ser un proceso lento si juegas solo. Sin embargo, unirte a un clan activo que colabore en guerras y donaciones es la mejor forma de acelerar la obtención de estos cofres exclusivos.</p>
 
@@ -274,6 +295,9 @@ export const blogs = [
     slug: 'errores-al-elegir-un-clan-clash-royale',
     title: '5 errores comunes al elegir un clan en Clash Royale',
     description: 'Evita perder tiempo y recursos uniéndote a clanes inactivos o poco compatibles con tu estilo de juego.',
+    datePublished: '2026-03-05',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Elegir un clan en Clash Royale puede parecer sencillo, pero hay errores comunes que pueden hacer que pierdas tiempo y no aproveches las ventajas de jugar en equipo. Aquí te mostramos cuáles son para que los evites.</p>
 
@@ -301,6 +325,9 @@ export const blogs = [
     slug: 'clanes-clash-royale-mexico-2026',
     title: 'Clanes de Clash Royale en México activos este 2026',
     description: 'Descubre los clanes más activos y populares de Clash Royale en México, organizados por región y nivel de actividad en 2026.',
+    datePublished: '2026-04-12',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Clash Royale sigue creciendo en México y con él, la comunidad de clanes que se forma cada día más fuerte y activa. Si buscas un clan mexicano para jugar con amigos, competir y compartir estrategias, estás en el lugar indicado.</p>
 
@@ -337,6 +364,9 @@ export const blogs = [
     slug: 'mejores-clanes-guerras-de-clanes',
     title: 'Clanes enfocados en guerras de clanes: los mejores en 2026',
     description: 'Descubre los clanes más activos y organizados en guerras de clanes para Clash Royale en 2026 y cómo unirte a ellos.',
+    datePublished: '2026-05-20',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Las guerras de clanes son uno de los modos más emocionantes y competitivos de Clash Royale. Si quieres llevar tu experiencia de juego al siguiente nivel, unirte a un clan que se enfoque en estas guerras es fundamental.</p>
 
@@ -376,6 +406,9 @@ export const blogs = [
     slug: 'clanes-para-donaciones-rapidas',
     title: 'Clanes con mayor actividad de donaciones en Clash Royale',
     description: 'Descubre los clanes más solidarios donde puedes recibir cartas rápido gracias a donaciones frecuentes y activas.',
+    datePublished: '2026-06-01',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>En Clash Royale, una de las claves para mejorar tu mazo rápido es recibir donaciones constantes de cartas. Por eso, unirte a un clan con alta actividad de donaciones es fundamental para progresar sin gastar gemas.</p>
 
@@ -412,6 +445,9 @@ export const blogs = [
     slug: 'clanes-para-subir-de-arena',
     title: 'Clanes ideales para subir de arena más rápido',
     description: 'Descubre los clanes que te ayudarán a escalar de arena en Clash Royale con mayor facilidad y rapidez.',
+    datePublished: '2026-06-10',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Subir de arena en Clash Royale puede ser un reto, pero hacerlo acompañado de un clan activo y comprometido hace toda la diferencia. Los mejores clanes ofrecen apoyo en donaciones, consejos y estrategias para avanzar rápido.</p>
 
@@ -450,6 +486,9 @@ export const blogs = [
     slug: 'mejores-clanes-según-tu-edad',
     title: '¿Qué clan te conviene según tu edad?',
     description: 'Desde niños hasta adultos, descubre cuál es el clan ideal para ti según tu grupo de edad y estilo de juego.',
+    datePublished: '2026-03-05',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Clash Royale es un juego para todas las edades, y elegir un clan que se adapte a tu perfil puede mejorar mucho tu experiencia. Ya seas niño, adolescente o adulto, en <a href="/clanes">Joingroups</a> encontrarás clanes que encajan con tu edad y estilo de juego.</p>
 
@@ -484,6 +523,9 @@ export const blogs = [
     slug: 'clanes-de-clash-of-clans-2026',
     title: 'Los mejores clanes de Clash of Clans en 2026',
     description: 'No todo es Clash Royale: descubre los clanes más activos y poderosos de Clash of Clans este 2026.',
+    datePublished: '2026-04-12',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Si eres fan de los juegos de estrategia, sabes que <strong>Clash of Clans</strong> es un título que no puede faltar en tu lista. Para dominarlo, es vital unirse a un clan activo que te apoye en guerras, donaciones y estrategias.</p>
 
@@ -512,6 +554,9 @@ export const blogs = [
     slug: 'como-hacer-crecer-tu-clan-rapido',
     title: '¿Cómo hacer crecer tu clan en Clash Royale rápidamente?',
     description: 'Tips prácticos para conseguir miembros activos y hacer crecer tu clan en Clash Royale de forma efectiva.',
+    datePublished: '2026-05-20',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Hacer crecer tu clan en Clash Royale puede parecer difícil, pero con las estrategias correctas, podrás atraer a jugadores activos y crear una comunidad fuerte y unida.</p>
 
@@ -541,6 +586,9 @@ export const blogs = [
     slug: 'clanes-amistosos-para-chatear',
     title: 'Clanes amistosos para jugadores que buscan comunidad',
     description: 'Si buscas clanes con buen rollo y comunidad activa, esta guía es para ti.',
+    datePublished: '2026-06-01',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>En Clash Royale no solo se trata de competir, sino también de compartir momentos con jugadores que buscan lo mismo: diversión y buen ambiente. Si estás cansado de clanes tóxicos o inactivos, unirte a un <strong>clan amistoso</strong> es la mejor opción para disfrutar el juego al máximo.</p>
 
@@ -565,6 +613,9 @@ export const blogs = [
     slug: 'guia-para-novatos-clanes',
     title: 'Guía rápida para novatos: ¿cómo elegir tu primer clan?',
     description: 'Los primeros pasos en Clash Royale son más fáciles y divertidos con un clan adecuado.',
+    datePublished: '2026-06-10',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Si recién empiezas en Clash Royale, unirte a un clan puede marcar la diferencia en tu progreso. Aquí te damos una guía rápida para elegir tu primer clan y sacarle el máximo provecho.</p>
 
@@ -590,6 +641,9 @@ export const blogs = [
     slug: 'clanes-competitivos-torneos',
     title: 'Clanes competitivos que participan en torneos',
     description: 'Si eres pro y quieres subir de nivel rápido, únete a los clanes que participan en torneos oficiales y comunitarios.',
+    datePublished: '2026-03-05',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>En <strong>Clash Royale</strong>, la competencia es lo que más emociona a los jugadores avanzados. Si quieres crecer de verdad, lo mejor es unirte a un <a href="/clanes/clanes-de-clash-royale">clan competitivo de Clash Royale</a> que participe activamente en <strong>torneos y guerras de clanes</strong>.</p>
 
@@ -615,6 +669,9 @@ export const blogs = [
     slug: 'clanes-con-discord-o-telegram',
     title: 'Clanes que usan Discord o Telegram para coordinarse',
     description: 'Mejora tu comunicación y estrategia con clanes que usan plataformas externas como Discord o Telegram.',
+    datePublished: '2026-04-12',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>La comunicación es clave para el éxito en <strong>Clash Royale</strong>, especialmente si participas en <a href="/clanes/clanes-de-clash-royale">clanes activos y competitivos</a>. Muchos jugadores usan apps como <strong>Discord</strong> o <strong>Telegram</strong> para coordinar estrategias, organizar guerras y fortalecer la comunidad del clan.</p>
 
@@ -640,6 +697,9 @@ export const blogs = [
     slug: 'como-crear-clan-exitoso-clash-royale',
     title: '¿Cómo crear un clan exitoso en Clash Royale?',
     description: 'Desde elegir un buen nombre hasta atraer a tus primeros miembros, te guiamos para crear un clan exitoso.',
+    datePublished: '2026-05-20',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Crear un clan exitoso en Clash Royale no es solo cuestión de darle un nombre, sino de construir una comunidad sólida que crezca y se mantenga activa.</p>
 
@@ -666,6 +726,9 @@ export const blogs = [
     slug: 'clanes-nuevos-clash-royale',
     title: 'Clanes nuevos que buscan jugadores activos',
     description: 'Actualizamos diariamente con los clanes más recientes y activos que buscan jugadores como tú.',
+    datePublished: '2026-06-01',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Si estás cansado de clanes inactivos o tóxicos, una buena opción es unirte a clanes nuevos que buscan crecer con jugadores comprometidos.</p>
 
@@ -693,6 +756,9 @@ export const blogs = [
     slug: 'como-evitar-clanes-toxicos',
     title: 'Cómo evitar clanes tóxicos o inactivos en Clash Royale',
     description: 'Aprende a identificar y evitar clanes que arruinan tu experiencia de juego.',
+    datePublished: '2026-06-10',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>En Clash Royale, unirte al clan adecuado puede marcar la diferencia entre disfrutar el juego o frustrarte. Desafortunadamente, muchos jugadores terminan en clanes tóxicos o inactivos que no aportan nada positivo.</p>
 
@@ -726,6 +792,9 @@ export const blogs = [
     slug: 'clanes-top-por-regiones',
     title: 'Top clanes por región en 2026',
     description: 'Desde México hasta España, descubre los clanes que dominan en cada región.',
+    datePublished: '2026-03-05',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Clash Royale es un juego global, pero cada región tiene sus propios clanes top que se destacan por actividad, logros y comunidad.</p>
 
@@ -757,6 +826,9 @@ export const blogs = [
     slug: 'requisitos-para-un-buen-clan',
     title: 'Requisitos que debe tener un buen clan en Clash Royale',
     description: 'No todos los clanes valen la pena. Descubre qué debes buscar para unirte a uno que realmente valga la pena.',
+    datePublished: '2026-04-12',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Elegir un buen clan en Clash Royale es clave para progresar y disfrutar del juego. No todos los clanes son iguales, por eso hoy te contamos los requisitos esenciales que debe cumplir un clan para ser considerado bueno y confiable.</p>
 
@@ -786,6 +858,9 @@ export const blogs = [
     slug: 'clanes-en-vivo-actualizados-hoy',
     title: 'Clanes activos hoy mismo — ¡Únete ya!',
     description: 'Nuestra base se actualiza diario para que siempre encuentres un clan activo y con buena comunidad.',
+    datePublished: '2026-05-20',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>¿Buscas clanes realmente activos para unirte hoy? En Clash Royale, la actividad es vital para progresar rápido y divertirte. Por eso, en <a href="/clanes">Joingroups</a> mantenemos una base de datos actualizada todos los días con los clanes más activos y participativos.</p>
 
@@ -815,6 +890,9 @@ export const blogs = [
     slug: 'como-cambiarte-de-clan-sin-perder-progreso',
     title: 'Cómo cambiarte de clan sin perder progreso ni amigos',
     description: 'Haz la transición sin drama y sigue creciendo en Clash Royale.',
+    datePublished: '2026-06-01',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Cambiar de clan en Clash Royale puede ser una decisión difícil, especialmente si tienes amigos, buen ambiente y mucho progreso acumulado. Sin embargo, a veces es necesario buscar un nuevo clan para seguir creciendo y encontrar mejores oportunidades.</p>
 
@@ -846,6 +924,9 @@ export const blogs = [
     slug: 'ranking-de-clanes-joingroups',
     title: 'Ranking de clanes en Joingroups — Julio 2026',
     description: 'Descubre los 10 clanes más visitados y con más miembros en Joingroups.',
+    datePublished: '2026-06-10',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>En Joingroups nos encargamos de actualizar constantemente el ranking de clanes para que encuentres los mejores y más activos en Clash Royale.</p>
 
@@ -874,6 +955,9 @@ export const blogs = [
     slug: 'como-reportar-un-clan-inactivo',
     title: '¿Cómo reportar un clan inactivo en Joingroups?',
     description: 'Ayuda a mantener la comunidad limpia y activa reportando clanes inactivos.',
+    datePublished: '2026-03-05',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>En Joingroups queremos mantener la calidad de nuestra comunidad y por eso te damos la opción de reportar clanes que estén inactivos o incumpliendo las reglas.</p>
 
@@ -902,6 +986,9 @@ export const blogs = [
     slug: 'nombres-originales-para-tu-clan',
     title: 'Nombres originales y épicos para tu clan',
     description: 'Inspírate antes de publicar el tuyo.',
+    datePublished: '2026-04-12',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Elegir un nombre para tu clan en Clash Royale es mucho más que una simple etiqueta: es tu identidad, tu bandera, y el primer paso para atraer a los mejores jugadores. Un buen nombre puede reflejar el estilo, la energía y los valores de tu clan, además de ayudarte a destacar en plataformas como <a href="/clanes">Joingroups</a>.</p>
 
@@ -936,6 +1023,9 @@ export const blogs = [
     slug: 'clanes-para-familias',
     title: '¿Sabías que hay clanes familiares en Clash Royale?',
     description: 'Juega con tu papá, mamá o hermanos.',
+    datePublished: '2026-05-20',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Clash Royale no es solo un juego competitivo, también puede ser una experiencia para compartir en familia. Los clanes familiares se han vuelto muy populares porque permiten jugar, aprender y divertirse juntos, fortaleciendo los lazos entre papás, mamás, hijos y hermanos.</p>
 
@@ -971,6 +1061,9 @@ export const blogs = [
     slug: 'clanes-para-fines-de-semana',
     title: 'Clanes para jugadores que solo juegan en fines de semana',
     description: 'Ideal si no tienes mucho tiempo.',
+    datePublished: '2026-06-01',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>No todos los jugadores tienen tiempo para jugar Clash Royale todos los días, y eso está bien. Para quienes solo pueden dedicar tiempo los fines de semana, existen clanes especiales con actividad más relajada que se adaptan a estos horarios.</p>
 
@@ -1003,6 +1096,9 @@ export const blogs = [
     slug: 'clanes-clash-royale-solo-adultos',
     title: 'Clanes de Clash Royale solo para adultos',
     description: '¿Buscas jugar con gente de tu edad? Aquí tienes clanes para mayores de 18.',
+    datePublished: '2026-06-10',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>En Clash Royale, la experiencia de juego varía mucho según el tipo de comunidad en la que te encuentres. Para quienes prefieren un ambiente más tranquilo, maduro y sin las distracciones propias de grupos juveniles, existen los clanes exclusivos para adultos, generalmente mayores de 18 años. Estos clanes no solo ofrecen un espacio de respeto y compañerismo, sino que también se enfocan en la competitividad y la organización seria del juego.</p>
         
@@ -1043,6 +1139,9 @@ export const blogs = [
     slug: 'clanes-con-premios-reales',
     title: 'Clanes con premios reales: ¿mito o realidad?',
     description: 'Algunos clanes reparten premios por rendimiento. Te contamos cómo funcionan.',
+    datePublished: '2026-03-05',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>En el mundo de Clash Royale, la motivación extra puede ser un gran impulso para el rendimiento del clan. Por eso, cada vez más clanes están implementando sistemas de premios reales para incentivar la participación, el esfuerzo y la competitividad. Pero, ¿es esto solo un mito o una realidad tangible? Aquí te contamos todo sobre los clanes que ofrecen premios y cómo funcionan.</p>
 
@@ -1080,6 +1179,9 @@ export const blogs = [
     slug: 'cuantos-integrantes-debe-tener-un-clan',
     title: '¿Cuántos integrantes debe tener un buen clan?',
     description: '¿Es mejor un clan lleno o uno más pequeño y organizado?',
+    datePublished: '2026-04-12',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Uno de los debates más comunes entre jugadores de Clash Royale es cuál es el tamaño ideal de un clan. ¿Debería un clan estar siempre lleno al máximo de miembros o es mejor tener menos integrantes pero más comprometidos? La respuesta depende de varios factores, pero aquí te damos toda la información para que tomes la mejor decisión.</p>
 
@@ -1135,6 +1237,9 @@ export const blogs = [
     slug: 'clanes-amistosos-para-menores',
     title: 'Clanes seguros y amigables para menores de edad',
     description: 'Encuentra clanes donde los más jóvenes pueden jugar sin toxicidad.',
+    datePublished: '2026-05-20',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>En el universo de Clash Royale, los jugadores menores de edad buscan un espacio donde puedan disfrutar del juego sin preocuparse por la toxicidad, insultos o comportamientos inapropiados. Por eso, los <strong>clanes amigables y seguros para menores</strong> son esenciales para fomentar un ambiente sano y divertido donde los jóvenes puedan aprender, competir y socializar con respeto.</p>
         
@@ -1175,6 +1280,9 @@ export const blogs = [
     slug: 'clanes-top-de-hispanoamerica',
     title: 'Clanes top de Hispanoamérica que dominan el juego',
     description: 'De México a Argentina, estos clanes mandan en Clash Royale.',
+    datePublished: '2026-06-01',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>La escena competitiva de Clash Royale en Hispanoamérica está más viva que nunca. Los <strong>clanes top de Hispanoamérica</strong> reúnen a los mejores jugadores, organizan torneos, y dominan tanto en ligas regionales como internacionales. Si buscas competir o formar parte de una comunidad élite, esta guía es para ti.</p>
         
@@ -1222,6 +1330,9 @@ export const blogs = [
     slug: 'como-salir-de-un-clan-en-clash-royale',
     title: '¿Cómo salir de un clan en Clash Royale sin perder progreso?',
     description: 'Todo lo que debes saber antes de dejar tu clan actual.',
+    datePublished: '2026-06-10',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Salir de un clan en Clash Royale puede parecer un proceso sencillo, pero hacerlo sin perder tu progreso, amigos o beneficios requiere estrategia y cuidado. En esta guía te contamos paso a paso cómo cambiar de clan sin problemas y aprovechar al máximo tu transición.</p>
 
@@ -1266,6 +1377,9 @@ export const blogs = [
     slug: 'clanes-de-clash-royale-para-padres',
     title: 'Clanes para papás y mamás que también juegan Clash Royale',
     description: 'Juega tranquilo con gente en tu misma situación.',
+    datePublished: '2026-03-05',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Ser padre o madre y mantener la pasión por Clash Royale no es incompatible. De hecho, cada vez más papás y mamás buscan clanes donde puedan jugar tranquilos, compartir tips y competir con personas que entienden su situación y responsabilidades.</p>
         
@@ -1297,6 +1411,9 @@ export const blogs = [
     slug: 'cuando-es-mejor-cambiar-de-clan',
     title: '¿Cuándo es buen momento para cambiar de clan?',
     description: 'Detecta las señales de que ya no estás en el clan correcto.',
+    datePublished: '2026-04-12',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Elegir el momento justo para cambiar de clan en Clash Royale puede marcar la diferencia entre estancarte o seguir creciendo. Reconocer las señales de que tu clan actual ya no te aporta es fundamental para tomar una buena decisión.</p>
         
@@ -1320,6 +1437,9 @@ export const blogs = [
     slug: 'clanes-de-clash-royale-solo-para-pros',
     title: 'Clanes solo para pros en Clash Royale',
     description: 'Si eres nivel alto, estos clanes te van a interesar.',
+    datePublished: '2026-05-20',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>¿Eres un jugador avanzado buscando un clan que te desafíe y te permita crecer en un ambiente competitivo? Los clanes solo para pros están diseñados para jugadores que dominan el juego y quieren competir al máximo nivel.</p>
         
@@ -1346,6 +1466,9 @@ export const blogs = [
     slug: 'eventos-especiales-de-clanes',
     title: 'Eventos especiales dentro de clanes: desafíos, premios y más',
     description: 'Algunos clanes organizan torneos internos. Conócelos aquí.',
+    datePublished: '2026-06-01',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Los eventos especiales dentro de clanes son una gran forma de mantener la comunidad activa, motivada y unida. Desde desafíos diarios hasta torneos con premios, estos eventos son clave para la diversión y la competencia sana.</p>
         
@@ -1374,6 +1497,9 @@ export const blogs = [
     slug: 'clanes-de-clash-royale-activos-2026',
     title: 'Clanes de Clash Royale activos en 2026: los mejores para unirte este año',
     description: 'Descubre los mejores clanes activos de Clash Royale en 2026. Únete a comunidades vivas, con guerras, donaciones y miembros conectados todos los días.',
+    datePublished: '2026-06-10',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>¿Buscas <strong>clanes de Clash Royale activos en 2026</strong>? Un buen <strong>clan activo</strong> puede marcar la diferencia en tu experiencia dentro del juego: te permite <strong>donar cartas</strong>, <strong>participar en guerras de clanes</strong>, conocer nuevos jugadores, y avanzar rápidamente en arenas.</p>
 
@@ -1419,6 +1545,9 @@ export const blogs = [
     slug: 'clan-apto-para-todos-clash-royale',
     title: '¿Existe un clan apto para todos en Clash Royale? Descubre los más inclusivos',
     description: 'Encuentra clanes que se adaptan a todo tipo de jugadores: nuevos, casuales, competitivos y más. Descubre los clanes más inclusivos en Clash Royale.',
+    datePublished: '2026-03-05',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>En <strong>Clash Royale</strong>, cada jugador tiene su propio ritmo: algunos juegan a diario, otros solo en ratos libres. Entonces surge la duda: <strong>¿existe un clan que sea realmente apto para todos?</strong></p>
 
@@ -1467,6 +1596,9 @@ export const blogs = [
     slug: 'clash-royale-clans',
     title: 'Clash Royale Clans: Todo lo que debes saber',
     description: 'Descubre qué tipos de clanes existen en Clash Royale, cómo unirte a uno y dónde encontrar los mejores.',
+    datePublished: '2026-04-12',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Unirte a un <strong>clan en Clash Royale</strong> puede transformar tu experiencia de juego. Los clanes no solo te permiten participar en guerras y obtener recompensas, también son comunidades donde puedes aprender, recibir donaciones y divertirte con otros jugadores.</p>
 
@@ -1506,6 +1638,9 @@ export const blogs = [
     slug: 'mejor-clan-de-clash-royale',
     title: '¿Cuál es el mejor clan de Clash Royale?',
     description: 'Descubre qué hace a un clan el mejor en Clash Royale y cómo encontrar uno que encaje contigo.',
+    datePublished: '2026-05-20',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Muchos se preguntan cuál es el <strong>mejor clan de Clash Royale</strong>, pero la verdad es que depende de tu estilo de juego. Para algunos es uno competitivo, para otros uno relajado o simplemente activo.</p>
 
@@ -1530,6 +1665,9 @@ export const blogs = [
     slug: 'clan-competitivo-clash-royale',
     title: '¿Buscas un clan competitivo en Clash Royale?',
     description: 'Conoce las características de los clanes competitivos y dónde encontrarlos.',
+    datePublished: '2026-06-01',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Si te gusta ganar, participar en guerras y estar en lo alto del ranking, entonces necesitas un <strong>clan competitivo de Clash Royale</strong>. Estos clanes buscan jugadores activos, organizados y comprometidos.</p>
 
@@ -1555,6 +1693,9 @@ export const blogs = [
     slug: 'nombre-para-clan-de-clash-royale',
     title: 'Ideas de nombres para tu clan en Clash Royale',
     description: 'Nombres originales, graciosos y competitivos para tu clan en Clash Royale. Encuentra inspiración y destaca entre los demás.',
+    datePublished: '2026-06-10',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Elegir un buen <strong>nombre para tu clan de Clash Royale</strong> es más importante de lo que crees. Es la primera impresión que das a otros jugadores y puede ayudarte a atraer más miembros.</p>
 
@@ -1591,6 +1732,9 @@ export const blogs = [
     slug: 'clanes-buenos-en-clash-royale',
     title: '¿Cómo encontrar clanes buenos en Clash Royale?',
     description: 'Consejos para encontrar clanes de calidad en Clash Royale. Aprende a identificar clanes activos, organizados y con buena comunidad.',
+    datePublished: '2026-03-05',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Encontrar <strong>clanes buenos en Clash Royale</strong> no es tan fácil como parece. No basta con ver un clan con muchos miembros, hay que saber si es activo, respetuoso y tiene buena organización.</p>
 
@@ -1613,6 +1757,9 @@ export const blogs = [
     slug: 'para-que-sirven-los-clanes-en-clash-royale',
     title: '¿Para qué sirven los clanes en Clash Royale?',
     description: 'Conoce las ventajas de estar en un clan en Clash Royale. Más cartas, recompensas, guerras y comunidad.',
+    datePublished: '2026-04-12',
+    dateModified: '2026-06-28',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>Estar en un <strong>clan en Clash Royale</strong> no es solo por socializar. Los clanes son clave para progresar más rápido, conseguir cartas, y participar en eventos especiales.</p>
 
@@ -1637,6 +1784,9 @@ export const blogs = [
     slug: 'porque-no-me-puedo-unir-a-un-clan-en-clash-royale',
     title: '¿Por qué no me puedo unir a un clan en Clash Royale?',
     description: 'Soluciona los errores más comunes al intentar entrar a un clan en Clash Royale.',
+    datePublished: '2026-05-20',
+    dateModified: '2026-06-30',
+    image: '/clashRoyaleFondo1.webp',
     content: `
         <p>¿Estás intentando unirte a un <strong>clan de Clash Royale</strong> y te aparece un error? Aquí te explicamos las causas más comunes y cómo solucionarlas.</p>
 

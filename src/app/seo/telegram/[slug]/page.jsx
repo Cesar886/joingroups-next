@@ -116,13 +116,13 @@ export async function generateMetadata({ params }) {
       url: page.canonical,
       siteName: 'JoinGroups',
       type: 'website',
-      images: [`${SITE_URL}/JoinGroup.png`],
+      images: [`${SITE_URL}/JoinGroup.webp`],
     },
     twitter: {
       card: 'summary_large_image',
       title: page.title,
       description: page.description,
-      images: [`${SITE_URL}/JoinGroup.png`],
+      images: [`${SITE_URL}/JoinGroup.webp`],
     },
     robots: { index: true, follow: true },
   };
@@ -206,7 +206,7 @@ export default async function TelegramSeoLanding({ params }) {
                   <Link key={group.id} href={href} className={classes.groupCard}>
                     <div className={classes.groupTop}>
                       <div className={classes.avatar}>
-                        <img src="/telegramicons.png" alt="Telegram" />
+                        <img src="/telegramicons.webp" alt="Telegram" />
                       </div>
                       <div className={classes.groupInfo}>
                         <div className={classes.groupName}>{group.name}</div>

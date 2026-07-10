@@ -38,7 +38,7 @@ export default function Footer() {
           {/* Logo + Description */}
           <div className={`${classes.logoWrapper}`} style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
             <img
-              src="/JoinGroups.png"
+              src="/JoinGroups.webp"
               alt="Logo de JoinGroup"
               className={classes.logo}
             />
